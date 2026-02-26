@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stampa Runa per Test AR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=EB+Garamond:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            margin: 0;
+            padding: 0;
+            background: #2a241b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            color: #f2e8d0;
+        }
+
+        .controls {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        button,
+        .back-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #c9922a;
+            color: #0d1117;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        button:hover,
+        .back-btn:hover {
+            background: #e8b84b;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid #c9922a;
+            color: #c9922a;
+        }
+
+        .back-btn:hover {
+            background: rgba(201, 146, 42, 0.1);
+            color: #e8b84b;
+        }
+
+        /* Formato A4 */
+        .page {
+            width: 21cm;
+            min-height: 29.7cm;
+            padding: 2cm;
+            margin: 0 auto;
+            background: white;
+            color: black;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-inner {
+            border: 2px solid #000;
+            padding: 1cm;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: #555;
+            letter-spacing: 4px;
+            margin-bottom: 50px;
+        }
+
+        .marker-frame {
+            border: 15px solid #000;
+            width: 14cm;
+            height: 14cm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            box-sizing: border-box;
+        }
+
+        .rune {
+            font-family: 'Cinzel', serif;
+            font-size: 8cm;
+            line-height: 1;
+        }
+
+        .instructions {
+            text-align: left;
+            width: 14cm;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .instructions strong {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+
+            .controls {
+                display: none;
+            }
+
+            .page {
+                margin: 0;
+                padding: 1.5cm;
+                border: none;
+                box-shadow: none;
+                width: 210mm;
+                height: 297mm;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="controls">
+        <a href="index.html" class="back-btn">Torna alla Dashboard</a>
+        <button onclick="window.print()">🖨️ Stampa A4 per Test</button>
+    </div>
+
+    <div class="page">
+        <div class="page-inner">
+            <div class="title">Vercelli Hidden Runes</div>
+            <div class="subtitle">Marker AR di Test — MVP</div>
+
+            <div class="marker-frame">
+                <span class="rune">ᚢ</span>
+            </div>
+
+            <div class="instructions">
+                <strong>Istruzioni Operative per inquadratura:</strong>
+                <ul>
+                    <li>Posiziona questo foglio su una superficie piatta e ben illuminata.</li>
+                    <li>Non piegare o macchiare il bordo nero spesso: è necessario per il riconoscimento AR.js.</li>
+                    <li>Avvia l'app VHR sul tuo dispositivo e punta la fotocamera sulla runa centrale mantenendo una
+                        distanza di 30-50 cm.</li>
+                    <li>Attendi l'apparizione del contenuto 3D o dell'enigma testuale.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

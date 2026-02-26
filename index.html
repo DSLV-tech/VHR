@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vercelli Hidden Runes - Dashboard Applicazione</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #f2e8d0;
+            font-family: 'EB Garamond', serif;
+            margin: 0; padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: #c9922a;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.2em;
+            color: #8a7d65;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #161b22;
+            border: 1px solid rgba(201,146,42,0.3);
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #f2e8d0;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .card:hover {
+            box-shadow: 0 0 20px rgba(201,146,42,0.2);
+            border-color: #c9922a;
+            transform: translateY(-5px);
+            background: #1c2128;
+        }
+        .card h2 { 
+            font-family: 'Cinzel', serif; 
+            font-size: 1.4em; 
+            color: #e8b84b; 
+            margin: 0 0 10px 0;
+        }
+        .card p {
+            margin: 0;
+            font-size: 1em;
+            color: rgba(242,232,208,0.7);
+        }
+        .action-container {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(201,146,42,0.2);
+        }
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: rgba(201,146,42,0.1);
+            color: #e8b84b;
+            border: 1px solid #c9922a;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1.2em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .action-button:hover { 
+            background: #c9922a; 
+            color: #0d1117;
+            box-shadow: 0 0 25px rgba(201,146,42,0.4);
+        }
+    </style>
+</head>
+<body>
+    <h1>Vercelli Hidden Runes</h1>
+    <div class="subtitle">Dashboard MVP Principale</div>
+    
+    <div class="grid">
+        <a href="VHR_Brand_Identity.html" class="card">
+            <h2>Brand Identity</h2>
+            <p>Linee guida e sistema visivo</p>
+        </a>
+        <a href="VHR_Mission_Cards.html" class="card">
+            <h2>Missioni</h2>
+            <p>Esplora il sistema delle carte</p>
+        </a>
+        <a href="VHR_SOP_Collega_AI.html" class="card">
+            <h2>SOP per AI</h2>
+            <p>Standard operativi del progetto</p>
+        </a>
+        <a href="VHR_Universi_Narrativi.html" class="card">
+            <h2>Universi Narrativi</h2>
+            <p>I cinque mondi del Multiverso VHR</p>
+        </a>
+        <a href="Vercelli_Hidden_Runes_Progetto.docx" class="card" download>
+            <h2>Master Document</h2>
+            <p>Scarica il DOCX originale</p>
+        </a>
+    </div>
+
+    <div class="action-container">
+        <a href="A4_Test_Print.html" class="action-button">
+            🖨️ Stampa Foglio A4 (Test Funzionalità)
+        </a>
+    </div>
+</body>
+</html>
