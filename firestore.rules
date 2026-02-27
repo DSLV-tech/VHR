@@ -72,18 +72,26 @@ service cloud.firestore {
 
     /**
      * Returns true if the user has an Admin role.
-     * Checks for the existence of a document in the dedicated admin roles collection.
+     * Checks for the existence of a document in the dedicated admin roles collection,
+     * OR safely falls back to checking the role field in the users collection.
      */
     function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid)) ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+      );
     }
 
     /**
      * Returns true if the user has a Merchant role.
-     * Checks for the existence of a document in the dedicated merchant roles collection.
+     * Checks for the existence of a document in the dedicated merchant roles collection,
+     * OR safely falls back to checking the role field in the users collection.
      */
     function isMerchant() {
-      return isSignedIn() && exists(/databases/$(database)/documents/roles_merchant/$(request.auth.uid));
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/roles_merchant/$(request.auth.uid)) ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'merchant'
+      );
     }
 
     /**
@@ -126,12 +134,12 @@ service cloud.firestore {
      * @allow (get, update) An existing user accessing their own profile.
      * @deny (list, delete) Any user listing profiles or deleting a profile.
      * @deny (get, update) A user trying to access another user's profile.
-     * @principle Restricts access to a user's own data tree (Ownership).
+     * @principle Restricts access to a user's own data tree (Ownership). Prevents role escalation.
      */
     match /users/{userId} {
       allow read: if true;
       allow create: if isOwner(userId);
-      allow update: if isOwner(userId) || isAdmin();
+      allow update: if (isOwner(userId) && request.resource.data.role == resource.data.role) || isAdmin();
       allow delete: if isAdmin();
     }
 
