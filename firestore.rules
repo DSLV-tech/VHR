@@ -1,0 +1,241 @@
+rules_version = '2';
+
+/**
+ * @file firestore.rules
+ * @description Security rules for the Vercellae Hidden Runes Firestore database.
+ *
+ * ## Core Philosophy
+ * This ruleset enforces a security model based on the "Authorization Independence"
+ * principle. Authorization decisions are made using data stored directly on the
+ * document being accessed or through dedicated, high-performance role collections.
+ * This approach avoids slow and costly `get()` calls to other documents,
+ * ensuring rules are secure, performant, and scalable.
+ *
+ * ## Data Structure
+ * - `/users/{userId}`: Private user profiles, only accessible by the owner.
+ * - `/roles_admin/{userId}` & `/roles_merchant/{userId}`: Role-lookup collections. Document
+ *   existence grants a specific role (Admin or Merchant).
+ * - `/teams/{teamId}`: Collaborative documents where access is controlled by a
+ *   `members` array and a `leaderId` field on the document itself.
+ * - `/stages/{stageId}` & `/merchants/{merchantId}`: Publicly readable data that
+ *   can only be modified by Admins.
+ * - `/coupons/{couponId}`: Documents with heavily denormalized data (`teamMemberUids`,
+ *   `merchantId`) to allow secure, independent access for players, merchants,
+ *   and admins without cross-collection lookups.
+ *
+ * ## Key Security Decisions
+ * - **No User Listing**: Listing users from the `/users`, `/roles_admin`, or
+ *   `/roles_merchant` collections is strictly prohibited to protect user privacy
+ *   and prevent data scraping.
+ * - **Role by Existence**: A user's role is determined by the existence of a
+ *   document in a role collection (e.g., `exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid))`).
+ *   This is significantly more performant and secure than checking a field on a user profile.
+ * - **Denormalization for Authorization**: Data required for an authorization
+ *   decision is copied onto the documents being secured. For example, a `/coupons`
+ *   document contains a map of `teamMemberUids` so that rules don't need to look
+ *   up the team document to verify a user's membership.
+ * - **Query-Based Security for Lists**: For collections like `/teams` and `/coupons`,
+ *   `list` operations are broadly allowed for any signed-in user, with the critical
+ *   expectation that the client-side query will apply the necessary filters
+ *   (e.g., `where('members', 'array-contains', 'userId')`) to fetch only the
+ *   documents the user is authorized to see.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------------------
+    // Helper Functions
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns true if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Returns true if the requesting user's UID matches the provided userId.
+     * Used to verify resource ownership.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Returns true if the document exists.
+     * CRITICAL: Must be used for all update and delete operations.
+     */
+    function isExistingDoc() {
+      return resource != null;
+    }
+
+    /**
+     * Returns true if the user has an Admin role.
+     * Checks for the existence of a document in the dedicated admin roles collection.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * Returns true if the user has a Merchant role.
+     * Checks for the existence of a document in the dedicated merchant roles collection.
+     */
+    function isMerchant() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_merchant/$(request.auth.uid));
+    }
+
+    /**
+     * Returns true if the user is a member of the team defined in the team document.
+     */
+    function isTeamMember(teamDoc) {
+      return isSignedIn() && request.auth.uid in teamDoc.members;
+    }
+
+    /**
+     * Returns true if the user is the leader of the team defined in the team document.
+     */
+    function isTeamLeader(teamDoc) {
+      return isSignedIn() && request.auth.uid == teamDoc.leaderId;
+    }
+
+    /**
+     * Returns true if a user can view a coupon as a member of the associated team.
+     * The team must have paid and the user must be in the denormalized members map.
+     */
+    function isCouponTeamMember(couponDoc) {
+      return isSignedIn() && couponDoc.teamTicketPaid == true && request.auth.uid in couponDoc.teamMemberUids;
+    }
+
+    /**
+     * Returns true if a user is the merchant associated with the coupon.
+     */
+    function isCouponMerchant(couponDoc) {
+      return isMerchant() && request.auth.uid == couponDoc.merchantId;
+    }
+
+    // -------------------------------------------------------------------------
+    // Collection Rules
+    // -------------------------------------------------------------------------
+
+    /**
+     * @description Manages user profile data.
+     * @path /users/{userId}
+     * @allow (create) A new user creating their own profile document.
+     * @allow (get, update) An existing user accessing their own profile.
+     * @deny (list, delete) Any user listing profiles or deleting a profile.
+     * @deny (get, update) A user trying to access another user's profile.
+     * @principle Restricts access to a user's own data tree (Ownership).
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) && isExistingDoc();
+      allow delete: if false;
+    }
+
+    /**
+     * @description Manages Admin role assignments.
+     * @path /roles_admin/{userId}
+     * @allow (get, create, update, delete) An Admin managing other Admins.
+     * @deny (list) Any user listing all Admins to prevent enumeration.
+     * @deny (any) Any non-Admin trying to read or write roles.
+     * @principle Centralizes role management for high-performance access control.
+     */
+    match /roles_admin/{userId} {
+      allow get: if isAdmin();
+      allow list: if false;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+
+    /**
+     * @description Manages Merchant role assignments.
+     * @path /roles_merchant/{userId}
+     * @allow (get, create, update, delete) An Admin managing Merchant roles.
+     * @deny (list) Any user listing all Merchants to prevent enumeration.
+     * @deny (any) Any non-Admin or non-Merchant trying to read or write roles.
+     * @principle Centralizes role management for high-performance access control.
+     */
+    match /roles_merchant/{userId} {
+      allow get: if isAdmin();
+      allow list: if false;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+
+    /**
+     * @description Stores collaborative teams for the scavenger hunt.
+     * @path /teams/{teamId}
+     * @allow (get) A member of the team reading team data.
+     * @allow (list) Any signed-in user, relying on client queries to filter for their teams.
+     * @allow (create) A signed-in user creating a new team where they are the leader.
+     * @allow (update, delete) The team's leader modifying or deleting the team.
+     * @deny (get) A user trying to read a team they are not a member of.
+     * @deny (update, delete) A team member who is not the leader trying to modify the team.
+     * @principle Enforces shared access via a denormalized 'members' list.
+     */
+    match /teams/{teamId} {
+      allow get: if isTeamMember(resource.data) || isAdmin();
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && isTeamLeader(request.resource.data) && isTeamMember(request.resource.data);
+      allow update: if (isTeamLeader(resource.data) && isExistingDoc() && request.resource.data.leaderId == resource.data.leaderId) || isAdmin();
+      allow delete: if (isTeamLeader(resource.data) && isExistingDoc()) || isAdmin();
+    }
+
+    /**
+     * @description Defines the stages of the scavenger hunt.
+     * @path /stages/{stageId}
+     * @allow (get, list) Any user or anonymous visitor reading stage information.
+     * @allow (create, update, delete) An Admin managing the game stages.
+     * @deny (create, update, delete) Any non-Admin user attempting to modify game data.
+     * @principle Implements public read access with privileged (Admin-only) writes.
+     */
+    match /stages/{stageId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+
+    /**
+     * @description Stores information about partner merchants.
+     * @path /merchants/{merchantId}
+     * @allow (get, list) Any user or anonymous visitor reading merchant information.
+     * @allow (create, update, delete) An Admin managing merchant data.
+     * @deny (create, update, delete) Any non-Admin user attempting to modify merchant data.
+     * @principle Implements public read access with privileged (Admin-only) writes.
+     */
+    match /merchants/{merchantId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && isExistingDoc();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+
+    /**
+     * @description Represents redeemable coupons won by teams.
+     * @path /coupons/{couponId}
+     * @allow (get) A team member viewing their team's coupon, or a Merchant viewing their own coupon.
+     * @allow (list) Any signed-in user, relying on client queries to filter for their coupons.
+     * @allow (update) The associated Merchant updating the coupon status (e.g., to 'redeemed').
+     * @allow (create, delete) An Admin managing the coupon lifecycle.
+     * @deny (update) A player trying to change a coupon's status.
+     * @deny (get) A user trying to view a coupon belonging to another team or merchant.
+     * @principle Uses denormalized data to provide secure access to multiple user types (Players, Merchants, Admins).
+     */
+    match /coupons/{couponId} {
+      allow get: if isCouponTeamMember(resource.data) || isCouponMerchant(resource.data) || isAdmin();
+      allow list: if isSignedIn();
+      allow create: if isAdmin();
+      allow update: if (isCouponMerchant(resource.data) && isExistingDoc()) || isAdmin();
+      allow delete: if isAdmin() && isExistingDoc();
+    }
+  }
+}

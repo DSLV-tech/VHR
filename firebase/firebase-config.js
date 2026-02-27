@@ -15,8 +15,8 @@ const firebaseConfig = {
     authDomain: "studio-5957048529-68f31.firebaseapp.com",
     projectId: "studio-5957048529-68f31",
     storageBucket: "studio-5957048529-68f31.firebasestorage.app",
-    messagingSenderId: "5957048529",
-    appId: "1:5957048529:web:31220619514035774416"
+    messagingSenderId: "1014259683925",
+    appId: "1:1014259683925:web:4fe753f9f4b1a018063adc"
 };
 // ───────────────────────────────────────────────────────────────
 

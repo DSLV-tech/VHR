@@ -35,6 +35,14 @@
             color: var(--parchment);
             font-family: 'EB Garamond', serif;
             min-height: 100vh;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
         }
 
         body::before {
@@ -429,7 +437,6 @@
             background: linear-gradient(90deg, var(--gold), var(--gold-lt));
         }
 
-        /* Free badge */
         .mc-free {
             font-family: 'Cinzel', serif;
             font-size: 8px;
@@ -439,6 +446,17 @@
             background: var(--gold);
             padding: 2px 9px;
             border-radius: 20px;
+        }
+
+        .mc-price {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            color: var(--gold-lt);
+            border: 1px solid rgba(201, 146, 42, 0.4);
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(201, 146, 42, 0.08);
         }
 
         /* Coupon section */
@@ -702,8 +720,10 @@
             grid.innerHTML = MISSIONS.map(m => {
                 const done = completed.includes(m.id);
                 const diffClass = m.diff.toLowerCase();
+                const lockIcon = m.free ? '' : '<div style="position:absolute; top:20px; right:20px; font-size:1.1em; opacity:0.5;" title="Missione a pagamento">🔒</div>';
                 return `
         <a href="mission.html?id=${m.id}" class="mission-card ${done ? '' : ''}">
+          ${lockIcon}
           ${done ? '<div class="mc-status"></div>' : ''}
           <div class="mc-top">
             <span class="mc-element">${m.element}</span>
@@ -713,7 +733,7 @@
           <div class="mc-location">📍 ${m.location}</div>
           <div class="mc-footer">
             <span class="mc-xp">⚡ ${m.xp} XP</span>
-            ${m.free ? '<span class="mc-free">GRATIS</span>' : `<span class="mc-stops">€${m.price}</span>`}
+            ${m.free ? '<span class="mc-free">GRATIS</span>' : `<span class="mc-price">€${m.price}</span>`}
             <span class="mc-stops">${m.stops} tappe</span>
           </div>
         </a>`;

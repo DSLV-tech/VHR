@@ -36,6 +36,14 @@
             height: 100%;
             overflow: hidden;
             background: #000;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
         }
 
         /* A-Frame canvas takes full page */
@@ -360,6 +368,57 @@
             text-align: center;
         }
 
+        /* Camera Prompt */
+        #camera-prompt {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(10, 7, 3, 0.95);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        #camera-prompt.hidden {
+            display: none;
+        }
+
+        .cp-icon {
+            font-size: 3.5em;
+            margin-bottom: 24px;
+        }
+
+        .cp-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5em;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+
+        .cp-text {
+            font-style: italic;
+            color: var(--mist);
+            max-width: 400px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .cp-hint {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold-lt);
+            background: rgba(201, 146, 42, 0.1);
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 1px solid rgba(201, 146, 42, 0.3);
+        }
+
         .pp-feedback {
             font-family: 'Cinzel', serif;
             font-size: 11px;
@@ -510,6 +569,24 @@
             border-radius: 2px;
         }
 
+        /* GPS error */
+        #gps-error {
+            position: fixed;
+            inset: 0;
+            z-index: 250;
+            background: var(--ink);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        #gps-error.show {
+            display: flex;
+        }
+
         @media(min-width:768px) {
 
             /* Desktop fallback – centered simulator */
@@ -540,6 +617,30 @@
             Apri questa pagina da <strong>Chrome su Android</strong> oppure <strong>Safari su iPhone</strong>.
         </p>
         <a href="mission.html" class="ce-btn">← Torna alla Missione</a>
+    </div>
+
+    <!-- ── GPS ERROR ── -->
+    <div id="gps-error">
+        <div class="ce-icon">🧭</div>
+        <h1 class="ce-title">Sei Troppo Lontano</h1>
+        <p class="ce-text" id="gps-error-text">
+            Devi essere fisicamente vicino alla tappa per svelare la runa in Realtà Aumentata.
+        </p>
+        <a href="javascript:history.back()" class="ce-btn">← Torna alla Mappa</a>
+    </div>
+
+    <!-- ── CAMERA PROMPT ── -->
+    <div id="camera-prompt">
+        <div class="cp-icon">👁️</div>
+        <h1 class="cp-title">Accesso Fotocamera</h1>
+        <p class="cp-text">
+            Per svelare le rune antiche e completare la missione, il Guardiano deve usare il suo occhio divino.
+        </p>
+        <div class="cp-hint">Accetta il permesso della fotocamera nel popup del browser.</div>
+        <div id="camera-error"
+            style="display:none; color:#ff8a8a; margin-top:24px; font-size:0.9em; font-style:italic;">
+            Permesso negato. Ricarica la pagina e consenti l'accesso, oppure modificalo nelle impostazioni del browser.
+        </div>
     </div>
 
     <!-- ── A-FRAME SCENE ── -->
@@ -628,15 +729,15 @@
         // ── MISSION DATA (same as mission.html) ───────────────────
         const STOPS = {
             m1: [
-                { id: 's1', name: "L'Ingresso dei Campi", riddle: 'Quale runa rappresenta la fertilità della terra?', answer: 'ᛟ', hint: 'Cercala tra le radici', rune: 'ᚢ', xp: 90 },
-                { id: 's2', name: 'Il Pozzo dei Libui', riddle: 'Quante stagioni proteggeva il guardiano del pozzo?', answer: '4', hint: 'Le stagioni del raccolto', rune: 'ᚷ', xp: 90 },
-                { id: 's3', name: 'Il Confine Sacro', riddle: 'Qual è il nome celtico del dio delle acque?', answer: 'verbumnus', hint: 'Dio celtico di fiumi e abbondanza', rune: 'ᚺ', xp: 100 },
+                { id: 's1', name: "L'Ingresso dei Campi", riddle: 'Quale runa rappresenta la fertilità della terra?', answer: 'ᛟ', hint: 'Cercala tra le radici', rune: 'ᚢ', xp: 90, lat: 45.3350, lng: 8.4100 },
+                { id: 's2', name: 'Il Pozzo dei Libui', riddle: 'Quante stagioni proteggeva il guardiano del pozzo?', answer: '4', hint: 'Le stagioni del raccolto', rune: 'ᚷ', xp: 90, lat: 45.3400, lng: 8.4050 },
+                { id: 's3', name: 'Il Confine Sacro', riddle: 'Qual è il nome celtico del dio delle acque?', answer: 'verbumnus', hint: 'Dio celtico di fiumi e abbondanza', rune: 'ᚺ', xp: 100, lat: 45.3450, lng: 8.4150 },
             ],
             m2: [
-                { id: 's1', name: 'La Prima Chiusa', riddle: 'Quale runa significa acqua corrente?', answer: 'ᛚ', hint: 'Runa lagu — l\'acqua', rune: 'ᛚ', xp: 100 },
-                { id: 's2', name: 'Il Palazzo dell\'Acqua', riddle: 'In che anno fu costruito il Canale Cavour?', answer: '1866', hint: 'Metà Ottocento, Risorgimento', rune: 'ᚢ', xp: 110 },
-                { id: 's3', name: 'Il Ponte dei Sussurri', riddle: 'Qual è il nome della dea dell\'acqua celtica?', answer: 'coventina', hint: 'Dea dei pozzi e delle sorgenti', rune: 'ᚱ', xp: 100 },
-                { id: 's4', name: 'La Foce Segreta', riddle: 'Quante rune ancestrali compongono il Futhark Antico?', answer: '24', hint: 'Il tuo alfabeto runico', rune: 'ᚷ', xp: 110 },
+                { id: 's1', name: 'La Prima Chiusa', riddle: 'Quale runa significa acqua corrente?', answer: 'ᛚ', hint: 'Runa lagu — l\'acqua', rune: 'ᛚ', xp: 100, lat: 45.3300, lng: 8.4200 },
+                { id: 's2', name: 'Il Palazzo dell\'Acqua', riddle: 'In che anno fu costruito il Canale Cavour?', answer: '1866', hint: 'Metà Ottocento, Risorgimento', rune: 'ᚢ', xp: 110, lat: 45.3280, lng: 8.4250 },
+                { id: 's3', name: 'Il Ponte dei Sussurri', riddle: 'Qual è il nome della dea dell\'acqua celtica?', answer: 'coventina', hint: 'Dea dei pozzi e delle sorgenti', rune: 'ᚱ', xp: 100, lat: 45.3250, lng: 8.4220 },
+                { id: 's4', name: 'La Foce Segreta', riddle: 'Quante rune ancestrali compongono il Futhark Antico?', answer: '24', hint: 'Il tuo alfabeto runico', rune: 'ᚷ', xp: 110, lat: 45.3220, lng: 8.4300 },
             ],
         };
 
@@ -656,11 +757,55 @@
 
         // ── AUTH ──────────────────────────────────────────────────
         onAuthStateChanged(auth, user => {
+            if (params.get('mock') === 'true') {
+                currentUser = { uid: 'mock' };
+                updateUI();
+                checkGeolocationAndStart();
+                return;
+            }
             if (!user) { window.location.href = 'login.html'; return; }
             currentUser = user;
-            initAR();
             updateUI();
+            checkGeolocationAndStart();
         });
+
+        function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
+            var R = 6371000;
+            var dLat = (lat2 - lat1) * Math.PI / 180;
+            var dLon = (lon2 - lon1) * Math.PI / 180;
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function checkGeolocationAndStart() {
+            // Bypass logic for testing on desktop
+            if (params.get('bypassGps') === 'true' || !/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                initAR();
+                return;
+            }
+
+            if ("geolocation" in navigator) {
+                document.getElementById('scan-status').textContent = '📍 Acquisizione posizione GPS...';
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const dist = getDistanceFromLatLonInM(position.coords.latitude, position.coords.longitude, stop.lat, stop.lng);
+                    if (dist > 50) {
+                        document.getElementById('gps-error').classList.add('show');
+                        document.getElementById('gps-error-text').innerHTML = `Devi essere entro 50 metri per svelare la runa. Sei a ca. ${Math.round(dist)}m di distanza. <br><br>Avvicinati a <strong>${stop.name}</strong>.`;
+                    } else {
+                        document.getElementById('scan-status').textContent = 'Inquadra il marker runico';
+                        initAR();
+                    }
+                }, (error) => {
+                    console.warn("GPS error:", error);
+                    initAR(); // Fallback if user denys or error occurs to not completely block the app for MVP demo
+                }, { enableHighAccuracy: true });
+            } else {
+                initAR();
+            }
+        }
 
         // ── UI INIT ───────────────────────────────────────────────
         function updateUI() {
@@ -689,6 +834,17 @@
 
             // Detect marker found
             const scene = document.querySelector('a-scene');
+
+            scene.addEventListener('camera-init', () => {
+                const cp = document.getElementById('camera-prompt');
+                if (cp) cp.classList.add('hidden');
+            });
+
+            scene.addEventListener('camera-error', () => {
+                const ce = document.getElementById('camera-error');
+                if (ce) ce.style.display = 'block';
+            });
+
             scene.addEventListener('loaded', () => {
                 const markers = document.querySelectorAll('a-marker');
                 markers.forEach(marker => {
@@ -716,28 +872,59 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            // Animated golden rune in 3D space
+            // Complex 3D Magical Artifact using A-Frame primitives
             container.innerHTML = `
-      <a-text
-        value="${rune}" color="#e8b84b"
-        align="center" width="3"
-        position="0 0.5 0" rotation="-90 0 0"
-        scale="1.5 1.5 1.5"
-        animation="property:rotation; to:-90 360 0; dur:6000; loop:true; easing:linear"
-      ></a-text>
-      <a-ring color="#c9922a" radius-inner="0.7" radius-outer="0.75"
-        rotation="-90 0 0" position="0 0.02 0" opacity="0.6"
-        animation="property:rotation; from:-90 0 0; to:-90 360 0; dur:4000; loop:true; easing:linear"
-      ></a-ring>
-      <a-ring color="#e8b84b" radius-inner="0.9" radius-outer="0.93"
-        rotation="-90 0 0" position="0 0.01 0" opacity="0.3"
-        animation="property:rotation; from:-90 0 0; to:-90 -360 0; dur:8000; loop:true; easing:linear"
-      ></a-ring>
-      <a-sphere radius="0.06" color="#e8b84b" opacity="0.9"
-        position="0 0 0"
-        animation__pos="property:position; dir:alternate; dur:1200; to:0 0.3 0; loop:true; easing:easeInOutSine"
-        animation__sc="property:scale; dir:alternate; dur:800; from:1 1 1; to:1.3 1.3 1.3; loop:true"
-      ></a-sphere>
+      <!-- Core Group pulsating and floating -->
+      <a-entity position="0 0.6 0" 
+                animation__float="property: position; dir: alternate; dur: 2000; to: 0 0.8 0; loop: true; easing: easeInOutSine">
+         
+         <!-- Glowing Point Light -->
+         <a-light type="point" color="#e8b84b" intensity="2" distance="3" decay="2"
+                  animation__pulse="property: intensity; dir: alternate; dur: 1500; from: 1.5; to: 2.5; loop: true">
+         </a-light>
+
+         <!-- The Magical Rune Text -->
+         <a-text value="${rune}" color="#ffffff" align="center" width="4"
+                 position="0 0 0" rotation="0 0 0" scale="1.8 1.8 1.8"
+                 material="shader: flat; color: #ffffff"
+                 animation="property: rotation; to: 0 360 0; dur: 8000; loop: true; easing: linear">
+         </a-text>
+
+         <!-- Inner Glowing Octahedron (The Crystal) -->
+         <a-octahedron color="#c9922a" radius="0.35" opacity="0.8" metalness="0.5" roughness="0.2"
+                       animation="property: rotation; to: 0 360 0; dur: 5000; loop: true; easing: linear"
+                       animation__scale="property: scale; dir: alternate; dur: 1200; to: 1.1 1.1 1.1; loop: true">
+         </a-octahedron>
+
+         <!-- Outer Wireframe Icosahedron -->
+         <a-icosahedron color="#e8b84b" radius="0.45" wireframe="true" wireframe-linewidth="2"
+                        animation="property: rotation; to: 360 360 0; dur: 12000; loop: true; easing: linear">
+         </a-icosahedron>
+
+         <!-- Orbiting Particle Rings -->
+         <a-entity animation="property: rotation; to: 0 0 360; dur: 4000; loop: true; easing: linear">
+            <a-sphere radius="0.03" color="#ffffff" position="0.6 0 0" material="shader: flat"></a-sphere>
+            <a-sphere radius="0.02" color="#e8b84b" position="-0.6 0 0" material="shader: flat"></a-sphere>
+         </a-entity>
+
+         <a-entity animation="property: rotation; to: 360 0 0; dur: 6000; loop: true; easing: linear">
+            <a-sphere radius="0.025" color="#c9922a" position="0 0.7 0" material="shader: flat"></a-sphere>
+            <a-sphere radius="0.015" color="#ffffff" position="0 -0.7 0" material="shader: flat"></a-sphere>
+         </a-entity>
+
+         <!-- Base Magic Circle (Ground Portal) -->
+         <a-ring color="#e8b84b" radius-inner="0.8" radius-outer="0.85"
+                 rotation="-90 0 0" position="0 -0.6 0" opacity="0.5"
+                 material="shader: flat"
+                 animation="property: rotation; from: -90 0 0; to: -90 360 0; dur: 10000; loop: true; easing: linear">
+         </a-ring>
+         <a-ring color="#c9922a" radius-inner="0.6" radius-outer="0.62"
+                 rotation="-90 0 0" position="0 -0.6 0" opacity="0.8"
+                 material="shader: flat"
+                 animation="property: rotation; from: -90 0 0; to: -90 -360 0; dur: 7000; loop: true; easing: linear">
+         </a-ring>
+
+      </a-entity>
     `;
         }
 
