@@ -321,6 +321,111 @@
             padding: 20px 0;
         }
 
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg2);
+            z-index: 10;
+        }
+
+        .modal-header h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 16px;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: var(--mist);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--parchment);
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #58a6ff;
+        }
+
+        .stops-container {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+
+        .stop-card {
+            background: var(--ink);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .stop-card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--gold);
+        }
+
         @media(max-width:700px) {
             .sidebar {
                 display: none;
@@ -346,6 +451,7 @@
     <div class="layout">
         <nav class="sidebar">
             <div class="sidebar-label">Gestione</div>
+            <a href="#missions">🗺️ Missioni</a>
             <a href="#merchants" class="active">🏪 Commercianti</a>
             <a href="#coupons">🎫 Coupon</a>
             <a href="#players">👤 Giocatori</a>
@@ -377,6 +483,35 @@
                     <div class="icon">⏳</div>
                     <div class="val" id="s-pending">—</div>
                     <div class="lbl">In attesa</div>
+                </div>
+            </div>
+
+            <!-- MISSIONS -->
+            <div id="missions">
+                <div class="sec-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2>Missioni</h2>
+                        <p>Gestisci la trama principale e le tappe AR</p>
+                    </div>
+                    <button class="btn-action btn-approve" onclick="openMissionModal()">+ Nuova Missione</button>
+                </div>
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Titolo / ID</th>
+                                <th>Prezzo</th>
+                                <th>Tappe</th>
+                                <th>Stato</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="missions-body">
+                            <tr class="empty-row">
+                                <td colspan="5">Caricamento...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -462,10 +597,90 @@
         </main>
     </div>
 
+    <!-- MISSION MODAL -->
+    <div id="mission-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nuova Missione</h3>
+                <button class="btn-action" onclick="closeMissionModal()">✕ Chiudi</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="m-id">
+                <div style="display:flex; gap:16px;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Titolo Missione</label>
+                        <input type="text" id="m-title" placeholder="Es. L'Eredità dei Guardiani">
+                    </div>
+                    <div class="form-group" style="width:120px;">
+                        <label>Difficoltà (1-5)</label>
+                        <input type="number" id="m-difficulty" min="1" max="5" value="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Breve Descrizione (Mostrata nelle Card)</label>
+                    <input type="text" id="m-shortDesc" placeholder="Es. Scopri il segreto perduto...">
+                </div>
+
+                <div class="form-group">
+                    <label>Descrizione Completa</label>
+                    <textarea id="m-desc" rows="3" placeholder="Trama completa della missione..."></textarea>
+                </div>
+
+                <div style="display:flex; gap:16px;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Cover Map URL</label>
+                        <input type="text" id="m-cover" placeholder="Es. ../assets/images/map1.png">
+                    </div>
+                    <div class="form-group" style="width:120px;">
+                        <label>Stato</label>
+                        <select id="m-status">
+                            <option value="draft">Bozza</option>
+                            <option value="published">Pubblicata</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:16px;">
+                    <div class="form-group" style="width:120px;">
+                        <label>Gratuita?</label>
+                        <select id="m-isFree">
+                            <option value="true">Sì</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="width:120px;">
+                        <label>Prezzo (EUR)</label>
+                        <input type="number" id="m-price" value="0.00" step="0.50">
+                    </div>
+                </div>
+
+                <hr style="border:0; border-top:1px solid var(--border); margin:24px 0;">
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4 style="color:var(--gold); font-family:'Cinzel',serif;">Tappe della Missione</h4>
+                    <button class="btn-action btn-approve" onclick="addStopCard()">+ Aggiungi Tappa</button>
+                </div>
+
+                <div id="stops-list" class="stops-container">
+                    <div style="color:var(--mist); font-size:11px; font-style:italic; text-align:center;">Nessuna tappa
+                        aggiunta.</div>
+                </div>
+
+                <div style="margin-top:24px; text-align:right;">
+                    <button class="btn-action btn-approve" style="font-size:13px; padding:10px 24px;"
+                        onclick="saveMission()">💾 Salva Missione</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { auth, db } from '../firebase/firebase-config.js';
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { collection, getDocs, updateDoc, doc, query, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { collection, getDocs, updateDoc, deleteDoc, setDoc, doc, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        let currentMissions = {}; // Cache for editing
 
         onAuthStateChanged(auth, async user => {
             if (!user) { window.location.href = 'login.html'; return; }
@@ -481,10 +696,11 @@
         });
 
         async function loadAll() {
-            const [merchants, coupons, users] = await Promise.all([
+            const [merchants, coupons, users, missionsSnap] = await Promise.all([
                 getDocs(collection(db, 'merchants')),
                 getDocs(collection(db, 'coupons')),
                 getDocs(collection(db, 'users')),
+                getDocs(collection(db, 'missions'))
             ]);
 
             const pendingM = [...merchants.docs].filter(d => !d.data().approved).length;
@@ -497,6 +713,28 @@
             renderMerchants(merchants);
             renderCoupons(coupons);
             renderPlayers(users);
+            renderMissions(missionsSnap);
+        }
+
+        function renderMissions(snap) {
+            const tbody = document.getElementById('missions-body');
+            currentMissions = {};
+            if (snap.empty) { tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Nessuna missione trovata.</td></tr>'; return; }
+
+            tbody.innerHTML = snap.docs.map(d => {
+                const m = d.data();
+                currentMissions[d.id] = m;
+                return `<tr>
+        <td><strong>${m.title || 'Senza Titolo'}</strong><br><span style="color:var(--mist);font-size:10px">${d.id}</span></td>
+        <td>${m.isFree ? 'Gratuita' : `€${m.price}`}</td>
+        <td>—</td>
+        <td><span class="pill ${m.status === 'published' ? 'green' : 'mist'}">${m.status}</span></td>
+        <td>
+          <button class="btn-action" style="color:#58a6ff; border-color:rgba(88,166,255,0.3)" onclick="openMissionModal('${d.id}')">✏️ Modifica</button>
+          <button class="btn-action btn-reject" onclick="deleteMission('${d.id}', this)">✕ Elimina</button>
+        </td>
+      </tr>`;
+            }).join('');
         }
 
         function renderMerchants(snap) {
@@ -565,9 +803,166 @@
 
         window.rejectDoc = async (coll, id, btn) => {
             if (!confirm('Rimuovere definitivamente?')) return;
-            const { deleteDoc, doc: d } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-            await deleteDoc(d(db, coll, id));
+            await deleteDoc(doc(db, coll, id));
             btn.closest('tr').remove();
+        };
+
+        // ── MISSION LOGIC ──
+
+        window.deleteMission = async (id, btn) => {
+            if (!confirm(`Eliminare la missione ${id}? L'operazione non può essere annullata.`)) return;
+            await deleteDoc(doc(db, 'missions', id));
+            btn.closest('tr').remove();
+        };
+
+        window.openMissionModal = async (missionId = null) => {
+            const modal = document.getElementById('mission-modal');
+            const stopsList = document.getElementById('stops-list');
+            stopsList.innerHTML = '';
+
+            if (missionId && currentMissions[missionId]) {
+                const m = currentMissions[missionId];
+                document.getElementById('modal-title').textContent = 'Modifica Missione';
+                document.getElementById('m-id').value = missionId;
+                document.getElementById('m-title').value = m.title || '';
+                document.getElementById('m-shortDesc').value = m.shortDesc || '';
+                document.getElementById('m-desc').value = m.description || '';
+                document.getElementById('m-difficulty').value = m.difficulty || 1;
+                document.getElementById('m-cover').value = m.coverUrl || '';
+                document.getElementById('m-status').value = m.status || 'draft';
+                document.getElementById('m-isFree').value = m.isFree ? 'true' : 'false';
+                document.getElementById('m-price').value = m.price || 0;
+
+                // Fetch stops
+                try {
+                    const stopsSnap = await getDocs(collection(db, 'missions', missionId, 'stops'));
+                    if (!stopsSnap.empty) {
+                        const stops = stopsSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.order - b.order);
+                        stops.forEach(s => window.addStopCard(s));
+                    } else {
+                        stopsList.innerHTML = '<div style="color:var(--mist); font-size:11px; font-style:italic; text-align:center;">Nessuna tappa aggiunta.</div>';
+                    }
+                } catch (e) { console.error('Error fetching stops', e); }
+
+            } else {
+                document.getElementById('modal-title').textContent = 'Nuova Missione';
+                document.getElementById('m-id').value = 'm' + Date.now().toString().slice(-4);
+                document.getElementById('m-title').value = '';
+                document.getElementById('m-shortDesc').value = '';
+                document.getElementById('m-desc').value = '';
+                document.getElementById('m-difficulty').value = 1;
+                document.getElementById('m-cover').value = '';
+                document.getElementById('m-status').value = 'draft';
+                document.getElementById('m-isFree').value = 'true';
+                document.getElementById('m-price').value = 0;
+                stopsList.innerHTML = '<div style="color:var(--mist); font-size:11px; font-style:italic; text-align:center;">Nessuna tappa aggiunta.</div>';
+            }
+            modal.classList.add('show');
+        };
+
+        window.closeMissionModal = () => {
+            document.getElementById('mission-modal').classList.remove('show');
+        };
+
+        let stopCounter = 0;
+        window.addStopCard = (data = {}) => {
+            const list = document.getElementById('stops-list');
+            if (list.querySelector('div[style*="Nessuna tappa"]')) list.innerHTML = ''; // clear empty msg
+
+            stopCounter++;
+            const sId = data.id || `s${stopCounter}`;
+
+            const div = document.createElement('div');
+            div.className = 'stop-card';
+            div.dataset.id = sId;
+            div.innerHTML = `
+                <div class="stop-card-header">
+                    <span>Tappa ID: ${sId} <input type="number" class="s-order" value="${data.order || stopCounter}" style="width:40px; padding:2px; height:20px; text-align:center; background:transparent; color:var(--gold); border:1px solid var(--border); border-radius:3px;" title="Ordine (1, 2, 3...)"></span>
+                    <button class="btn-action btn-reject" style="margin:0;" onclick="this.closest('.stop-card').remove()">✕ Rimuovi</button>
+                </div>
+                <div style="display:flex; gap:12px; margin-bottom:12px;">
+                    <div class="form-group" style="flex:2; margin:0;"><input type="text" class="s-name" placeholder="Nome Luogo" value="${data.name || ''}"></div>
+                    <div class="form-group" style="flex:1; margin:0;"><input type="text" class="s-rune" placeholder="Simbolo Runa (es ᚢ)" value="${data.rune || ''}"></div>
+                    <div class="form-group" style="flex:1; margin:0;"><input type="number" class="s-xp" placeholder="XP" value="${data.xp || 100}"></div>
+                </div>
+                <div style="display:flex; gap:12px; margin-bottom:12px;">
+                    <div class="form-group" style="flex:1; margin:0;"><input type="number" step="0.000001" class="s-lat" placeholder="Latitudine" value="${data.lat || ''}"></div>
+                    <div class="form-group" style="flex:1; margin:0;"><input type="number" step="0.000001" class="s-lng" placeholder="Longitudine" value="${data.lng || ''}"></div>
+                </div>
+                <div class="form-group" style="margin-bottom:12px;"><input type="text" class="s-riddle" placeholder="Indovinello" value="${data.riddle || ''}"></div>
+                <div style="display:flex; gap:12px;">
+                    <div class="form-group" style="flex:1; margin:0;"><input type="text" class="s-answer" placeholder="Risposta corretta" value="${data.answer || ''}"></div>
+                    <div class="form-group" style="flex:1; margin:0;"><input type="text" class="s-hint" placeholder="Suggerimento" value="${data.hint || ''}"></div>
+                </div>
+            `;
+            list.appendChild(div);
+        };
+
+        window.saveMission = async () => {
+            const btn = document.querySelector('#mission-modal .btn-approve:last-child');
+            btn.disabled = true;
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Salvataggio...';
+
+            const mId = document.getElementById('m-id').value || 'm' + Date.now();
+
+            const missionData = {
+                title: document.getElementById('m-title').value.trim(),
+                shortDesc: document.getElementById('m-shortDesc').value.trim(),
+                description: document.getElementById('m-desc').value.trim(),
+                difficulty: parseInt(document.getElementById('m-difficulty').value) || 1,
+                coverUrl: document.getElementById('m-cover').value.trim(),
+                status: document.getElementById('m-status').value,
+                isFree: document.getElementById('m-isFree').value === 'true',
+                price: parseFloat(document.getElementById('m-price').value) || 0,
+                updatedAt: new Date().toISOString()
+            };
+
+            // Collect stops
+            const stopsElements = document.querySelectorAll('.stop-card');
+            const stopsData = [];
+            stopsElements.forEach(el => {
+                stopsData.push({
+                    id: el.dataset.id,
+                    order: parseInt(el.querySelector('.s-order').value) || 0,
+                    name: el.querySelector('.s-name').value.trim(),
+                    rune: el.querySelector('.s-rune').value.trim(),
+                    xp: parseInt(el.querySelector('.s-xp').value) || 0,
+                    lat: parseFloat(el.querySelector('.s-lat').value) || 0,
+                    lng: parseFloat(el.querySelector('.s-lng').value) || 0,
+                    riddle: el.querySelector('.s-riddle').value.trim(),
+                    answer: el.querySelector('.s-answer').value.trim(),
+                    hint: el.querySelector('.s-hint').value.trim(),
+                });
+            });
+
+            try {
+                const batch = writeBatch(db);
+                // 1. Mission doc
+                const missionRef = doc(db, 'missions', mId);
+                batch.set(missionRef, missionData);
+
+                // 2. Clear old stops (ideally we should fetch and delete orphans, but simple overwrite is fine for MVP)
+                // Actually to clear subcollections properly from client without a cloud function is hard. 
+                // Since this is MVP, we assume IDs remain same or we just overwrite.
+
+                // 3. Set new stops
+                stopsData.forEach(stop => {
+                    const sRef = doc(db, 'missions', mId, 'stops', stop.id);
+                    batch.set(sRef, stop);
+                });
+
+                await batch.commit();
+
+                closeMissionModal();
+                loadAll(); // Reload table
+            } catch (e) {
+                console.error("Error saving mission", e);
+                alert("Errore salvataggio: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
         };
 
         window.doLogout = async () => { await signOut(auth); window.location.href = 'login.html'; };

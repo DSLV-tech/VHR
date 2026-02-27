@@ -1,0 +1,170 @@
+VERCELLI HIDDEN RUNES
+Documento di Progetto — Web App AR
+Caccia al Tesoro in Realtà Aumentata nel Centro Storico di Vercelli
+
+Indice
+1. Panoramica del Progetto
+2. Obiettivi e Pubblico di Riferimento
+3. Struttura dell'App e Navigazione
+4. Meccanica di Gioco
+5. Personalizzazione e Dashboard Utente
+6. Sezione Commercianti
+7. Gestione, Ruoli e Sistema di Pagamento
+8. Architettura Tecnica
+9. Sicurezza e Privacy
+10. Piano di Lancio e Note Finali
+
+1. Panoramica del Progetto
+Vercelli Hidden Runes è una web app di realtà aumentata che trasforma il centro storico di Vercelli in un'arena di gioco interattiva. I giocatori esplorano la città, inquadrano con lo smartphone marker fisici come loghi, rune e monumenti, e sbloccano contenuti digitali tridimensionali e video collegati al tema fantasy-celtico "Libui". Attraverso enigmi, sfide e missioni progressive, il gioco unisce esplorazione urbana, cultura locale e tecnologia avanzata in un'esperienza unica pensata sia per i residenti di Vercelli che per i turisti e i visitatori.
+L'app integra una rete di commercianti locali convenzionati che partecipano attivamente all'ecosistema di gioco offrendo premi e coupon sconto, trasformando la caccia al tesoro in uno strumento concreto di promozione del territorio e del commercio locale.
+
+2. Obiettivi e Pubblico di Riferimento
+Obiettivi principali
+	•	Offrire un'esperienza di gioco innovativa e immersiva basata su tecnologia WebAR nel centro storico di Vercelli.
+	•	Valorizzare i monumenti, i luoghi e la cultura locale attraverso contenuti narrativi e visivi tematici.
+	•	Creare un ecosistema digitale che coinvolga attivamente i commercianti locali, generando traffico verso i loro punti vendita.
+	•	Costruire una community di giocatori fidelizzati attraverso meccaniche di progressione, ricompense e condivisione social.
+	•	Generare un modello di business sostenibile basato su quote di partecipazione, abbonamenti e visibilità commerciale.
+Pubblico di riferimento
+	•	Residenti di Vercelli di tutte le età, in particolare famiglie, giovani e appassionati di storia locale.
+	•	Turisti e visitatori che desiderano esplorare la città in modo originale e coinvolgente.
+	•	Commercianti locali interessati a promuovere la propria attività attraverso un canale digitale innovativo.
+
+3. Struttura dell'App e Navigazione
+Menu di navigazione principale
+L'app sarà dotata di un menu di navigazione persistente accessibile da tutte le pagine, con le seguenti voci principali: Home, Come Funziona, Avventure disponibili, Accedi / Registrati, Dashboard (per utenti autenticati) e Contatti.
+Landing Page
+La landing page è il primo punto di contatto con l'utente e deve comunicare immediatamente l'identità visiva e il valore del prodotto. Sarà strutturata nelle seguenti sezioni:
+	•	Hero Section: immagine o video di sfondo con anteprima dell'esperienza AR nel centro di Vercelli, nome e logo dell'app con claim accattivante (es. "Svela i segreti nascosti di Vercelli") e pulsante call-to-action ben visibile.
+	•	Come Funziona: riassunto visivo in 4 passi illustrati — Registrati, Scegli l'avventura, Esplora la città, Vinci premi.
+	•	Anteprima del gioco: screenshot e mockup dell'esperienza AR, breve video dimostrativo che mostra l'attivazione di un monumento.
+	•	Ricompense e vantaggi: sezione visiva che mostra coupon, gadget e badge ottenibili.
+	•	Sezione Commercianti: invito ai commercianti locali a unirsi alla piattaforma con pulsante di registrazione separato.
+	•	Social Proof: numero di giocatori attivi, loghi degli sponsor e dei partner tecnologici.
+	•	Footer: link alle pagine principali, contatti, privacy policy, termini e condizioni e social media.
+Pagina Come Funziona
+Pagina dedicata con spiegazione dettagliata e visiva del processo di gioco, delle tipologie di enigmi, del sistema di premi e delle modalità di partecipazione. Include una sezione FAQ con le domande più frequenti.
+Pagina Contatti
+Include una sezione About con la storia e la visione del progetto, un modulo di contatto, i riferimenti social, la presentazione degli sponsor e delle tecnologie utilizzate.
+
+4. Meccanica di Gioco
+Registrazione e onboarding
+Alla prima registrazione l'utente verrà guidato attraverso un breve processo di onboarding nel quale potrà scegliere il proprio personaggio tra 5 modelli disponibili, ognuno con una storia e un'identità coerente con il tema Libui. Il sistema assegnerà al nuovo giocatore un tutorial interattivo per familiarizzare con le meccaniche AR prima di iniziare la prima missione reale.
+Modalità di gioco
+L'utente potrà scegliere se affrontare l'avventura in solitaria o creare/unirsi a un team. I team potranno essere pubblici o privati, accessibili tramite codice invito, e disporranno di una classifica interna per stimolare la competizione amichevole tra i membri. Ogni membro del team contribuisce con il proprio punteggio al totale del gruppo.
+Struttura delle missioni
+Il gioco è strutturato in missioni progressive, ognuna composta da più tappe distribuite nel centro storico di Vercelli. Ogni tappa si attiva inquadrando con lo smartphone un marker specifico che potrà essere un logo, una runa, un elemento architettonico o un monumento. Il marker attiverà un'esperienza in realtà aumentata con contenuti 2D, 3D o video. Dopo aver visionato il contenuto, il giocatore dovrà risolvere un enigma o completare una sfida per sbloccare la tappa successiva.
+Tipologie di enigmi
+	•	Indovinelli testuali a risposta libera o multipla.
+	•	Puzzle visivi da completare sull'interfaccia AR.
+	•	Sfide basate sulla posizione GPS che richiedono di raggiungere fisicamente un punto preciso.
+	•	Sfide di squadra che richiedono la collaborazione di più membri del team simultaneamente.
+	•	Mini-giochi interattivi integrati nell'esperienza AR.
+Punteggio e classifiche
+Ogni missione avrà un livello di difficoltà dichiarato (facile, medio, difficile) e un tempo massimo di completamento. I giocatori che completano la missione entro il tempo limite otterranno un punteggio bonus. Sarà presente una classifica globale e una per team, aggiornate in tempo reale e visibili a tutti gli utenti dall'apposita sezione della dashboard.
+Sistema di ricompense
+Al completamento di una missione il giocatore riceverà una combinazione di premi variabile in base al punteggio ottenuto, al tempo impiegato e alla difficoltà affrontata. Le ricompense potranno includere buoni sconto offerti dai commercianti locali convenzionati, gadget a tema, premi speciali offerti dall'organizzatore e badge esclusivi da collezione.
+Quote di partecipazione
+La partecipazione prevede il pagamento di una quota di accesso differenziata per tipologia di missione, calcolata in base alla complessità del gioco, al numero di tappe, alla qualità dei contenuti AR e ai costi delle risorse tecniche. Saranno disponibili formule promozionali come sconti per chi invita nuovi giocatori e pacchetti multi-missione a prezzo ridotto.
+
+5. Personalizzazione e Dashboard Utente
+Personalizzazione del personaggio
+Ogni giocatore potrà scegliere il proprio personaggio tra 5 modelli con storia e identità coerenti con il tema Libui. I personaggi potranno essere personalizzati nel tempo sbloccando elementi estetici come costumi, accessori ed effetti visivi come ricompensa per il completamento di missioni o obiettivi speciali.
+Struttura della dashboard
+La dashboard personale è il punto centrale dell'esperienza utente ed è organizzata nelle seguenti sezioni:
+	•	Profilo: nome utente, avatar, livello raggiunto, statistiche di gioco (missioni completate, enigmi risolti, tempo medio, punteggio totale) e possibilità di modificare i dati personali.
+	•	Missioni: panoramica delle avventure disponibili, in corso e completate, con dettaglio delle tappe superate e dei punteggi ottenuti.
+	•	Inventario premi: raccolta di tutti i badge, coupon e gadget ottenuti, con indicazione della scadenza dei buoni sconto e istruzioni per il loro utilizzo.
+	•	Classifica: posizione del giocatore nella classifica globale e, se in un team, in quella di gruppo.
+	•	Team: gestione del proprio team, lista dei membri, chat interna e progressi condivisi.
+	•	Notifiche: aggiornamenti su nuove missioni, scadenze coupon, attività del team e risultati raggiunti.
+Sistema di progressione
+Il sistema di progressione è basato su livelli di esperienza. Ogni azione in gioco — completare una tappa, risolvere un enigma nel minor tempo, invitare un amico — contribuisce all'accumulo di punti esperienza che fanno salire il giocatore di livello, sbloccando contenuti esclusivi e vantaggi aggiuntivi.
+Condivisione social e referral
+I giocatori potranno condividere risultati, screenshot dell'esperienza AR e badge ottenuti direttamente sui principali social network (Instagram, Facebook, TikTok). Ogni condivisione genererà un link di invito personalizzato e tracciabile: quando una persona invitata si registra e acquista la prima missione, sia l'invitante che il nuovo utente riceveranno un coupon sconto. Questo meccanismo di referral incentiverà la crescita organica della community e premierà i giocatori più attivi.
+
+6. Sezione Commercianti
+Registrazione e accesso
+La sezione commercianti è accessibile tramite un portale di registrazione separato rispetto a quello dei giocatori. Il commerciante, una volta registrato e verificato dall'amministratore, ottiene l'accesso alla propria dashboard dedicata.
+Dashboard commerciante
+	•	Profilo attività: nome del negozio, categoria merceologica, indirizzo, orari di apertura, logo e descrizione, visibili ai giocatori come vetrina digitale.
+	•	Gestione coupon: area per la creazione di buoni sconto con valore o percentuale, condizioni di utilizzo, data di scadenza, numero massimo disponibile e obiettivo di gioco collegato.
+	•	Statistiche: dati su coupon emessi, riscattati e scaduti, con stima della visibilità ottenuta e del traffico generato verso il punto vendita.
+	•	Notifiche: aggiornamenti sullo stato di approvazione dei coupon e segnalazioni di coupon in scadenza o esauriti.
+Flusso di approvazione coupon
+Il processo di gestione dei coupon segue tre fasi. Prima fase: il commerciante compila il modulo di creazione nella propria dashboard e lo invia per la revisione. Seconda fase: l'amministratore verifica la correttezza e la conformità alle linee guida della piattaforma, e approva o richiede modifiche. Terza fase: una volta approvato, il coupon viene reso disponibile nel gioco e assegnato automaticamente ai giocatori che raggiungono l'obiettivo collegato.
+Tipologie di coupon
+	•	Sconto percentuale sul totale dell'acquisto.
+	•	Sconto a valore fisso (es. 5€ di sconto).
+	•	Omaggio al raggiungimento di una soglia di spesa.
+	•	Accesso a un'offerta esclusiva riservata ai partecipanti alla caccia al tesoro.
+Ogni coupon sarà dotato di un codice univoco e tracciabile che il giocatore potrà mostrare direttamente dallo smartphone al momento dell'utilizzo.
+Modello di partecipazione
+La partecipazione dei commercianti sarà disponibile in formula base gratuita, con la possibilità di accedere a pacchetti a pagamento per una maggiore visibilità, come la comparsa in evidenza nella mappa dei negozi convenzionati o la sponsorizzazione di una missione specifica.
+
+7. Gestione, Ruoli e Sistema di Pagamento
+Architettura multi-ruolo
+L'app prevede database e dashboard distinte per tre tipologie di utenti: amministratori, giocatori e commercianti. I permessi di accesso sono gestiti tramite Firebase Authentication con Custom Claims che determinano il ruolo di ciascun utente.
+Ruolo Amministratore
+Gli amministratori hanno accesso completo alla piattaforma tramite una dashboard di controllo avanzata. Le loro funzioni esclusive includono: creazione, modifica e pubblicazione di avventure, missioni ed enigmi; caricamento e gestione di modelli 3D, video e contenuti AR; approvazione o rifiuto dei coupon creati dai commercianti; gestione degli utenti; monitoraggio delle statistiche generali della piattaforma; gestione dei pagamenti e delle quote di partecipazione.
+Ruolo Giocatore
+Il giocatore ha accesso alla propria dashboard personale per gestire il profilo, visualizzare i progressi, consultare l'inventario premi e partecipare alle missioni disponibili. Le azioni del giocatore sono tracciate e registrate su Firestore per aggiornare in tempo reale punteggi, classifiche e ricompense.
+Ruolo Commerciante
+Il commerciante ha accesso a una dashboard dedicata per la gestione della propria vetrina digitale e la creazione di coupon, i quali entrano in un flusso di approvazione amministrativa prima di essere resi disponibili nel gioco.
+Sistema di pagamento
+Il sistema di pagamento sarà integrato tramite Stripe, collegato a Firebase attraverso Cloud Functions per garantire transazioni sicure lato server nel rispetto degli standard PCI-DSS. Il flusso prevede la creazione di un Payment Intent su Stripe tramite Cloud Function, evitando che dati sensibili transitino lato client. Una volta confermato il pagamento, la Cloud Function aggiorna automaticamente il documento dell'utente su Firestore, sbloccando l'accesso alla missione.
+I giocatori potranno pagare tramite carta di credito/debito, Apple Pay e Google Pay, tutti supportati nativamente da Stripe. Le quote saranno differenziate per tipologia e difficoltà della missione.
+Sarà disponibile un sistema di abbonamento mensile o stagionale gestito tramite Stripe Subscriptions, con aggiornamento automatico dei permessi su Firestore alla conferma del rinnovo. Ogni transazione sarà registrata in una collezione dedicata su Firestore, consultabile dall'amministratore tramite pannello di rendicontazione. Sarà prevista una policy di rimborso chiara consultabile prima dell'acquisto.
+
+8. Architettura Tecnica
+Stack tecnologico front-end
+	•	AR.js: libreria principale per la gestione della realtà aumentata basata su marker nel browser.
+	•	Three.js: rendering di contenuti 3D e animazioni nell'ambiente AR.
+	•	GSAP (GreenSock Animation Platform): animazioni fluide per l'interfaccia utente e le transizioni.
+	•	HTML5 / CSS3 / JavaScript (ES6+): base tecnologica della web app.
+Firebase — Servizi utilizzati
+Firebase è l'ecosistema scelto per backend, database, autenticazione e storage. Di seguito i servizi impiegati:
+	•	Firebase Authentication: gestione della registrazione e del login tramite email/password e provider social (Google, Facebook). I ruoli (admin, giocatore, commerciante) sono assegnati tramite Custom Claims.
+	•	Cloud Firestore: database NoSQL strutturato in collezioni distinte per utenti, missioni, enigmi, tappe, coupon, transazioni e classifiche. Le Firestore Security Rules garantiscono che ogni ruolo acceda esclusivamente ai dati di propria competenza.
+	•	Firebase Storage: archiviazione di modelli 3D, video, immagini AR e loghi dei commercianti, con regole di accesso differenziate per ruolo.
+	•	Firebase Cloud Functions: logica di business serverless per approvazione coupon, calcolo punteggi, invio notifiche automatiche, generazione codici referral ed elaborazione pagamenti tramite Stripe.
+	•	Firebase Cloud Messaging (FCM): notifiche push per aggiornamenti su missioni, coupon in scadenza, attività del team e risultati.
+	•	Firebase Analytics: monitoraggio del comportamento degli utenti per ottimizzare l'esperienza di gioco e le performance delle missioni.
+	•	Firebase Remote Config: gestione dinamica di parametri configurabili da remoto senza necessità di aggiornare l'app (prezzi, soglie di punteggio, messaggi promozionali).
+Struttura del database Firestore
+Il database sarà organizzato nelle seguenti collezioni principali:
+	•	users: profili utente con ruolo, livello, punteggio, inventario premi e riferimenti al personaggio scelto.
+	•	missions: avventure create dagli admin con metadati, livello di difficoltà, tappe e contenuti AR collegati.
+	•	steps: singole tappe delle missioni con coordinate GPS, tipo di marker, contenuto AR e enigma associato.
+	•	teams: dati dei team con lista membri, punteggio aggregato e progressi condivisi.
+	•	coupons: buoni sconto con stato di approvazione, codice univoco, scadenza e commerciante di riferimento.
+	•	merchants: profili dei commercianti con dati attività e storico coupon.
+	•	transactions: registro di tutti i pagamenti con stato, importo, missione acquistata e timestamp.
+	•	leaderboard: classifica globale e per team aggiornata in tempo reale.
+Compatibilità e limiti tecnici
+AR.js e la WebAR hanno limitazioni su alcuni dispositivi e browser. L'app sarà ottimizzata per i browser moderni (Chrome e Safari su iOS/Android) e sarà presente una pagina di verifica compatibilità al primo accesso. Verrà implementato il supporto alla modalità offline tramite Firestore Offline Persistence, per garantire una degradazione graziosa della funzionalità in caso di perdita della connessione durante una missione.
+
+9. Sicurezza e Privacy
+Protezione dei dati e GDPR
+L'app raccoglierà dati personali degli utenti e dovrà essere pienamente conforme al Regolamento Europeo sulla Protezione dei Dati (GDPR). Sarà redatta una Privacy Policy chiara e accessibile prima della registrazione. Saranno implementati meccanismi di consenso esplicito per la raccolta e il trattamento dei dati, con possibilità per l'utente di richiedere l'esportazione o la cancellazione del proprio account e dei dati associati.
+Sicurezza delle transazioni
+Tutti i pagamenti saranno gestiti lato server tramite Stripe e Firebase Cloud Functions, senza che dati sensibili transitino lato client. Le comunicazioni saranno protette da HTTPS e le Firestore Security Rules garantiranno l'isolamento dei dati tra i diversi ruoli utente.
+Prevenzione delle frodi
+Sarà implementato un sistema di verifica lato server per la validazione degli enigmi risolti, evitando che i giocatori possano aggirare le tappe tramite manipolazione del client. I codici coupon saranno univoci, tracciabili e verificati al momento del riscatto tramite Cloud Function. Saranno presenti limiti di utilizzo per prevenire abusi del sistema di referral.
+Termini e Condizioni
+Saranno redatti termini e condizioni separati per giocatori e commercianti, consultabili dall'app e accettati obbligatoriamente al momento della registrazione. Includeranno la policy di rimborso, le regole di utilizzo della piattaforma e le responsabilità delle parti.
+
+10. Piano di Lancio e Note Finali
+Fasi di sviluppo consigliate
+	•	Fase 1 — MVP: autenticazione, una missione demo con 3-5 tappe, sistema AR base con AR.js, dashboard utente essenziale e integrazione pagamenti Stripe.
+	•	Fase 2 — Beta: aggiunta del sistema team, classifica globale, dashboard commerciante e sistema coupon, notifiche push e condivisione social.
+	•	Fase 3 — Lancio pubblico: onboarding completo, personalizzazione personaggi, Remote Config, Analytics, ottimizzazione performance e compatibilità dispositivi.
+	•	Fase 4 — Evoluzione: nuove missioni tematiche stagionali, abbonamenti, pacchetti multi-missione e funzionalità social avanzate.
+Strategia di lancio
+Per il lancio si consiglia di coinvolgere in anticipo un gruppo ristretto di commercianti locali partner e un gruppo beta di giocatori locali, per testare l'esperienza sul campo e raccogliere feedback prima dell'apertura al pubblico. Il lancio ufficiale potrebbe coincidere con un evento cittadino o una manifestazione locale per massimizzare la visibilità.
+Contenuti e produzione
+È fondamentale definire fin da subito chi si occuperà della creazione narrativa delle missioni, della scrittura degli enigmi e della produzione dei modelli 3D, elementi centrali per la qualità dell'esperienza di gioco. Si consiglia di pianificare almeno 2-3 missioni complete pronte al momento del lancio, con una roadmap di contenuti per i mesi successivi.
+Supporto e assistenza
+L'app dovrà prevedere una sezione FAQ integrata, un sistema di segnalazione bug accessibile dalla dashboard utente e un canale di assistenza dedicato sia per i giocatori che per i commercianti, con tempi di risposta definiti.
+
+Documento redatto con il supporto di Claude — Anthropic

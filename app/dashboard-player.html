@@ -672,15 +672,7 @@
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ── MISSIONS DATA (demo offline) ──────────────────────────
-        const MISSIONS = [
-            { id: 'm1', name: 'La Risaia dei Libui', location: 'Campi risicoli a nord', element: '🌿', diff: 'Facile', xp: 280, stops: 3, free: true, price: 0 },
-            { id: 'm2', name: 'Il Canale dei Segreti', location: 'Canale Cavour, centro', element: '💧', diff: 'Media', xp: 420, stops: 4, free: false, price: 3.99 },
-            { id: 'm3', name: 'Battistero di Sant\'Eusebio', location: 'Piazza Sant\'Eusebio', element: '💧', diff: 'Facile', xp: 260, stops: 3, free: false, price: 2.99 },
-            { id: 'm4', name: 'Il Mercato Medievale', location: 'Centro storico', element: '🌿', diff: 'Media', xp: 510, stops: 5, free: false, price: 3.99 },
-            { id: 'm5', name: 'La Torre del Fuoco', location: 'Torre Angolare, sudovest', element: '🔥', diff: 'Difficile', xp: 850, stops: 6, free: false, price: 5.99 },
-            { id: 'm6', name: 'Le Antiche Mura', location: 'Mura Romane, centro storico', element: '⚡', diff: 'Mitica', xp: 1400, stops: 7, free: false, price: 8.99 },
-        ];
+        // ── MISSIONS DATA (Firestore) ──────────────────────────
 
         const ALL_BADGES = [
             { id: 'b1', icon: '🌿', name: 'Primo Passo', desc: 'Prima tappa completata' },
@@ -714,30 +706,55 @@
             renderBadges();
         }
 
-        function renderMissions() {
+        async function renderMissions() {
             const completed = userData.activeMissions || [];
             const grid = document.getElementById('missions-grid');
-            grid.innerHTML = MISSIONS.map(m => {
-                const done = completed.includes(m.id);
-                const diffClass = m.diff.toLowerCase();
-                const lockIcon = m.free ? '' : '<div style="position:absolute; top:20px; right:20px; font-size:1.1em; opacity:0.5;" title="Missione a pagamento">🔒</div>';
-                return `
-        <a href="mission.html?id=${m.id}" class="mission-card ${done ? '' : ''}">
-          ${lockIcon}
-          ${done ? '<div class="mc-status"></div>' : ''}
-          <div class="mc-top">
-            <span class="mc-element">${m.element}</span>
-            <span class="mc-difficulty ${diffClass}">${m.diff}</span>
-          </div>
-          <div class="mc-name">${m.name}</div>
-          <div class="mc-location">📍 ${m.location}</div>
-          <div class="mc-footer">
-            <span class="mc-xp">⚡ ${m.xp} XP</span>
-            ${m.free ? '<span class="mc-free">GRATIS</span>' : `<span class="mc-price">€${m.price}</span>`}
-            <span class="mc-stops">${m.stops} tappe</span>
-          </div>
-        </a>`;
-            }).join('');
+
+            // Fetch Real Missions
+            try {
+                const missionsSnap = await getDocs(collection(db, 'missions'));
+
+                if (missionsSnap.empty) {
+                    grid.innerHTML = '<p class="no-coupons">Nessuna missione disponibile al momento.</p>';
+                } else {
+                    const elementsMap = { water: '💧', wind: '💨', fire: '🔥', earth: '🌿', generic: '⚡' };
+                    const diffMap = { 1: 'Facile', 2: 'Media', 3: 'Difficile', 4: 'Mitica' };
+
+                    grid.innerHTML = missionsSnap.docs.map(doc => {
+                        const m = doc.data();
+                        const id = doc.id;
+
+                        const isDone = completed.includes(id);
+
+                        // Parse values or fallback to defaults
+                        const free = m.isFree === true;
+                        const diffName = diffMap[m.difficulty || 1] || 'Media';
+                        const elementIcon = elementsMap[m.element || 'generic'];
+
+                        const lockIcon = free || isDone ? '' : '<div style="position:absolute; top:20px; right:20px; font-size:1.1em; opacity:0.5;" title="Missione a pagamento">🔒</div>';
+
+                        return `
+                        <a href="mission.html?id=${id}" class="mission-card ${isDone ? '' : ''}">
+                          ${lockIcon}
+                          ${isDone ? '<div class="mc-status"></div>' : ''}
+                          <div class="mc-top">
+                            <span class="mc-element">${elementIcon}</span>
+                            <span class="mc-difficulty ${diffName.toLowerCase()}">${diffName}</span>
+                          </div>
+                          <div class="mc-name">${m.title || 'Missione'}</div>
+                          <div class="mc-location">📍 Vercelli</div>
+                          <div class="mc-footer">
+                            <span class="mc-xp">⚡ ${m.xpTotal || 100} XP</span>
+                            ${free ? '<span class="mc-free">GRATIS</span>' : `<span class="mc-price">€${(m.price || 0).toFixed(2)}</span>`}
+                          </div>
+                        </a>`;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error("Error loading missions:", error);
+                grid.innerHTML = '<p class="no-coupons" style="color:#ff8a8a">Errore caricamento missioni. Riprova più tardi.</p>';
+            }
+
             document.getElementById('stat-missions').textContent = completed.length;
         }
 

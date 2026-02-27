@@ -35,7 +35,9 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #000;
+            background: transparent;
+            /* Allows AR.js video (z-index: -2) to be visible */
+            background-color: transparent;
             opacity: 0;
             animation: fadeIn 0.8s forwards;
         }
@@ -623,10 +625,7 @@
     <div id="gps-error">
         <div class="ce-icon">🧭</div>
         <h1 class="ce-title">Sei Troppo Lontano</h1>
-        <p class="ce-text" id="gps-error-text">
-            Devi essere fisicamente vicino alla tappa per svelare la runa in Realtà Aumentata.
-        </p>
-        <a href="javascript:history.back()" class="ce-btn">← Torna alla Mappa</a>
+        <a href="#" id="ce-back-link" class="ce-btn">← Torna alla Mappa</a>
     </div>
 
     <!-- ── CAMERA PROMPT ── -->
@@ -636,7 +635,11 @@
         <p class="cp-text">
             Per svelare le rune antiche e completare la missione, il Guardiano deve usare il suo occhio divino.
         </p>
-        <div class="cp-hint">Accetta il permesso della fotocamera nel popup del browser.</div>
+
+        <!-- Bottone esplicito per attivare la scena AR -->
+        <button id="btn-start-camera" class="btn-continue" style="margin-top:20px;">Attiva Fotocamera</button>
+
+        <div class="cp-hint" style="margin-top:24px;">Accetta il permesso della fotocamera nel popup del browser.</div>
         <div id="camera-error"
             style="display:none; color:#ff8a8a; margin-top:24px; font-size:0.9em; font-style:italic;">
             Permesso negato. Ricarica la pagina e consenti l'accesso, oppure modificalo nelle impostazioni del browser.
@@ -646,7 +649,8 @@
     <!-- ── A-FRAME SCENE ── -->
     <a-scene id="ar-scene" embedded
         arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-        renderer="logarithmicDepthBuffer: true; antialias: true;" vr-mode-ui="enabled: false">
+        renderer="logarithmicDepthBuffer: true; antialias: true;" vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false">
         <!-- Lights -->
         <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
         <a-light type="directional" position="1 1 0.5" intensity="0.6" color="#e8b84b"></a-light>
@@ -667,7 +671,7 @@
     <!-- ── OVERLAY ── -->
     <div id="ar-overlay">
         <div id="ar-topbar">
-            <a href="javascript:history.back()" class="ar-back">← Missione</a>
+            <a href="#" id="ar-back-link" class="ar-back">← Missione</a>
             <div class="ar-info">
                 <span id="ar-stop-name">Tappa 1</span>
                 <small id="ar-mission-name">Missione</small>
@@ -724,47 +728,55 @@
         // ── IMPORTS ────────────────────────────────────────────────
         import { auth, db } from '../firebase/firebase-config.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        // ── MISSION DATA (same as mission.html) ───────────────────
-        const STOPS = {
-            m1: [
-                { id: 's1', name: "L'Ingresso dei Campi", riddle: 'Quale runa rappresenta la fertilità della terra?', answer: 'ᛟ', hint: 'Cercala tra le radici', rune: 'ᚢ', xp: 90, lat: 45.3350, lng: 8.4100 },
-                { id: 's2', name: 'Il Pozzo dei Libui', riddle: 'Quante stagioni proteggeva il guardiano del pozzo?', answer: '4', hint: 'Le stagioni del raccolto', rune: 'ᚷ', xp: 90, lat: 45.3400, lng: 8.4050 },
-                { id: 's3', name: 'Il Confine Sacro', riddle: 'Qual è il nome celtico del dio delle acque?', answer: 'verbumnus', hint: 'Dio celtico di fiumi e abbondanza', rune: 'ᚺ', xp: 100, lat: 45.3450, lng: 8.4150 },
-            ],
-            m2: [
-                { id: 's1', name: 'La Prima Chiusa', riddle: 'Quale runa significa acqua corrente?', answer: 'ᛚ', hint: 'Runa lagu — l\'acqua', rune: 'ᛚ', xp: 100, lat: 45.3300, lng: 8.4200 },
-                { id: 's2', name: 'Il Palazzo dell\'Acqua', riddle: 'In che anno fu costruito il Canale Cavour?', answer: '1866', hint: 'Metà Ottocento, Risorgimento', rune: 'ᚢ', xp: 110, lat: 45.3280, lng: 8.4250 },
-                { id: 's3', name: 'Il Ponte dei Sussurri', riddle: 'Qual è il nome della dea dell\'acqua celtica?', answer: 'coventina', hint: 'Dea dei pozzi e delle sorgenti', rune: 'ᚱ', xp: 100, lat: 45.3250, lng: 8.4220 },
-                { id: 's4', name: 'La Foce Segreta', riddle: 'Quante rune ancestrali compongono il Futhark Antico?', answer: '24', hint: 'Il tuo alfabeto runico', rune: 'ᚷ', xp: 110, lat: 45.3220, lng: 8.4300 },
-            ],
-        };
+        import { doc, getDoc, updateDoc, arrayUnion, increment, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ── URL PARAMS ────────────────────────────────────────────
         const params = new URLSearchParams(location.search);
-        const missionId = params.get('mission') || 'm1';
-        const stopId = params.get('stop') || 's1';
+        let missionId = params.get('mission') || 'm1';
+        let stopId = params.get('stop') || 's1';
         const runeChar = decodeURIComponent(params.get('rune') || 'ᚢ');
 
-        // Find stop data
-        const mStops = STOPS[missionId] || STOPS.m1;
-        const stop = mStops.find(s => s.id === stopId) || mStops[0];
-
+        let stop = null;
         let currentUser = null;
         let markerFound = false;
         let hintShown = false;
 
+        async function fetchStopData() {
+            try {
+                const sSnap = await getDoc(doc(db, 'missions', missionId, 'stops', stopId));
+                if (sSnap.exists()) {
+                    stop = sSnap.data();
+                } else {
+                    console.error("Stop not found in DB");
+                    if (params.get('mock') === 'true') {
+                        const bm = await getDocs(collection(db, 'missions'));
+                        if (!bm.empty) {
+                            missionId = bm.docs[0].id;
+                            const bs = await getDocs(collection(db, 'missions', missionId, 'stops'));
+                            if (!bs.empty) {
+                                stopId = bs.docs[0].id;
+                                stop = bs.docs[0].data();
+                            }
+                        }
+                    }
+                }
+            } catch (e) { console.error("Error fetching stop", e); }
+        }
+
         // ── AUTH ──────────────────────────────────────────────────
-        onAuthStateChanged(auth, user => {
+        onAuthStateChanged(auth, async user => {
             if (params.get('mock') === 'true') {
                 currentUser = { uid: 'mock' };
+                await fetchStopData();
+                if (!stop) stop = { name: 'Test', riddle: 'Test', answer: 'test', hint: 'test', xp: 100, lat: 0, lng: 0, rune: 'ᚢ' };
                 updateUI();
                 checkGeolocationAndStart();
                 return;
             }
             if (!user) { window.location.href = 'login.html'; return; }
             currentUser = user;
+            await fetchStopData();
+            if (!stop) { alert("Tappa non trovata."); window.location.href = 'dashboard-player.html'; return; }
             updateUI();
             checkGeolocationAndStart();
         });
@@ -818,6 +830,11 @@
             document.getElementById('so-rune').textContent = stop.rune || runeChar;
             document.getElementById('so-xp').textContent = `+${stop.xp} XP`;
             document.getElementById('so-name').textContent = stop.name;
+
+            // Update Back Links
+            const backLink = `mission.html?id=${missionId}`;
+            document.getElementById('ar-back-link').href = backLink;
+            document.getElementById('ce-back-link').href = backLink;
         }
 
         // ── AR SETUP ──────────────────────────────────────────────
@@ -832,17 +849,34 @@
             buildRuneContent('ar-content-uruz', stop.rune || '???');
             buildRuneContent('ar-content-hiro', stop.rune || '???');
 
-            // Detect marker found
-            const scene = document.querySelector('a-scene');
+            const scene = document.getElementById('ar-scene');
+
+            // Setup pulsante di Start fotocamera
+            const startBtn = document.getElementById('btn-start-camera');
+            if (startBtn) {
+                startBtn.addEventListener('click', () => {
+                    const cp = document.getElementById('camera-prompt');
+                    if (cp) cp.classList.add('hidden');
+
+                    // Force the AR.js video to play in case iOS paused it
+                    const video = document.querySelector('video');
+                    if (video) {
+                        video.play().catch(e => console.log('Video play error:', e));
+                    }
+                });
+            }
 
             scene.addEventListener('camera-init', () => {
-                const cp = document.getElementById('camera-prompt');
-                if (cp) cp.classList.add('hidden');
+                if (startBtn) {
+                    startBtn.textContent = 'Inizia Scansione';
+                    startBtn.disabled = false;
+                }
             });
 
             scene.addEventListener('camera-error', () => {
                 const ce = document.getElementById('camera-error');
                 if (ce) ce.style.display = 'block';
+                if (startBtn) startBtn.textContent = 'Errore Fotocamera';
             });
 
             scene.addEventListener('loaded', () => {
@@ -850,9 +884,6 @@
                 markers.forEach(marker => {
                     marker.addEventListener('markerFound', () => {
                         if (!markerFound) onMarkerFound();
-                    });
-                    marker.addEventListener('markerLost', () => {
-                        // optional: could dim the puzzle but keep it open
                     });
                 });
             });

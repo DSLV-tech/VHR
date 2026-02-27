@@ -468,6 +468,7 @@
             border-radius: 4px;
             margin-bottom: 30px;
             z-index: 10;
+            position: relative;
         }
 
         .leaflet-layer,
@@ -511,7 +512,7 @@
 <body>
 
     <header class="topbar">
-        <a href="dashboard-player.html">← Dashboard</a>
+        <a href="dashboard-player.html" class="ar-back">← Dashboard</a>
         <span class="topbar-title" id="topbar-title">Missione</span>
     </header>
 
@@ -526,77 +527,83 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ── MISSION DATA ──────────────────────────────────────────
-        const MISSIONS = {
-            m1: {
-                id: 'm1', name: 'La Risaia dei Libui', location: 'Campi risicoli a nord', element: '🌿',
-                diff: 'Facile', xp: 280, price: 0, free: true,
-                desc: 'I Libui, tribù celtica fondatrice di Vercelli, custodivano tra i filari di riso i segreti della terra. Segui il vento tra le spighe e ascolta le voci degli antenati.',
-                stops: [
-                    { id: 's1', name: 'L\'Ingresso dei Campi', location: 'Bivio via Leri Nord', riddle: 'Quale runa rappresenta la fertilità della terra?', answer: 'ᛟ', hint: 'Cercala tra le radici', markerRune: 'ᚢ', lat: 45.3350, lng: 8.4100 },
-                    { id: 's2', name: 'Il Pozzo dei Libui', location: 'Podere abbandonato, nord-ovest', riddle: 'Quante stagioni proteggeva il guardiano del pozzo?', answer: '4', hint: 'Le stagioni del raccolto', markerRune: 'ᚷ', lat: 45.3400, lng: 8.4050 },
-                    { id: 's3', name: 'Il Confine Sacro', location: 'Argine canale, nord', riddle: 'Qual è il nome celtico del dio delle acque?', answer: 'verbumnus', hint: 'Dio celtico di fiumi e abbondanza', markerRune: 'ᚺ', lat: 45.3450, lng: 8.4150 },
-                ]
-            },
-            m2: {
-                id: 'm2', name: 'Il Canale dei Segreti', location: 'Canale Cavour, centro', element: '💧',
-                diff: 'Media', xp: 420, price: 3.99, free: false,
-                desc: 'Un sistema di canali costruito su vie d\'acqua millenarie. Sotto la superficie scorrono non solo acque, ma messaggi cifrati che i Templari usavano per comunicare.',
-                stops: [
-                    { id: 's1', name: 'La Prima Chiusa', location: 'Sbarramento nord, via Po', riddle: 'Quale runa significa acqua corrente?', answer: 'ᛚ', hint: 'Runa lagu — l\'acqua', markerRune: 'ᛚ', lat: 45.3300, lng: 8.4200 },
-                    { id: 's2', name: 'Il Palazzo dell\'Acqua', location: 'Edificio storico canale', riddle: 'In che anno fu costruito il Canale Cavour?', answer: '1866', hint: 'Metà Ottocento, Risorgimento', markerRune: 'ᚢ', lat: 45.3280, lng: 8.4250 },
-                    { id: 's3', name: 'Il Ponte dei Sussurri', location: 'Passerella pedonale, centro', riddle: 'Qual è il nome della dea dell\'acqua celtica?', answer: 'coventina', hint: 'Dea dei pozzi e delle sorgenti', markerRune: 'ᚱ', lat: 45.3250, lng: 8.4220 },
-                    { id: 's4', name: 'La Foce Segreta', location: 'Confluenza canali, est', riddle: 'Quante rune ancestrali compongono il Futhark Antico?', answer: '24', hint: 'Il tuo alfabeto runico', markerRune: 'ᚷ', lat: 45.3220, lng: 8.4300 },
-                ]
-            },
-            m3: { id: 'm3', name: "Battistero di Sant'Eusebio", location: "Piazza Sant'Eusebio", element: '💧', diff: 'Facile', xp: 260, price: 2.99, free: false, desc: 'Il battistero più antico del Piemonte. Sotto le fondamenta ottagonali si nasconde un codice trasmesso di vescovo in vescovo per 1600 anni.', stops: [{ id: 's1', name: 'Atrio Antico', location: "Ingresso Piazza Sant'Eusebio", riddle: 'Chi era il primo vescovo di Vercelli?', answer: 'eusebio', hint: 'IV secolo d.C.', markerRune: 'ᚢ', lat: 45.3275, lng: 8.4207 }, { id: 's2', name: 'La Fontana Battesimale', location: 'Centro battistero', riddle: 'Quanti lati ha il battistero?', answer: '8', hint: 'Forma ottagonale', markerRune: 'ᚺ', lat: 45.3276, lng: 8.4208 }, { id: 's3', name: 'Le Fondamenta Romane', location: 'Cripta sotterranea', riddle: 'In quale lingua erano scritte le prime pergamene vercellesi?', answer: 'latino', hint: 'Lingua della chiesa medievale', markerRune: 'ᚱ', lat: 45.3276, lng: 8.4209 }] },
-            m4: { id: 'm4', name: 'Il Mercato Medievale', location: 'Centro storico', element: '🌿', diff: 'Media', xp: 510, price: 3.99, free: false, desc: 'Per secoli piazza Cavour fu il cuore pulsante di scambi e segreti. Ogni banco nascondeva un codice commerciale che solo gli iniziati sapevano decifrare.', stops: [{ id: 's1', name: 'Palazzo del Comune', location: 'Piazza Cavour, lato nord', riddle: 'Quale materiale costruiva i tessitori vercellesi famosi in tutta Europa?', answer: 'lino', hint: 'Una fibra naturale', markerRune: 'ᚢ', lat: 45.3255, lng: 8.4215 }, { id: 's2', name: 'Il Vicolo dei Mercanti', location: 'Via Gioberti, laterale', riddle: 'Qual è il nome del mercato annuale medievale di Vercelli?', answer: 'fiera', hint: 'Si teneva d\'estate', markerRune: 'ᚷ', lat: 45.3250, lng: 8.4225 }, { id: 's3', name: 'La Loggia dei Lanaioli', location: 'Angolo via Cavour/Verdi', riddle: 'Quale corporazione dominava il commercio vercellese nel 1200?', answer: 'arte della lana', hint: 'Tessitori e commercianti di tessuti', markerRune: 'ᛖ', lat: 45.3245, lng: 8.4210 }, { id: 's4', name: 'La Fontana Centrale', location: 'Centro piazza', riddle: 'Quante sentinelle guardavano le mura medievali di notte?', answer: '12', hint: 'Una per ogni torre', markerRune: 'ᚺ', lat: 45.3252, lng: 8.4220 }, { id: 's5', name: 'La Loggia del Tesoro', location: 'Palazzo Cenni, est', riddle: 'In quale lingua parlavano i mercanti arabi che visitavano Vercelli?', answer: 'arabo', hint: 'Lingua dei mercati orientali', markerRune: 'ᛚ', lat: 45.3258, lng: 8.4230 }] },
-            m5: { id: 'm5', name: 'La Torre del Fuoco', location: 'Torre angolare, sudovest', element: '🔥', diff: 'Difficile', xp: 850, price: 5.99, free: false, desc: 'La torre più alta e misteriosa delle mura di Vercelli. I custodi usavano segnali di fuoco per comunicare con sentinelle distanti. Ogni fiamma era un messaggio.', stops: [{ id: 's1', name: 'Base della Torre', location: 'Accesso via Vela', riddle: 'Quale runa representa il fuoco?', answer: 'ᚲ', hint: 'Runa Kenaz o Kaunan', markerRune: 'ᚲ', lat: 45.3200, lng: 8.4150 }, { id: 's2', name: 'Il Primo Livello', location: 'Accesso interno (simulato)', riddle: 'A quanti km si vedevano i segnali di fuoco delle torri vercellesi?', answer: '30', hint: 'Visibili fino alle Alpi nelle notti limpide', markerRune: 'ᚢ', lat: 45.3201, lng: 8.4151 }, { id: 's3', name: 'La Feritoia del Guardiano', location: 'Lato est della torre', riddle: 'Che nome aveva il capitano delle sentinelle del 1300?', answer: 'ardito', hint: 'Significato: audace, coraggioso', markerRune: 'ᚷ', lat: 45.3202, lng: 8.4152 }, { id: 's4', name: 'Il Cammino di Ronda', location: 'Perimetro esterno mura', riddle: 'Quante torri componevano le mura medievali originali?', answer: '16', hint: 'Alcune sono ancora visibili', markerRune: 'ᚺ', lat: 45.3210, lng: 8.4140 }, { id: 's5', name: 'Il Magazzino delle Armi', location: 'Corpo nord delle mura', riddle: 'Quale materiale era usato per le frecce delle balestre vercellesi?', answer: 'legno di frassino', hint: 'Albero sacro ai Vichinghi', markerRune: 'ᛖ', lat: 45.3220, lng: 8.4160 }, { id: 's6', name: 'La Sommità', location: 'Camera superiore (simbolica)', riddle: 'Qual è la runa della vittoria?', answer: 'ᛏ', hint: 'Runa Tiwaz, dio guerriero', markerRune: 'ᛏ', lat: 45.3200, lng: 8.4150 }] },
-            m6: { id: 'm6', name: 'Le Antiche Mura', location: 'Mura Romane, centro storico', element: '⚡', diff: 'Mitica', xp: 1400, price: 8.99, free: false, desc: 'Prima dei Libui, prima dei Romani, c\'erano le mura. Costruite su linee di forza telluriche, oggi ancora vibrano di un\'energia che pochi sanno percepire. Sei uno di loro?', stops: [{ id: 's1', name: 'Porta Orientale', location: 'Inizio via Galileo Ferraris', riddle: 'Come si chiamava Vercelli in latino Romano?', answer: 'vercellae', hint: 'Nome su tutte le mappe imperiali', markerRune: 'ᚢ', lat: 45.3260, lng: 8.4180 }, { id: 's2', name: 'Il Tratto Intatto', location: 'Tratto mura via Verdi', riddle: 'In quale secolo furono costruite le prime mura romane di Vercelli?', answer: 'II', hint: 'Secolo prima di Cristo', markerRune: 'ᚺ', lat: 45.3270, lng: 8.4190 }, { id: 's3', name: 'La Torre Semicircolare', location: 'Angolo mura nord', riddle: 'Quanti metri erano le mura originali di Vercellae?', answer: '3000', hint: 'Un perimetro enorme per l\'epoca', markerRune: 'ᚱ', lat: 45.3280, lng: 8.4200 }, { id: 's4', name: 'Il Camminamento', location: 'Interno lato mura nord-ovest', riddle: 'Quale imperatore romano passò da Vercelli nel 69 d.C.?', answer: 'vitellio', hint: 'Anno dei quattro imperatori', markerRune: 'ᚷ', lat: 45.3275, lng: 8.4170 }, { id: 's5', name: 'La Pietra Miliare', location: 'Angolo via Foa/via Galileo', riddle: 'Quale pietra usavano i romani per le mura di Vercelli?', answer: 'granito', hint: 'Estratto dalle cave alpine', markerRune: 'ᛖ', lat: 45.3250, lng: 8.4250 }, { id: 's6', name: 'Il Bastione dei Segreti', location: 'Tratto mura via Don Minzoni', riddle: 'Qual è la runa della protezione?', answer: 'ᚨ', hint: 'Runa Ansuz — la mente divina', markerRune: 'ᛚ', lat: 45.3210, lng: 8.4220 }, { id: 's7', name: 'La Porta Nascosta', location: 'Accesso nascosto, sudovest', riddle: 'Pronuncia la parola dei Libui che significa "custode eterno".', answer: 'vercel', hint: 'La radice del nome stesso della città', markerRune: 'ᛟ', lat: 45.3200, lng: 8.4180 }] },
-        };
+        import { collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const params = new URLSearchParams(location.search);
-        const missionId = params.get('id') || 'm1';
-        const mission = MISSIONS[missionId];
+        let missionId = params.get('id') || 'm1';
+        let mission = null;
 
         let currentUser = null;
         let userData = {};
 
-        function init(user, data) {
+        async function fetchMissionData(mId) {
+            try {
+                const mSnap = await getDoc(doc(db, 'missions', mId));
+                if (mSnap.exists()) {
+                    mission = mSnap.data();
+                    mission.id = mId;
+                    const stopsSnap = await getDocs(query(collection(db, 'missions', mId, 'stops'), orderBy('order')));
+                    mission.stops = stopsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                } else {
+                    console.error("Mission not found in DB");
+                }
+            } catch (e) {
+                console.error("Error fetching mission", e);
+            }
+        }
+
+        async function init(user, data) {
             currentUser = user; userData = data;
-            if (!mission) { document.getElementById('mission-content').innerHTML = '<p style="color:var(--mist);padding:40px 0;font-style:italic">Missione non trovata.</p>'; return; }
+
+            // Allow override for easier local testing
+            if (params.get('mock') === 'true') {
+                missionId = 'm1'; // Try to load first mission
+                const backupMissions = await getDocs(collection(db, 'missions'));
+                if (!backupMissions.empty) {
+                    missionId = backupMissions.docs[0].id;
+                }
+            }
+
+            await fetchMissionData(missionId);
+
+            if (!mission) {
+                document.getElementById('mission-content').innerHTML = '<p style="color:var(--mist);padding:40px 0;font-style:italic">Nessuna missione trovata. Verificare il Database.</p>';
+                return;
+            }
             renderMission();
         }
 
         // ── RENDER ─────────────────────────────────────────────────
         function renderMission() {
-            document.title = `VHR — ${mission.name}`;
-            document.getElementById('topbar-title').textContent = mission.name;
+            document.title = `VHR — ${mission.title || mission.name || 'Missione'}`;
+            document.getElementById('topbar-title').textContent = mission.title || mission.name || 'Missione';
 
             const active = userData.activeMissions || [];
-            const unlocked = active.includes(missionId);
+            const unlocked = mission.isFree || active.includes(missionId);
             const completedSt = userData.completedStops || {};
             const mDone = completedSt[missionId] || [];
 
-            const diffClass = 'diff-' + mission.diff.toLowerCase();
+            const diffNames = ['Molto Facile', 'Facile', 'Media', 'Difficile', 'Mitica'];
+            const diffName = diffNames[(mission.difficulty || 1) - 1] || 'Media';
+            const diffClass = 'diff-' + diffName.toLowerCase();
 
-            const purchaseBlock = (!mission.free && !unlocked) ? `
+            const purchaseBlock = (!mission.isFree && !unlocked) ? `
       <div class="purchase-box">
         <div>
-          <div class="purchase-price">€ ${mission.price.toFixed(2)}</div>
+          <div class="purchase-price">€ ${(mission.price || 0).toFixed(2)}</div>
           <div class="purchase-text">Sblocca questa missione per iniziare l'avventura ed accedere a tutte le tappe AR.</div>
         </div>
         <button class="btn-purchase" onclick="mockPurchase()">✦ Sblocca Missione</button>
       </div>` : '';
 
-            const stopsHTML = mission.stops.map((s, i) => {
+            const stopsHTML = (mission.stops || []).map((s, i) => {
                 const prevDone = i === 0 || mDone.includes(mission.stops[i - 1].id);
                 const isDone = mDone.includes(s.id);
-                const isActive = (mission.free || unlocked) && !isDone && prevDone;
+                const isActive = (mission.isFree || unlocked) && !isDone && prevDone;
                 const isLocked = !isDone && !isActive;
                 const cardClass = isDone ? 'done' : isActive ? 'active' : 'locked';
                 const action = isActive
-                    ? `<a href="ar-scanner.html?mission=${missionId}&stop=${s.id}&rune=${encodeURIComponent(s.markerRune)}" class="btn-start-stop">📱 Avvia Tappa AR</a>`
+                    ? `<a href="ar-scanner.html?mission=${missionId}&stop=${s.id}&rune=${encodeURIComponent(s.rune || 'ᚢ')}" class="btn-start-stop">📱 Avvia Tappa AR</a>`
                     : isDone
                         ? `<span class="done-badge">✓ Completata</span>`
                         : '';
@@ -605,33 +612,35 @@
         <div class="stop-card ${cardClass}" ${clickHandler}>
           <div class="stop-num">${isDone ? '✓' : i + 1}</div>
           <div class="stop-body">
-            <div class="stop-name">${s.name}</div>
-            <div class="stop-location">📍 ${s.location}</div>
-            ${isActive ? `<div class="stop-hint">Cerca il marker: <strong>${s.markerRune}</strong> — punta la fotocamera sulla runa stampata</div>` : ''}
+            <div class="stop-name">${s.name || 'Tappa Sconosciuta'}</div>
+            <div class="stop-location">📍 ${s.name}</div>
+            ${isActive ? `<div class="stop-hint">Cerca il marker: <strong>${s.rune || 'ᚢ'}</strong> — punta la fotocamera sulla runa stampata</div>` : ''}
             ${action}
           </div>
         </div>`;
             }).join('');
 
+            const totalXp = (mission.stops || []).reduce((acc, curr) => acc + (curr.xp || 100), 0);
+
             document.getElementById('mission-content').innerHTML = `
       <div class="mission-hero">
         <div class="mh-top">
-          <div class="mh-element">${mission.element}</div>
+          <div class="mh-element">⚡</div>
           <div class="mh-info">
-            <div class="mh-eyebrow">Missione · ${mission.diff} · ${mission.stops.length} Tappe</div>
-            <h1 class="mh-title">${mission.name}</h1>
-            <div class="mh-location">📍 ${mission.location}</div>
+            <div class="mh-eyebrow">Missione · Difficoltà ${mission.difficulty || 1}/5 · ${(mission.stops || []).length} Tappe</div>
+            <h1 class="mh-title">${mission.title || mission.name}</h1>
+            <div class="mh-location">📍 Vercelli</div>
             <div class="mh-badges">
-              <span class="badge-pill ${diffClass}">${mission.diff}</span>
-              <span class="badge-pill gold">⚡ ${mission.xp} XP</span>
-              ${mission.free ? '<span class="badge-pill" style="color:#6dbf67;border-color:rgba(109,191,103,0.35)">Gratuita</span>' : ''}
+              <span class="badge-pill ${diffClass}">${diffName}</span>
+              <span class="badge-pill gold">⚡ ${totalXp} XP</span>
+              ${mission.isFree ? '<span class="badge-pill" style="color:#6dbf67;border-color:rgba(109,191,103,0.35)">Gratuita</span>' : ''}
             </div>
           </div>
         </div>
-        <p class="mh-desc">${mission.desc}</p>
+        <p class="mh-desc">${mission.description || mission.shortDesc || mission.desc || ''}</p>
       </div>
 
-      ${purchaseBlock}
+                ${purchaseBlock}
 
       <div class="stops-title">Mappa Tappe</div>
       <div id="mission-map"></div>
@@ -643,8 +652,17 @@
             // Initialize Map
             setTimeout(() => {
                 if (window.missionMap) { window.missionMap.remove(); }
-                const firstStop = mission.stops[0];
-                const map = L.map('mission-map').setView([firstStop.lat, firstStop.lng], 15);
+
+                const hasStops = mission.stops && mission.stops.length > 0;
+                let centerLat = 45.3216;
+                let centerLng = 8.4231;
+
+                if (hasStops && mission.stops[0].lat && mission.stops[0].lng) {
+                    centerLat = mission.stops[0].lat;
+                    centerLng = mission.stops[0].lng;
+                }
+
+                const map = L.map('mission-map').setView([centerLat, centerLng], 15);
                 window.missionMap = map;
 
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -668,13 +686,20 @@
                     popupAnchor: [0, -10]
                 });
 
-                mission.stops.forEach((s, i) => {
-                    const isDone = mDone.includes(s.id);
-                    const icon = isDone ? doneIcon : goldIcon;
-                    L.marker([s.lat, s.lng], { icon: icon }).addTo(map)
-                        .bindPopup('<h3>' + (i + 1) + '. ' + s.name + '</h3><p>' + s.location + '</p>');
-                });
-            }, 100);
+                if (hasStops) {
+                    mission.stops.forEach((s, i) => {
+                        const isDone = mDone.includes(s.id);
+                        const icon = isDone ? doneIcon : goldIcon;
+                        if (s.lat && s.lng) {
+                            L.marker([s.lat, s.lng], { icon: icon }).addTo(map)
+                                .bindPopup('<h3>' + (i + 1) + '. ' + (s.name || 'Tappa') + '</h3><p>Vercelli</p>');
+                        }
+                    });
+                }
+
+                // Fix map container size after a tiny layout delay
+                setTimeout(() => map.invalidateSize(), 500);
+            }, 300);
         }
 
         // ── MOCK PURCHASE ─────────────────────────────────────────
@@ -709,13 +734,10 @@
             }
         };
 
-        // ── AUTH GUARD ───────────────────────────────────────────
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+        // ── LOAD START ───────────────────────────────────────────
         onAuthStateChanged(auth, async user => {
             if (params.get('mock') === 'true') {
-                init({ uid: 'mock' }, { activeMissions: ['m1'], completedStops: { 'm1': ['s1'] } });
+                init({ uid: 'mock', displayName: 'Mock User' }, { activeMissions: ['m1'], completedStops: { 'm1': ['s1'] } });
                 return;
             }
             if (!user) { window.location.href = 'login.html'; return; }

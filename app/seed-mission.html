@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Mission - VHR</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: monospace;
+            padding: 20px;
+        }
+
+        .success {
+            color: #3fb950;
+        }
+
+        .error {
+            color: #f85149;
+        }
+
+        .info {
+            color: #58a6ff;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Seeding Mission Data...</h1>
+    <div id="log"></div>
+
+    <script type="module">
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const logEl = document.getElementById('log');
+        function logMsg(msg, type = 'info') {
+            logEl.innerHTML += `<p class="${type}">${msg}</p>`;
+        }
+
+        onAuthStateChanged(auth, async user => {
+            if (!user) {
+                logMsg('Please login as admin first.', 'error');
+                return;
+            }
+
+            try {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                const data = snap.data();
+                if (!data || data.role !== 'admin') {
+                    logMsg('Not an admin. Access denied.', 'error');
+                    return;
+                }
+
+                logMsg('Admin authenticated. Starting seed...', 'info');
+
+                const batch = writeBatch(db);
+                const missionId = 'm_battistero';
+                const missionRef = doc(db, 'missions', missionId);
+
+                // 1. Set Mission Document
+                batch.set(missionRef, {
+                    title: "Il Battistero di Sant'Eusebio",
+                    shortDesc: "Scopri il mistero del fonte battesimale e le rune dell'inizio.",
+                    description: "L'acqua battesimale e le rune dei Libui parlano la stessa lingua: quella dell'inizio. Una creatura antica, il Custode del Fonte, si è risvegliata. Segui il percorso attorno al Duomo e svela il mistero nascosto nelle geometrie sacre.",
+                    difficulty: 1, // Facile
+                    isFree: true,
+                    price: 0,
+                    status: 'published',
+                    coverUrl: '../assets/icons/rune-water.svg', // Placeholder
+                    element: 'water',
+                    xpTotal: 260,
+                    timeLimit: 35, // Minuti
+                    createdAt: new Date().toISOString()
+                });
+
+                // 2. Set Stops Subcollection
+                const stops = [
+                    {
+                        id: 's1',
+                        order: 1,
+                        name: "Piazza Duomo (Esterno)",
+                        rune: "ᚢ", // Uruz
+                        lat: 45.328, // Placeholder Vercelli
+                        lng: 8.420,
+                        riddle: "Quanti campanili svettano a guardia della piazza?",
+                        answer: "2",
+                        hint: "Guarda la facciata principale del Duomo.",
+                        xp: 80
+                    },
+                    {
+                        id: 's2',
+                        order: 2,
+                        name: "Il Portale Minore",
+                        rune: "ᛚ", // Laguz
+                        lat: 45.3285,
+                        lng: 8.4205,
+                        riddle: "Quale animale di pietra sorregge la colonna di sinistra?",
+                        answer: "leone",
+                        hint: "Osserva la base delle colonne all'ingresso laterale.",
+                        xp: 80
+                    },
+                    {
+                        id: 's3',
+                        order: 3,
+                        name: "La Navata (Interno/Soglia)",
+                        rune: "ᛖ", // Ehwaz
+                        lat: 45.329,
+                        lng: 8.421,
+                        riddle: "Quanti archi principali circondano il fonte battesimale?",
+                        answer: "8",
+                        hint: "Conta gli archi che formano la struttura ottagonale.",
+                        xp: 100
+                    }
+                ];
+
+                stops.forEach(stop => {
+                    const stopRef = doc(db, 'missions', missionId, 'stops', stop.id);
+                    batch.set(stopRef, stop);
+                });
+
+                await batch.commit();
+                logMsg('Seeding completed successfully! Mission "Il Battistero di Sant\'Eusebio" added.', 'success');
+                logMsg('You can now check the Admin Dashboard or play the mission.', 'info');
+
+            } catch (error) {
+                console.error("Error during seeding:", error);
+                logMsg(`Error: ${error.message}`, 'error');
+            }
+        });
+    </script>
+</body>
+
+</html>
