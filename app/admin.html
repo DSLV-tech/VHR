@@ -206,7 +206,8 @@
         .tbl-wrap {
             border: 1px solid var(--border);
             border-radius: 6px;
-            overflow: hidden;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             margin-bottom: 36px;
         }
 
@@ -433,48 +434,58 @@
 
             .sidebar {
                 width: 100%;
-                height: auto;
+                height: 60px;
                 position: fixed;
                 bottom: 0;
                 top: auto;
                 left: 0;
                 display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                align-items: center;
                 z-index: 1000;
-                padding: 10px 5px;
+                padding: 0 10px;
+                background: rgba(22, 27, 34, 0.95);
+                backdrop-filter: blur(10px);
                 border-right: none;
                 border-top: 1px solid var(--border);
+                scrollbar-width: none;
+            }
+
+            .sidebar::-webkit-scrollbar {
+                display: none;
             }
 
             .sidebar-label {
                 display: none;
-                /* Hide labels on mobile to save space */
             }
 
             .sidebar a {
-                padding: 10px;
+                padding: 10px 16px;
                 text-align: center;
                 border-left: none;
                 border-bottom: 2px solid transparent;
-                flex: 1;
-                font-size: 11px;
+                flex: 0 0 auto;
+                font-size: 13px;
                 white-space: nowrap;
+                color: var(--mist);
             }
 
             .sidebar a.active {
                 border-left: none;
                 border-bottom-color: #58a6ff;
+                color: #58a6ff;
             }
 
             .sidebar a:hover {
                 border-left: none;
                 border-bottom-color: #58a6ff;
+                background: transparent;
             }
 
             .main {
-                padding: 20px 16px 120px;
-                /* Extra padding for bottom fixed nav */
+                padding: 20px 16px 80px;
             }
 
             .stats-grid {
