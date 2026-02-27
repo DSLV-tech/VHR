@@ -206,14 +206,13 @@ service cloud.firestore {
      * @description Stores information about partner merchants.
      * @path /merchants/{merchantId}
      * @allow (get, list) Any user or anonymous visitor reading merchant information.
-     * @allow (create, update, delete) An Admin managing merchant data.
-     * @deny (create, update, delete) Any non-Admin user attempting to modify merchant data.
-     * @principle Implements public read access with privileged (Admin-only) writes.
+     * @allow (create) Any authenticated user can create a pending application.
+     * @allow (update, delete) An Admin managing merchant data.
      */
     match /merchants/{merchantId} {
       allow get: if true;
       allow list: if true;
-      allow create: if isAdmin();
+      allow create: if isAdmin() || (isSignedIn() && request.resource.data.approved == false && request.resource.data.uid == request.auth.uid);
       allow update: if isAdmin() && isExistingDoc();
       allow delete: if isAdmin() && isExistingDoc();
     }
@@ -223,16 +222,14 @@ service cloud.firestore {
      * @path /coupons/{couponId}
      * @allow (get) A team member viewing their team's coupon, or a Merchant viewing their own coupon.
      * @allow (list) Any signed-in user, relying on client queries to filter for their coupons.
+     * @allow (create) A Merchant creating a new unapproved coupon, or an Admin.
      * @allow (update) The associated Merchant updating the coupon status (e.g., to 'redeemed').
-     * @allow (create, delete) An Admin managing the coupon lifecycle.
-     * @deny (update) A player trying to change a coupon's status.
-     * @deny (get) A user trying to view a coupon belonging to another team or merchant.
-     * @principle Uses denormalized data to provide secure access to multiple user types (Players, Merchants, Admins).
+     * @allow (delete) An Admin managing the coupon lifecycle.
      */
     match /coupons/{couponId} {
       allow get: if isCouponTeamMember(resource.data) || isCouponMerchant(resource.data) || isAdmin();
       allow list: if isSignedIn();
-      allow create: if isAdmin();
+      allow create: if isAdmin() || (isMerchant() && request.resource.data.approved == false && request.resource.data.merchantId == request.auth.uid);
       allow update: if (isCouponMerchant(resource.data) && isExistingDoc()) || isAdmin();
       allow delete: if isAdmin() && isExistingDoc();
     }

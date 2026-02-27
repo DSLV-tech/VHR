@@ -881,11 +881,22 @@
                 const snap = await getDocs(q);
                 const grid = document.getElementById('coupons-grid');
                 if (snap.empty) return;
+
+                // Get user's completed missions
                 const userSnap = await getDoc(doc(db, 'users', uid));
-                const unlockedCoupons = (userSnap.data()?.unlockedCoupons) || [];
+                const completedMissions = (userSnap.data()?.activeMissions) || [];
+
                 const available = [];
-                snap.forEach(d => { if (unlockedCoupons.includes(d.id)) available.push({ id: d.id, ...d.data() }); });
+                snap.forEach(d => {
+                    const data = d.data();
+                    // A coupon is unlocked if it has no specific mission (global) OR if the user completed the required mission
+                    if (!data.missionId || completedMissions.includes(data.missionId)) {
+                        available.push({ id: d.id, ...data });
+                    }
+                });
+
                 if (available.length === 0) return;
+
                 document.getElementById('stat-coupons').textContent = available.length;
                 grid.innerHTML = available.map(c => `
         <div class="coupon-card">
@@ -894,7 +905,7 @@
           <div class="coupon-code">${c.code || 'VHR-CODE'}</div>
           <div class="coupon-exp">Scade: ${c.expiresAt?.toDate?.()?.toLocaleDateString('it') || '—'}</div>
         </div>`).join('');
-            } catch (e) { /* Offline o no coupon */ }
+            } catch (e) { console.error("Error loading coupons:", e); }
         }
 
         window.doLogout = async () => {

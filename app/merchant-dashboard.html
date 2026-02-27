@@ -516,8 +516,8 @@
         });
 
         async function loadCoupons() {
-            if (!merchantId) return;
-            const q = query(collection(db, 'coupons'), where('merchantId', '==', merchantId));
+            if (!currentUser) return;
+            const q = query(collection(db, 'coupons'), where('merchantId', '==', currentUser.uid));
             const snap = await getDocs(q);
             const grid = document.getElementById('coupons-list');
             if (snap.empty) return;
@@ -552,7 +552,7 @@
             try {
                 const code = 'VHR-' + Math.random().toString(36).substring(2, 7).toUpperCase();
                 await addDoc(collection(db, 'coupons'), {
-                    merchantId, merchantName: merchantData?.name || '',
+                    merchantId: currentUser.uid, merchantName: merchantData?.name || '',
                     title, discount, code, quantity: qty, used: 0, approved: false,
                     missionId: mission || null,
                     expiresAt: expires ? Timestamp.fromDate(new Date(expires)) : null,

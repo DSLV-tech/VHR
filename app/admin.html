@@ -791,8 +791,34 @@
 
         window.approveMerchant = async (id, btn) => {
             btn.disabled = true; btn.textContent = '…';
-            await updateDoc(doc(db, 'merchants', id), { approved: true });
-            btn.textContent = '✓ Approvato'; btn.className = 'btn-action pill green';
+            try {
+                // Get the merchant to find the UID
+                const mRef = doc(db, 'merchants', id);
+                const mSnap = await getDoc(mRef);
+                if (!mSnap.exists()) return;
+
+                const data = mSnap.data();
+
+                // 1. Update merchant status
+                await updateDoc(mRef, { approved: true });
+
+                // 2. Grant Firebase security role
+                if (data.uid) {
+                    await setDoc(doc(db, 'roles_merchant', data.uid), {
+                        assignedAt: serverTimestamp(),
+                        assignedBy: currentUser.uid
+                    });
+                }
+
+                // 3. (Optional) update user profile role
+                await updateDoc(doc(db, 'users', data.uid), { role: 'merchant' });
+
+                btn.textContent = '✓ Approvato'; btn.className = 'btn-action pill green';
+            } catch (e) {
+                console.error("Error approving merchant", e);
+                alert("Errore approvazione.");
+                btn.disabled = false; btn.textContent = '✓ Approva';
+            }
         };
 
         window.approveCoupon = async (id, btn) => {

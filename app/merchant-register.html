@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHR — Registrazione Commerciante</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1209;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #f2e8d0;
+            --mist: #8a7d65;
+            --danger: #cf6679;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        .auth-card {
+            background: rgba(26, 18, 9, 0.95);
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 4px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 24px;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--mist);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--mist);
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            border-radius: 2px;
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            font-size: 1.1em;
+            transition: all 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(201, 146, 42, 0.6);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+            color: var(--ink);
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            box-shadow: 0 0 20px rgba(201, 146, 42, 0.4);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        #error-msg {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            color: var(--mist);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--gold);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+        <div class="logo">V.H.R</div>
+        <div class="subtitle">Registrazione Negoziante</div>
+
+        <p style="font-size: 0.95em; color: var(--mist); margin-bottom: 24px; text-align: center; line-height: 1.5;">
+            Unisciti al progetto Vercellae Hidden Runes.<br>Diventa una tappa del viaggio e attira nuovi clienti
+            offrendo ricompense ai Guardiani.
+        </p>
+
+        <form id="merchant-form">
+            <div class="form-group">
+                <label>Nome Attività commerciale</label>
+                <input type="text" id="m-name" required placeholder="Es. Pizzeria Da Genoveffa">
+            </div>
+            <div class="form-group">
+                <label>Tipologia / Categoria</label>
+                <input type="text" id="m-category" required placeholder="Es. Ristorazione / Abbigliamento">
+            </div>
+            <div class="form-group">
+                <label>Indirizzo (facoltativo)</label>
+                <input type="text" id="m-address" placeholder="Es. Via Roma 12, Vercelli">
+            </div>
+
+            <button type="submit" id="submit-btn" disabled>Crea Account Merchant</button>
+            <div id="error-msg">Compila i campi richiesti...</div>
+        </form>
+
+        <a href="login.html" class="back-link">← Torna al Login</a>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const btn = document.getElementById('submit-btn');
+        const form = document.getElementById('merchant-form');
+        const errMsg = document.getElementById('error-msg');
+        let currentUser = null;
+
+        // Check auth status
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                currentUser = user;
+                btn.disabled = false;
+                errMsg.textContent = "";
+                errMsg.style.color = "var(--mist)";
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const name = document.getElementById('m-name').value.trim();
+            const category = document.getElementById('m-category').value.trim();
+            const address = document.getElementById('m-address').value.trim();
+
+            if (!name || !category) {
+                errMsg.style.color = "var(--danger)";
+                errMsg.textContent = "Nome e Categoria sono obbligatori.";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "Invio richiesta...";
+
+            try {
+                // Determine a simple ID based on name or random
+                const merchantId = 'm_' + Math.random().toString(36).substr(2, 9);
+
+                // Write to merchants collection as pending
+                await setDoc(doc(db, 'merchants', merchantId), {
+                    uid: currentUser.uid,
+                    name: name,
+                    category: category,
+                    address: address,
+                    email: currentUser.email,
+                    approved: false, // Must be approved by admin
+                    createdAt: serverTimestamp()
+                });
+
+                // Update user role to pending_merchant
+                await setDoc(doc(db, 'users', currentUser.uid), {
+                    role: 'pending_merchant',
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                window.location.href = 'merchant-dashboard.html';
+
+            } catch (err) {
+                console.error("Error creating merchant:", err);
+                errMsg.style.color = "var(--danger)";
+                errMsg.textContent = "Errore durante la registrazione. Riprova.";
+                btn.disabled = false;
+                btn.textContent = "Crea Account Merchant";
+            }
+        });
+    </script>
+</body>
+
+</html>
