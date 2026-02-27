@@ -150,6 +150,11 @@
                 box-shadow: none;
                 width: 210mm;
                 height: 297mm;
+                page-break-after: always;
+            }
+
+            .page:last-child {
+                page-break-after: auto;
             }
         }
     </style>
@@ -158,30 +163,49 @@
 <body>
     <div class="controls">
         <a href="index.html" class="back-btn">Torna alla Dashboard</a>
-        <button onclick="window.print()">🖨️ Stampa A4 per Test</button>
+        <button onclick="window.print()">🖨️ Stampa Tutti i Marker (A4)</button>
     </div>
 
-    <div class="page">
-        <div class="page-inner">
-            <div class="title">Vercelli Hidden Runes</div>
-            <div class="subtitle">Marker AR di Test — MVP</div>
+    <div id="pages-container"></div>
 
-            <div class="marker-frame">
-                <span class="rune">ᚢ</span>
-            </div>
+    <script>
+        const markers = [
+            { id: 1, rune: 'ᚢ', name: 'Uruz' },
+            { id: 2, rune: 'ᚷ', name: 'Gebo' },
+            { id: 3, rune: 'ᚺ', name: 'Hagalaz' },
+            { id: 4, rune: 'ᚱ', name: 'Raido' },
+            { id: 5, rune: 'ᛖ', name: 'Ehwaz' },
+            { id: 6, rune: 'ᛚ', name: 'Laguz' }
+        ];
 
-            <div class="instructions">
-                <strong>Istruzioni Operative per inquadratura:</strong>
-                <ul>
-                    <li>Posiziona questo foglio su una superficie piatta e ben illuminata.</li>
-                    <li>Non piegare o macchiare il bordo nero spesso: è necessario per il riconoscimento AR.js.</li>
-                    <li>Avvia l'app VHR sul tuo dispositivo e punta la fotocamera sulla runa centrale mantenendo una
-                        distanza di 30-50 cm.</li>
-                    <li>Attendi l'apparizione del contenuto 3D o dell'enigma testuale.</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+        const container = document.getElementById('pages-container');
+
+        markers.forEach(m => {
+            const page = document.createElement('div');
+            page.className = 'page';
+            page.innerHTML = `
+                <div class="page-inner">
+                    <div class="title">Vercelli Hidden Runes</div>
+                    <div class="subtitle">Marker AR — Tappa ${m.id} (${m.name})</div>
+
+                    <div class="marker-frame">
+                        <span class="rune">${m.rune}</span>
+                    </div>
+
+                    <div class="instructions">
+                        <strong>Istruzioni Tappa ${m.id}:</strong>
+                        <ul>
+                            <li>Posiziona questo foglio su una superficie piatta e ben illuminata presso la Tappa ${m.id}.</li>
+                            <li>Non piegare o macchiare il bordo nero spesso: è necessario per il riconoscimento AR.js.</li>
+                            <li>Avvia l'app VHR sul tuo dispositivo e punta la fotocamera sulla runa centrale mantenendo una distanza di 30-50 cm.</li>
+                            <li>Attendi l'apparizione del contenuto 3D o dell'enigma testuale.</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            container.appendChild(page);
+        });
+    </script>
 </body>
 
 </html>

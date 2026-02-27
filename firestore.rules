@@ -129,8 +129,7 @@ service cloud.firestore {
      * @principle Restricts access to a user's own data tree (Ownership).
      */
     match /users/{userId} {
-      allow get: if isOwner(userId) || isAdmin();
-      allow list: if isAdmin();
+      allow read: if true;
       allow create: if isOwner(userId);
       allow update: if isOwner(userId) || isAdmin();
       allow delete: if isAdmin();

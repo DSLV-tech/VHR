@@ -104,6 +104,12 @@
             font-size: 11px;
             letter-spacing: 0.1em;
             color: var(--mist);
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            vertical-align: middle;
         }
 
         .btn-logout {
@@ -219,6 +225,8 @@
             font-weight: 700;
             color: var(--parchment);
             margin-bottom: 4px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
 
         .welcome-title span {
@@ -553,6 +561,90 @@
             opacity: 0.3;
         }
 
+        /* ── TOOLTIPS (Gemme Didattiche) ── */
+        .didactic-gem {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background: rgba(201, 146, 42, 0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold-lt);
+            border-radius: 50%;
+            font-size: 10px;
+            font-family: sans-serif;
+            font-weight: bold;
+            cursor: help;
+            margin-left: 6px;
+            vertical-align: middle;
+            transition: all 0.2s;
+        }
+
+        .didactic-gem:hover,
+        .didactic-gem:focus {
+            background: var(--gold);
+            color: var(--ink);
+            transform: scale(1.1);
+            outline: none;
+        }
+
+        .tooltip-container {
+            position: relative;
+        }
+
+        .tooltip-container::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(26, 18, 9, 0.95);
+            color: var(--parchment);
+            padding: 12px 18px;
+            border: 1px solid rgba(201, 146, 42, 0.5);
+            border-radius: 4px;
+            font-family: 'EB Garamond', serif;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            width: max-content;
+            max-width: 250px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .tooltip-container::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: rgba(201, 146, 42, 0.5) transparent transparent transparent;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tooltip-container:hover::after,
+        .tooltip-container:hover::before,
+        .tooltip-container:focus::after,
+        .tooltip-container:focus::before,
+        .tooltip-container:active::after,
+        .tooltip-container:active::before {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
         @media(max-width:700px) {
             .sidebar {
                 display: none;
@@ -589,6 +681,7 @@
             <div class="sidebar-section">
                 <div class="sidebar-label">Principale</div>
                 <a href="dashboard-player.html" class="active"><span class="s-icon">🏠</span> Dashboard</a>
+                <a href="leaderboard.html"><span class="s-icon">🏆</span> Classifiche</a>
                 <a href="#missioni"><span class="s-icon">🗺️</span> Missioni</a>
                 <a href="#coupon"><span class="s-icon">🎫</span> Coupon</a>
                 <a href="#badge"><span class="s-icon">🏅</span> Badge</a>
@@ -614,29 +707,40 @@
                 <div class="stat-card">
                     <div class="stat-icon">⚡</div>
                     <div class="stat-val" id="stat-xp">0</div>
-                    <div class="stat-lbl">Punti Esperienza</div>
+                    <div class="stat-lbl">Punti Esperienza <span tabindex="0" class="didactic-gem tooltip-container"
+                            data-tooltip="Questa è la tua Esperienza. Risolvi enigmi e inquadra rune in giro per Vercelli per guadagnare Punti Esperienza (XP) e scalare la classifica Guardiani.">?</span>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">⚔️</div>
                     <div class="stat-val" id="stat-missions">0</div>
-                    <div class="stat-lbl">Missioni Completate</div>
+                    <div class="stat-lbl">Missioni Completate <span tabindex="0" class="didactic-gem tooltip-container"
+                            data-tooltip="Le missioni completate sono i percorsi storici che sei riuscito a risolvere al 100%. Più ne finisci, più forte diventerai.">?</span>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">🏅</div>
                     <div class="stat-val" id="stat-badges">0</div>
-                    <div class="stat-lbl">Badge Conquistati</div>
+                    <div class="stat-lbl">Badge Conquistati <span tabindex="0" class="didactic-gem tooltip-container"
+                            data-tooltip="Raggiungi traguardi specifici (come finire 3 missioni o trovare un segreto) per sbloccare Medaglie speciali da mostrare a tutti.">?</span>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">🎫</div>
                     <div class="stat-val" id="stat-coupons">0</div>
-                    <div class="stat-lbl">Coupon Attivi</div>
+                    <div class="stat-lbl">Coupon Attivi <span tabindex="0" class="didactic-gem tooltip-container"
+                            data-tooltip="Quando sblocchi un Coupon, potrai presentarlo alla cassa dei negozi partner mostrati nel gioco per ricevere vere ricompense.">?</span>
+                    </div>
                 </div>
             </div>
 
             <!-- MISSIONI -->
             <div id="missioni">
                 <div class="sec-header">
-                    <div class="sec-title">Missioni Disponibili</div>
+                    <div class="sec-title">Missioni Disponibili <span tabindex="0"
+                            class="didactic-gem tooltip-container"
+                            data-tooltip="Le Missioni sono percorsi a tema nel cuore storico di Vercelli. Scegli un elemento (Fuoco, Acqua...) e seguine le orme: risolverai indovinelli ed esplorerai luoghi dimenticati accumulando prestigio.">?</span>
+                    </div>
                     <span class="sec-badge">Fase I</span>
                 </div>
                 <div class="missions-grid" id="missions-grid">
@@ -647,7 +751,9 @@
             <!-- COUPON -->
             <div id="coupon">
                 <div class="sec-header">
-                    <div class="sec-title">I Tuoi Coupon</div>
+                    <div class="sec-title">I Tuoi Coupon <span tabindex="0" class="didactic-gem tooltip-container"
+                            data-tooltip="Un Coupon è una ricompensa speciale ottenuta finendo le missioni dei Negozianti. Recati fisicamente dal commerciante e mostra questa schermata per attivare il codice premio.">?</span>
+                    </div>
                 </div>
                 <div class="coupons-grid" id="coupons-grid">
                     <p class="no-coupons">Nessun coupon sbloccato. Completa una missione per guadagnarne!</p>
@@ -657,7 +763,9 @@
             <!-- BADGE -->
             <div id="badge">
                 <div class="sec-header">
-                    <div class="sec-title">Badge e Traguardi</div>
+                    <div class="sec-title">Badge e Traguardi <span tabindex="0" class="didactic-gem tooltip-container"
+                            data-tooltip="I Badge testimoniano i tuoi traguardi. Sbloccali risolvendo missioni e scovando segreti in giro per Vercelli per rendere la tua bacheca unica.">?</span>
+                    </div>
                 </div>
                 <div class="badges-row" id="badges-row">
                     <!-- Generato via JS -->
