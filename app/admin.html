@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHR — Pannello Admin</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0d1117;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #e6edf3;
+            --mist: #8b949e;
+            --bg2: #161b22;
+            --bg3: #1c2128;
+            --border: #30363d;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+        }
+
+        /* Topbar */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13, 17, 23, 0.97);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 32px;
+        }
+
+        .topbar-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            color: var(--gold);
+            letter-spacing: 0.08em;
+        }
+
+        .admin-badge {
+            background: #f85149;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.08em;
+            margin-left: 10px;
+        }
+
+        .btn-logout {
+            font-size: 11px;
+            color: var(--mist);
+            border: 1px solid var(--border);
+            padding: 5px 14px;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            color: var(--parchment);
+            border-color: var(--mist);
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 47px);
+        }
+
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            position: sticky;
+            top: 47px;
+            height: calc(100vh - 47px);
+            overflow-y: auto;
+        }
+
+        .sidebar-label {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--mist);
+            padding: 10px 16px 4px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 7px 16px;
+            color: var(--mist);
+            text-decoration: none;
+            font-size: 12px;
+            border-left: 2px solid transparent;
+            transition: all .15s;
+        }
+
+        .sidebar a:hover {
+            color: var(--parchment);
+            background: var(--bg3);
+            border-left-color: #58a6ff;
+        }
+
+        .sidebar a.active {
+            color: #58a6ff;
+            background: rgba(88, 166, 255, 0.08);
+            border-left-color: #58a6ff;
+        }
+
+        .main {
+            flex: 1;
+            padding: 36px 40px 80px;
+            max-width: 1000px;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 18px;
+            transition: border-color .3s;
+        }
+
+        .stat-card:hover {
+            border-color: #58a6ff;
+        }
+
+        .stat-card .icon {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .val {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #58a6ff;
+        }
+
+        .stat-card .lbl {
+            font-size: 10px;
+            color: var(--mist);
+            margin-top: 2px;
+            letter-spacing: 0.05em;
+        }
+
+        /* Section */
+        .sec-header {
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .sec-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            letter-spacing: 0.06em;
+            color: var(--parchment);
+        }
+
+        .sec-header p {
+            font-size: 11px;
+            color: var(--mist);
+            margin-top: 4px;
+        }
+
+        /* Table */
+        .tbl-wrap {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 36px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        thead th {
+            background: var(--bg3);
+            color: var(--mist);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        tbody td {
+            padding: 10px 14px;
+            color: var(--parchment);
+            vertical-align: middle;
+        }
+
+        .empty-row td {
+            color: var(--mist);
+            font-style: italic;
+            text-align: center;
+            padding: 24px;
+        }
+
+        /* Badges */
+        .pill {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 2px 9px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .pill.green {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+        }
+
+        .pill.yellow {
+            background: rgba(210, 153, 34, 0.15);
+            color: #d29922;
+        }
+
+        .pill.red {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+        }
+
+        .pill.blue {
+            background: rgba(88, 166, 255, 0.15);
+            color: #58a6ff;
+        }
+
+        /* Action buttons */
+        .btn-action {
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid;
+            transition: all .2s;
+            margin-right: 4px;
+        }
+
+        .btn-approve {
+            color: #3fb950;
+            border-color: rgba(63, 185, 80, 0.35);
+            background: rgba(63, 185, 80, 0.08);
+        }
+
+        .btn-approve:hover {
+            background: rgba(63, 185, 80, 0.2);
+        }
+
+        .btn-reject {
+            color: #f85149;
+            border-color: rgba(248, 81, 73, 0.35);
+            background: rgba(248, 81, 73, 0.08);
+        }
+
+        .btn-reject:hover {
+            background: rgba(248, 81, 73, 0.2);
+        }
+
+        /* Loading */
+        .loading {
+            color: var(--mist);
+            font-size: 11px;
+            font-style: italic;
+            padding: 20px 0;
+        }
+
+        @media(max-width:700px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 20px 16px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div style="display:flex;align-items:center;">
+            <span class="topbar-logo">VHR Admin</span>
+            <span class="admin-badge">ADMIN</span>
+        </div>
+        <button class="btn-logout" onclick="doLogout()">Esci</button>
+    </header>
+
+    <div class="layout">
+        <nav class="sidebar">
+            <div class="sidebar-label">Gestione</div>
+            <a href="#merchants" class="active">🏪 Commercianti</a>
+            <a href="#coupons">🎫 Coupon</a>
+            <a href="#players">👤 Giocatori</a>
+            <div class="sidebar-label">Monitor</div>
+            <a href="#stats">📊 Statistiche</a>
+            <a href="../index.html">← Dashboard</a>
+        </nav>
+
+        <main class="main">
+
+            <!-- Stats -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <div class="icon">👤</div>
+                    <div class="val" id="s-players">—</div>
+                    <div class="lbl">Giocatori</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">🏪</div>
+                    <div class="val" id="s-merchants">—</div>
+                    <div class="lbl">Commercianti</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">🎫</div>
+                    <div class="val" id="s-coupons">—</div>
+                    <div class="lbl">Coupon totali</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">⏳</div>
+                    <div class="val" id="s-pending">—</div>
+                    <div class="lbl">In attesa</div>
+                </div>
+            </div>
+
+            <!-- MERCHANTS -->
+            <div id="merchants">
+                <div class="sec-header">
+                    <h2>Commercianti</h2>
+                    <p>Approva o rifiuta le richieste di registrazione commerciante</p>
+                </div>
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Negozio</th>
+                                <th>Categoria</th>
+                                <th>Email</th>
+                                <th>Stato</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="merchants-body">
+                            <tr class="empty-row">
+                                <td colspan="5">Caricamento...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- COUPONS -->
+            <div id="coupons">
+                <div class="sec-header">
+                    <h2>Coupon</h2>
+                    <p>Approva o rifiuta i coupon creati dai commercianti</p>
+                </div>
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Negozio</th>
+                                <th>Coupon</th>
+                                <th>Sconto</th>
+                                <th>Qty</th>
+                                <th>Stato</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="coupons-body">
+                            <tr class="empty-row">
+                                <td colspan="6">Caricamento...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PLAYERS -->
+            <div id="players">
+                <div class="sec-header">
+                    <h2>Giocatori</h2>
+                    <p>Panoramica utenti registrati</p>
+                </div>
+                <div class="tbl-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>XP</th>
+                                <th>Missioni</th>
+                                <th>Ruolo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="players-body">
+                            <tr class="empty-row">
+                                <td colspan="5">Caricamento...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, getDocs, updateDoc, doc, query, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        onAuthStateChanged(auth, async user => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            // Admin guard
+            const snap = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js")
+                .then(m => m.getDoc(m.doc(db, 'users', user.uid)));
+            const data = snap.data();
+            if (!data || data.role !== 'admin') {
+                alert('Accesso negato. Solo gli amministratori possono accedere a questa pagina.');
+                window.location.href = 'dashboard-player.html'; return;
+            }
+            loadAll();
+        });
+
+        async function loadAll() {
+            const [merchants, coupons, users] = await Promise.all([
+                getDocs(collection(db, 'merchants')),
+                getDocs(collection(db, 'coupons')),
+                getDocs(collection(db, 'users')),
+            ]);
+
+            const pendingM = [...merchants.docs].filter(d => !d.data().approved).length;
+            const pendingC = [...coupons.docs].filter(d => !d.data().approved).length;
+            document.getElementById('s-players').textContent = users.size;
+            document.getElementById('s-merchants').textContent = merchants.size;
+            document.getElementById('s-coupons').textContent = coupons.size;
+            document.getElementById('s-pending').textContent = pendingM + pendingC;
+
+            renderMerchants(merchants);
+            renderCoupons(coupons);
+            renderPlayers(users);
+        }
+
+        function renderMerchants(snap) {
+            const tbody = document.getElementById('merchants-body');
+            if (snap.empty) { tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Nessun commerciante registrato.</td></tr>'; return; }
+            tbody.innerHTML = snap.docs.map(d => {
+                const m = d.data();
+                return `<tr>
+        <td>${m.name || '—'}</td>
+        <td>${m.category || '—'}</td>
+        <td style="color:var(--mist);font-size:11px">${m.email || '—'}</td>
+        <td><span class="pill ${m.approved ? 'green' : 'yellow'}">${m.approved ? 'Approvato' : 'In attesa'}</span></td>
+        <td>
+          ${!m.approved ? `<button class="btn-action btn-approve" onclick="approveMerchant('${d.id}', this)">✓ Approva</button>` : ''}
+          <button class="btn-action btn-reject" onclick="rejectDoc('merchants','${d.id}', this)">✕ Rimuovi</button>
+        </td>
+      </tr>`;
+            }).join('');
+        }
+
+        function renderCoupons(snap) {
+            const tbody = document.getElementById('coupons-body');
+            if (snap.empty) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">Nessun coupon creato.</td></tr>'; return; }
+            tbody.innerHTML = snap.docs.map(d => {
+                const c = d.data();
+                return `<tr>
+        <td>${c.merchantName || '—'}</td>
+        <td style="font-size:11px">${c.title}</td>
+        <td>${c.discount}</td>
+        <td>${c.quantity}</td>
+        <td><span class="pill ${c.approved ? 'green' : 'yellow'}">${c.approved ? 'Approvato' : 'In attesa'}</span></td>
+        <td>
+          ${!c.approved ? `<button class="btn-action btn-approve" onclick="approveCoupon('${d.id}', this)">✓ Approva</button>` : ''}
+          <button class="btn-action btn-reject" onclick="rejectDoc('coupons','${d.id}', this)">✕ Rimuovi</button>
+        </td>
+      </tr>`;
+            }).join('');
+        }
+
+        function renderPlayers(snap) {
+            const tbody = document.getElementById('players-body');
+            if (snap.empty) { tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Nessun utente.</td></tr>'; return; }
+            tbody.innerHTML = snap.docs.filter(d => d.data().role !== 'admin').map(d => {
+                const u = d.data();
+                return `<tr>
+        <td>${u.displayName || '—'}</td>
+        <td style="color:var(--mist);font-size:11px">${u.email || '—'}</td>
+        <td><span style="color:#58a6ff">${u.xp || 0}</span></td>
+        <td>${(u.activeMissions || []).length}</td>
+        <td><span class="pill ${u.role === 'merchant' ? 'yellow' : 'blue'}">${u.role}</span></td>
+      </tr>`;
+            }).join('');
+        }
+
+        window.approveMerchant = async (id, btn) => {
+            btn.disabled = true; btn.textContent = '…';
+            await updateDoc(doc(db, 'merchants', id), { approved: true });
+            btn.textContent = '✓ Approvato'; btn.className = 'btn-action pill green';
+        };
+
+        window.approveCoupon = async (id, btn) => {
+            btn.disabled = true; btn.textContent = '…';
+            await updateDoc(doc(db, 'coupons', id), { approved: true });
+            btn.textContent = '✓ Approvato'; btn.className = 'btn-action pill green';
+        };
+
+        window.rejectDoc = async (coll, id, btn) => {
+            if (!confirm('Rimuovere definitivamente?')) return;
+            const { deleteDoc, doc: d } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+            await deleteDoc(d(db, coll, id));
+            btn.closest('tr').remove();
+        };
+
+        window.doLogout = async () => { await signOut(auth); window.location.href = 'login.html'; };
+    </script>
+</body>
+
+</html>

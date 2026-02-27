@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vercelli Hidden Runes - Dashboard Applicazione</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
     <style>
         body {
             background-color: #0d1117;
             color: #f2e8d0;
             font-family: 'EB Garamond', serif;
-            margin: 0; padding: 40px;
+            margin: 0;
+            padding: 40px;
             text-align: center;
         }
+
         h1 {
             font-family: 'Cinzel', serif;
             color: #c9922a;
             font-size: 3em;
             margin-bottom: 10px;
         }
+
         .subtitle {
             font-size: 1.2em;
             color: #8a7d65;
             margin-bottom: 50px;
             font-style: italic;
         }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -32,9 +39,10 @@
             max-width: 1000px;
             margin: 0 auto;
         }
+
         .card {
             background: #161b22;
-            border: 1px solid rgba(201,146,42,0.3);
+            border: 1px solid rgba(201, 146, 42, 0.3);
             padding: 30px 20px;
             border-radius: 8px;
             text-decoration: none;
@@ -45,34 +53,39 @@
             align-items: center;
             justify-content: center;
         }
+
         .card:hover {
-            box-shadow: 0 0 20px rgba(201,146,42,0.2);
+            box-shadow: 0 0 20px rgba(201, 146, 42, 0.2);
             border-color: #c9922a;
             transform: translateY(-5px);
             background: #1c2128;
         }
-        .card h2 { 
-            font-family: 'Cinzel', serif; 
-            font-size: 1.4em; 
-            color: #e8b84b; 
+
+        .card h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4em;
+            color: #e8b84b;
             margin: 0 0 10px 0;
         }
+
         .card p {
             margin: 0;
             font-size: 1em;
-            color: rgba(242,232,208,0.7);
+            color: rgba(242, 232, 208, 0.7);
         }
+
         .action-container {
             margin-top: 60px;
             padding-top: 40px;
-            border-top: 1px solid rgba(201,146,42,0.2);
+            border-top: 1px solid rgba(201, 146, 42, 0.2);
         }
+
         .action-button {
             display: inline-flex;
             align-items: center;
             gap: 10px;
             padding: 16px 32px;
-            background: rgba(201,146,42,0.1);
+            background: rgba(201, 146, 42, 0.1);
             color: #e8b84b;
             border: 1px solid #c9922a;
             font-family: 'Cinzel', serif;
@@ -84,44 +97,473 @@
             text-transform: uppercase;
             transition: all 0.3s;
         }
-        .action-button:hover { 
-            background: #c9922a; 
+
+        .action-button:hover {
+            background: #c9922a;
             color: #0d1117;
-            box-shadow: 0 0 25px rgba(201,146,42,0.4);
+            box-shadow: 0 0 25px rgba(201, 146, 42, 0.4);
+        }
+
+        /* Rune Frame */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid rgba(201, 146, 42, 0.15);
+            pointer-events: none;
+            z-index: -1;
+            border-radius: 12px;
+        }
+
+        body::after {
+            content: 'ᚢ ᚺ ᚱ ᚠ ᚡ ᚢ ᚣ ᚤ ᚥ ᚦ ᚧ ᚨ ᚩ ᚪ ᚫ ᚬ ᚭ ᚮ ᚯ ᚰ ᚱ ᚲ ᚳ ᚴ ᚵ ᚶ ᚷ ᚸ ᚹ ᚺ ᚻ ᚼ ᚽ ᚾ ᚿ ᛀ ᛁ ᛂ ᛃ ᛄ ᛅ ᛆ ᛇ ᛈ ᛉ ᛊ ᛋ ᛌ ᛍ ᛎ ᛏ ᛐ ᛑ ᛒ ᛓ ᛔ ᛕ ᛖ ᛗ ᛘ ᛙ ᛚ ᛛ ᛜ ᛝ ᛞ ᛟ ᛠ ᛡ ᛢ ᛣ ᛤ ᛥ ᛦ ᛧ ᛨ ᛩ ᛪ';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: -2;
+            opacity: 0.03;
+            font-size: 24px;
+            color: #c9922a;
+            overflow: hidden;
+            word-wrap: break-word;
+            line-height: 2;
+            text-align: justify;
+            animation: pulseRunes 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseRunes {
+            0% {
+                opacity: 0.02;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0.06;
+                transform: scale(1.02);
+            }
+        }
+
+        /* Gem Assistant */
+        #gem-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            z-index: 1000;
+            animation: floatGem 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(201, 146, 42, 0.6));
+            transition: transform 0.3s;
+        }
+
+        #gem-assistant:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 25px rgba(201, 146, 42, 0.9));
+        }
+
+        @keyframes floatGem {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+        }
+
+        /* Tutorial Overlay & Tooltips */
+        #tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 17, 23, 0.85);
+            z-index: 900;
+            display: none;
+            backdrop-filter: blur(3px);
+        }
+
+        .tutorial-active .card {
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .tutorial-active .card.highlighted {
+            opacity: 1;
+            z-index: 950;
+            position: relative;
+            box-shadow: 0 0 30px rgba(201, 146, 42, 0.8);
+            transform: scale(1.05);
+            pointer-events: auto;
+        }
+
+        .tutorial-dialog {
+            position: absolute;
+            background: #161b22;
+            border: 2px solid #c9922a;
+            border-radius: 8px;
+            padding: 20px;
+            width: 300px;
+            z-index: 960;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            color: #f2e8d0;
+            text-align: left;
+        }
+
+        .tutorial-dialog::after {
+            content: '';
+            position: absolute;
+            border-style: solid;
+        }
+
+        /* Top pointer */
+        .tutorial-dialog.pointer-top::after {
+            top: -10px;
+            left: 50%;
+            margin-left: -10px;
+            border-width: 0 10px 10px 10px;
+            border-color: transparent transparent #c9922a transparent;
+        }
+
+        /* Bottom pointer */
+        .tutorial-dialog.pointer-bottom::after {
+            bottom: -10px;
+            left: 50%;
+            margin-left: -10px;
+            border-width: 10px 10px 0 10px;
+            border-color: #c9922a transparent transparent transparent;
+        }
+
+        .dialog-title {
+            color: #e8b84b;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(201, 146, 42, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .dialog-text {
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .dialog-btn {
+            background: #c9922a;
+            color: #0d1117;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            display: block;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .dialog-btn:hover {
+            background: #e8b84b;
+        }
+
+        /* Minigame Counter */
+        #gem-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(22, 27, 34, 0.9);
+            border: 1px solid #c9922a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #e8b84b;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 0 15px rgba(201, 146, 42, 0.2);
+        }
+
+        .mini-gem {
+            width: 16px;
+            height: 16px;
         }
     </style>
 </head>
+
 <body>
+
+    <!-- Gem Counter (Minigame) -->
+    <div id="gem-counter">
+        <svg class="mini-gem" viewBox="0 0 100 100">
+            <polygon points="50,5 90,35 90,65 50,95 10,65 10,35" fill="none" stroke="#e8b84b" stroke-width="4" />
+            <polygon points="50,15 75,35 50,80 25,35" fill="#e8b84b" opacity="0.6" />
+            <polygon points="50,15 75,35 50,55 25,35" fill="#f5d688" opacity="0.8" />
+        </svg>
+        Gemme Didattiche: <span id="gem-count">0</span>/5
+    </div>
+
+    <!-- SVG Gem Assistant -->
+    <div id="gem-assistant" onclick="startTutorial()" title="Clicca per avviare la guida didattica">
+        <svg viewBox="0 0 100 100" width="80" height="80">
+            <!-- Outer Glow / Halo -->
+            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(201,146,42,0.3)" stroke-width="2"
+                stroke-dasharray="8 4">
+                <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s"
+                    repeatCount="indefinite" />
+            </circle>
+            <!-- Core Structure -->
+            <polygon points="50,5 90,40 50,95 10,40" fill="url(#gemGrad)" stroke="#e8b84b" stroke-width="2" />
+            <!-- Facets -->
+            <polygon points="50,5 90,40 50,55" fill="url(#gemGradLight)" />
+            <polygon points="50,5 10,40 50,55" fill="rgba(255,255,255,0.1)" />
+            <polygon points="50,55 90,40 50,95" fill="rgba(0,0,0,0.2)" />
+            <polygon points="50,55 10,40 50,95" fill="url(#gemGradDark)" />
+            <!-- Inner magic core -->
+            <circle cx="50" cy="45" r="10" fill="#fff" opacity="0.6">
+                <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" />
+            </circle>
+            <defs>
+                <linearGradient id="gemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#f5d688" />
+                    <stop offset="50%" stop-color="#c9922a" />
+                    <stop offset="100%" stop-color="#8a5d15" />
+                </linearGradient>
+                <linearGradient id="gemGradLight" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.1" />
+                </linearGradient>
+                <linearGradient id="gemGradDark" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#000000" stop-opacity="0.1" />
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0.6" />
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorial-overlay"></div>
+    <div id="tutorial-dialog" class="tutorial-dialog">
+        <div class="dialog-title" id="dialog-title">Benvenuto</div>
+        <div class="dialog-text" id="dialog-text">Testo tutorial</div>
+        <button class="dialog-btn" id="dialog-btn" onclick="nextTutorialStep()">Raccogli Gemma e Prosegui</button>
+    </div>
+
     <h1>Vercelli Hidden Runes</h1>
     <div class="subtitle">Dashboard MVP Principale</div>
-    
+
+    <!-- APP SECTION -->
+    <div class="subtitle" style="margin-top: 0; margin-bottom: 20px; font-size: 0.9em;">🚀 App MVP — Avvia l'Esperienza
+    </div>
     <div class="grid">
-        <a href="VHR_Brand_Identity.html" class="card">
-            <h2>Brand Identity</h2>
-            <p>Linee guida e sistema visivo</p>
+        <a href="app/onboarding.html" class="card" style="border-color:rgba(201,146,42,0.5);" id="card-app1">
+            <h2>🏠 Entra nel Gioco</h2>
+            <p>Landing page — onboarding e registrazione giocatore</p>
         </a>
-        <a href="VHR_Mission_Cards.html" class="card">
-            <h2>Missioni</h2>
-            <p>Esplora il sistema delle carte</p>
+        <a href="app/dashboard-player.html" class="card" id="card-app2">
+            <h2>🗺️ Dashboard Giocatore</h2>
+            <p>Missioni, XP, badge e coupon sbloccati</p>
         </a>
-        <a href="VHR_SOP_Collega_AI.html" class="card">
-            <h2>SOP per AI</h2>
-            <p>Standard operativi del progetto</p>
+        <a href="app/merchant-dashboard.html" class="card" id="card-app3">
+            <h2>🏪 Dashboard Commerciante</h2>
+            <p>Crea coupon e gestisci i premi</p>
         </a>
-        <a href="VHR_Universi_Narrativi.html" class="card">
-            <h2>Universi Narrativi</h2>
-            <p>I cinque mondi del Multiverso VHR</p>
-        </a>
-        <a href="Vercelli_Hidden_Runes_Progetto.docx" class="card" download>
-            <h2>Master Document</h2>
-            <p>Scarica il DOCX originale</p>
+        <a href="app/admin.html" class="card" id="card-app4">
+            <h2>⚙️ Pannello Admin</h2>
+            <p>Approvazione commercianti e coupon</p>
         </a>
     </div>
 
-    <div class="action-container">
-        <a href="A4_Test_Print.html" class="action-button">
-            🖨️ Stampa Foglio A4 (Test Funzionalità)
+    <div class="subtitle" style="margin-top: 50px; margin-bottom: 20px; font-size: 0.9em;">📚 Documenti di Progetto
+    </div>
+    <div class="grid">
+        <a href="VHR_Brand_Identity.html" class="card" id="card-1">
+            <h2>Brand Identity</h2>
+            <p>Linee guida e sistema visivo</p>
+        </a>
+        <a href="VHR_Mission_Cards.html" class="card" id="card-2">
+            <h2>Missioni — Carte</h2>
+            <p>Prototipo sistema delle carte</p>
+        </a>
+        <a href="VHR_SOP_Collega_AI.html" class="card" id="card-3">
+            <h2>SOP per AI</h2>
+            <p>Standard operativi del progetto</p>
+        </a>
+        <a href="VHR_Universi_Narrativi.html" class="card" id="card-4">
+            <h2>Universi Narrativi</h2>
+            <p>I cinque mondi del Multiverso VHR</p>
+        </a>
+        <a href="VHR_Poster.html" class="card" id="card-5">
+            <h2>Locandina</h2>
+            <p>Poster promozionale ufficiale</p>
         </a>
     </div>
+
+    <div class="action-container"
+        style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:40px;">
+        <a href="A4_Test_Print.html" class="action-button">
+            🖨️ Stampa Marker AR
+        </a>
+        <a href="app/login.html" class="action-button" style="background:rgba(201,146,42,0.2);">
+            🔐 Login / Registrati
+        </a>
+    </div>
+
+    <script>
+        const tutorialSteps = [
+            {
+                title: "La Guida: Il Nucleo (1/5)",
+                text: "Salve, Guardiano! Sono l'Archivio Didattico, intrappolato in questa gemma di silicio.<br><br>Iniziamo dalla <b>Brand Identity</b>. Qui sono custodite le regole visive e tipografiche che danno forma e coerenza a tutto l'Universo VHR.",
+                targetId: "card-1"
+            },
+            {
+                title: "Il Cuore del Gioco (2/5)",
+                text: "Queste sono le <b>Missioni</b>. Il prototipo del nostro ecosistema AR.<br><br>Scoprirai antiche rune, bestie mitologiche da sconfiggere e tesori frammentati nel tempo. L'avventura comincia da qui.",
+                targetId: "card-2"
+            },
+            {
+                title: "Le Procedure Macchina (3/5)",
+                text: "Questo modulo contiene le <b>SOP (Ideali Operativi Standard)</b> per le IA come me.<br><br>Non ho permessi di amministratore per modificarle, ma ti illustreranno come collaborare al meglio con le macchine del Multiverso.",
+                targetId: "card-3"
+            },
+            {
+                title: "I Mondi Paralleli (4/5)",
+                text: "VHR non è solo Vercelli.<br><br>Negli <b>Universi Narrativi</b> esplorerai le cinque dimensioni che compongono il nostro Multiverso. Dalla magia oscura alla Sci-Fi avanzata.",
+                targetId: "card-4"
+            },
+            {
+                title: "Il Compendio Originale (5/5)",
+                text: "Infine, il <b>Master Document</b>.<br><br>Scarica il manoscritto originale del progetto. L'essenza grezza da cui tutto ha avuto origine.<br><br>Ora sei pronto!",
+                targetId: "card-5"
+            }
+        ];
+
+        let currentStep = -1;
+        let gemsCollected = 0;
+
+        function startTutorial() {
+            if (gemsCollected === 5) {
+                // If completely done just show a message
+                alert("La tua istruzione è completa. Hai raccolto tutte le Gemme della Conoscenza. L'Archivio è a tua disposizione.");
+                return;
+            }
+
+            // Start from 0 if not finished
+            document.body.classList.add('tutorial-active');
+            document.getElementById('tutorial-overlay').style.display = 'block';
+
+            // Reset state
+            gemsCollected = 0;
+            currentStep = -1;
+            updateGemCount();
+
+            nextTutorialStep();
+        }
+
+        function updateGemCount() {
+            document.getElementById('gem-count').textContent = gemsCollected;
+        }
+
+        function nextTutorialStep() {
+            if (currentStep >= 0) {
+                // Collect gem from previous step
+                gemsCollected++;
+                updateGemCount();
+
+                // Remove highlight from old card
+                const oldCard = document.getElementById(tutorialSteps[currentStep].targetId);
+                if (oldCard) oldCard.classList.remove('highlighted');
+            }
+
+            currentStep++;
+
+            if (currentStep >= tutorialSteps.length) {
+                endTutorial();
+                return;
+            }
+
+            const step = tutorialSteps[currentStep];
+            const targetEl = document.getElementById(step.targetId);
+
+            // Highlight new target
+            if (targetEl) {
+                targetEl.classList.add('highlighted');
+                positionDialog(targetEl, step);
+            }
+        }
+
+        function positionDialog(targetEl, step) {
+            const dialog = document.getElementById('tutorial-dialog');
+            const rect = targetEl.getBoundingClientRect();
+
+            document.getElementById('dialog-title').innerHTML = step.title;
+            document.getElementById('dialog-text').innerHTML = step.text;
+
+            // Posizionamento sotto la card
+            dialog.style.display = 'block';
+            dialog.classList.remove('pointer-bottom');
+            dialog.classList.add('pointer-top');
+
+            let topPos = rect.bottom + window.scrollY + 15;
+            let leftPos = rect.left + window.scrollX + (rect.width / 2) - 150;
+
+            // Se esce dallo schermo in basso, mettilo sopra
+            if (topPos + dialog.offsetHeight > window.innerHeight + window.scrollY) {
+                topPos = rect.top + window.scrollY - dialog.offsetHeight - 15;
+                dialog.classList.remove('pointer-top');
+                dialog.classList.add('pointer-bottom');
+            }
+
+            // Se esce ai lati
+            if (leftPos < 10) leftPos = 10;
+            if (leftPos + 300 > window.innerWidth) leftPos = window.innerWidth - 310;
+
+            dialog.style.top = topPos + 'px';
+            dialog.style.left = leftPos + 'px';
+
+            if (currentStep === tutorialSteps.length - 1) {
+                document.getElementById('dialog-btn').textContent = "Termina e Sblocca Archivio";
+            } else {
+                document.getElementById('dialog-btn').textContent = "Raccogli Gemma e Prosegui";
+            }
+        }
+
+        function endTutorial() {
+            document.body.classList.remove('tutorial-active');
+            document.getElementById('tutorial-overlay').style.display = 'none';
+            document.getElementById('tutorial-dialog').style.display = 'none';
+
+            // Clean up any stray highlights
+            document.querySelectorAll('.card.highlighted').forEach(c => c.classList.remove('highlighted'));
+
+            // Final pulse animation to gem counter
+            const counter = document.getElementById('gem-counter');
+            counter.style.transform = 'scale(1.2)';
+            counter.style.background = 'rgba(201,146,42,0.9)';
+            counter.style.color = '#000';
+            setTimeout(() => {
+                counter.style.transform = 'scale(1)';
+                counter.style.background = 'rgba(22, 27, 34, 0.9)';
+                counter.style.color = '#e8b84b';
+            }, 600);
+        }
+    </script>
 </body>
+
 </html>

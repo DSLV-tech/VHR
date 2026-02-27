@@ -1,837 +1,1318 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VHR · I Mondi Narrativi</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --ink: #080704;
-  --deep: #100e08;
-  --parchment: #f2e8d0;
-  --mist: #8a7d65;
-  --border: rgba(255,255,255,0.07);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VHR · I Mondi Narrativi</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #080704;
+      --deep: #100e08;
+      --parchment: #f2e8d0;
+      --mist: #8a7d65;
+      --border: rgba(255, 255, 255, 0.07);
 
-  /* Universo I — Rune */
-  --rune-a: #0d1117; --rune-b: #c9922a; --rune-c: #e8b84b; --rune-glow: rgba(201,146,42,0.5);
+      /* Universo I — Rune */
+      --rune-a: #0d1117;
+      --rune-b: #c9922a;
+      --rune-c: #e8b84b;
+      --rune-glow: rgba(201, 146, 42, 0.5);
 
-  /* Universo II — Tarocchi */
-  --taro-a: #1a0a2e; --taro-b: #8b2fc9; --taro-c: #d4a0ff; --taro-glow: rgba(139,47,201,0.5);
+      /* Universo II — Tarocchi */
+      --taro-a: #1a0a2e;
+      --taro-b: #8b2fc9;
+      --taro-c: #d4a0ff;
+      --taro-glow: rgba(139, 47, 201, 0.5);
 
-  /* Universo III — Templari */
-  --temp-a: #0d1a0d; --temp-b: #8b0000; --temp-c: #ff6666; --temp-glow: rgba(139,0,0,0.5);
+      /* Universo III — Templari */
+      --temp-a: #0d1a0d;
+      --temp-b: #8b0000;
+      --temp-c: #ff6666;
+      --temp-glow: rgba(139, 0, 0, 0.5);
 
-  /* Universo IV — Egizio */
-  --egy-a: #1a1400; --egy-b: #b8860b; --egy-c: #ffd700; --egy-glow: rgba(184,134,11,0.5);
+      /* Universo IV — Egizio */
+      --egy-a: #1a1400;
+      --egy-b: #b8860b;
+      --egy-c: #ffd700;
+      --egy-glow: rgba(184, 134, 11, 0.5);
 
-  /* Universo V — Gitani */
-  --git-a: #1a0d00; --git-b: #c45e00; --git-c: #ff9a3c; --git-glow: rgba(196,94,0,0.5);
-}
+      /* Universo V — Gitani */
+      --git-a: #1a0d00;
+      --git-b: #c45e00;
+      --git-c: #ff9a3c;
+      --git-glow: rgba(196, 94, 0, 0.5);
+    }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  background: var(--ink);
-  color: var(--parchment);
-  font-family: 'EB Garamond', serif;
-  font-size: 17px;
-  line-height: 1.85;
-  overflow-x: hidden;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  opacity: 0.5;
-}
+    body {
+      background: var(--ink);
+      color: var(--parchment);
+      font-family: 'EB Garamond', serif;
+      font-size: 17px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--ink); }
-::-webkit-scrollbar-thumb { background: rgba(201,146,42,0.4); border-radius: 3px; }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
 
-/* ── TOPBAR ── */
-.topbar {
-  position: sticky; top: 0; z-index: 200;
-  background: rgba(8,7,4,0.97);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(201,146,42,0.15);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 13px 44px;
-}
-.topbar-logo {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 13px; color: var(--rune-b); letter-spacing: 0.08em;
-}
-.topbar-nav { display: flex; gap: 22px; }
-.topbar-nav a {
-  font-family: 'Cinzel', serif; font-size: 10px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--mist); text-decoration: none; transition: color 0.2s;
-}
-.topbar-nav a:hover { color: var(--parchment); }
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
 
-/* ── HERO ── */
-.hero {
-  position: relative; z-index: 1;
-  padding: 100px 60px 70px;
-  max-width: 960px; margin: 0 auto;
-  border-bottom: 1px solid var(--border);
-}
-.hero-pre {
-  font-family: 'Cinzel', serif; font-size: 10px;
-  letter-spacing: 0.32em; text-transform: uppercase;
-  color: var(--rune-b); margin-bottom: 18px;
-  display: flex; align-items: center; gap: 14px;
-}
-.hero-pre::after { content:''; width:60px; height:1px; background:var(--rune-b); opacity:0.4; }
-.hero h1 {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(2rem,5vw,3.6rem);
-  line-height: 1.1; margin-bottom: 24px;
-}
-.hero h1 em { color: var(--rune-b); font-style: normal; }
-.hero-lead {
-  font-style: italic;
-  color: rgba(242,232,208,0.7);
-  max-width: 640px; font-size: 1.08em; line-height: 2;
-}
-.hero-meta {
-  margin-top: 36px;
-  display: flex; gap: 10px; flex-wrap: wrap;
-}
-.meta-tag {
-  font-family: 'Cinzel', serif; font-size: 9px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 4px 14px; border-radius: 2px;
-  border: 1px solid rgba(201,146,42,0.25);
-  color: var(--mist); background: rgba(201,146,42,0.04);
-}
+    ::-webkit-scrollbar-track {
+      background: var(--ink);
+    }
 
-/* ── THREAD ── */
-.thread {
-  position: relative; z-index: 1;
-  padding: 72px 60px;
-  max-width: 960px; margin: 0 auto;
-  border-bottom: 1px solid var(--border);
-}
-.thread-eyebrow {
-  font-family: 'Cinzel', serif; font-size: 10px;
-  letter-spacing: 0.28em; text-transform: uppercase;
-  color: var(--mist); margin-bottom: 12px;
-}
-.thread h2 {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1.1rem,2.5vw,1.6rem);
-  font-weight: 700; color: var(--parchment);
-  margin-bottom: 8px;
-}
-.thread-body {
-  font-style: italic;
-  color: rgba(242,232,208,0.68);
-  max-width: 700px; line-height: 2;
-  margin-bottom: 20px;
-}
-.thread-body strong { color: var(--rune-c); font-style: normal; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(201, 146, 42, 0.4);
+      border-radius: 3px;
+    }
 
-/* ── TIMELINE ── */
-.timeline {
-  position: relative; margin: 32px 0;
-  padding-left: 32px;
-}
-.timeline::before {
-  content: ''; position: absolute;
-  left: 0; top: 8px; bottom: 8px; width: 1px;
-  background: linear-gradient(180deg,
-    var(--egy-b), var(--git-b), var(--temp-b), var(--taro-b), var(--rune-b));
-  opacity: 0.4;
-}
-.t-event {
-  position: relative; margin-bottom: 22px;
-  padding-left: 20px;
-}
-.t-event::before {
-  content: ''; position: absolute;
-  left: -28px; top: 9px;
-  width: 8px; height: 8px;
-  border-radius: 50%; border: 1px solid;
-}
-.t-event.egy::before  { border-color: var(--egy-b);  background: rgba(184,134,11,0.3); }
-.t-event.git::before  { border-color: var(--git-b);  background: rgba(196,94,0,0.3); }
-.t-event.temp::before { border-color: var(--temp-b); background: rgba(139,0,0,0.3); }
-.t-event.taro::before { border-color: var(--taro-b); background: rgba(139,47,201,0.3); }
-.t-event.rune::before { border-color: var(--rune-b); background: rgba(201,146,42,0.3); }
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(8, 7, 4, 0.97);
+      
+      border-bottom: 1px solid rgba(201, 146, 42, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 44px;
+    }
 
-.t-date {
-  font-family: 'Cinzel', serif; font-size: 9px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  margin-bottom: 3px;
-}
-.t-event.egy  .t-date { color: var(--egy-c); }
-.t-event.git  .t-date { color: var(--git-c); }
-.t-event.temp .t-date { color: var(--temp-c); }
-.t-event.taro .t-date { color: var(--taro-c); }
-.t-event.rune .t-date { color: var(--rune-c); }
+    .topbar-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 13px;
+      color: var(--rune-b);
+      letter-spacing: 0.08em;
+    }
 
-.t-desc {
-  font-size: 0.92em;
-  color: rgba(242,232,208,0.65);
-  font-style: italic; line-height: 1.65;
-}
+    .topbar-nav {
+      display: flex;
+      gap: 22px;
+    }
 
-/* ── UNIVERSI GRID ── */
-.universi-wrap {
-  position: relative; z-index: 1;
-  padding: 72px 60px;
-  max-width: 960px; margin: 0 auto;
-  border-bottom: 1px solid var(--border);
-}
-.universi-title {
-  font-family: 'Cinzel', serif; font-size: 10px;
-  letter-spacing: 0.28em; text-transform: uppercase;
-  color: var(--mist); margin-bottom: 12px;
-}
-.universi-title h2 {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1.1rem,2.5vw,1.6rem);
-  color: var(--parchment); font-weight: 700;
-  margin-bottom: 8px;
-}
-.universi-lead {
-  font-style: italic;
-  color: rgba(242,232,208,0.65);
-  max-width: 640px; margin-bottom: 48px;
-  font-size: 1em; line-height: 1.9;
-}
+    .topbar-nav a {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mist);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
 
-.universo {
-  margin-bottom: 56px;
-  padding: 0;
-}
-.universo-header {
-  display: flex; align-items: flex-start; gap: 28px;
-  margin-bottom: 24px;
-}
-.universo-num {
-  width: 64px; height: 64px; flex-shrink: 0;
-  border-radius: 4px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 2px; border: 1px solid;
-  font-family: 'Cinzel', serif;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.universo:hover .universo-num { transform: scale(1.08); }
+    .topbar-nav a:hover {
+      color: var(--parchment);
+    }
 
-.universo.rune  .universo-num { background: var(--rune-a); border-color: rgba(201,146,42,0.5); color: var(--rune-c); box-shadow: 0 0 20px rgba(201,146,42,0.1); }
-.universo.taro  .universo-num { background: var(--taro-a); border-color: rgba(139,47,201,0.5); color: var(--taro-c); box-shadow: 0 0 20px rgba(139,47,201,0.1); }
-.universo.temp  .universo-num { background: var(--temp-a); border-color: rgba(139,0,0,0.5);    color: var(--temp-c); box-shadow: 0 0 20px rgba(139,0,0,0.1); }
-.universo.egy   .universo-num { background: var(--egy-a);  border-color: rgba(184,134,11,0.5); color: var(--egy-c);  box-shadow: 0 0 20px rgba(184,134,11,0.1); }
-.universo.git   .universo-num { background: var(--git-a);  border-color: rgba(196,94,0,0.5);   color: var(--git-c);  box-shadow: 0 0 20px rgba(196,94,0,0.1); }
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 100px 60px 70px;
+      max-width: 960px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
 
-.universo-num .rom {
-  font-size: 1.2em; font-weight: 700;
-}
-.universo-num .sigla {
-  font-size: 8px; letter-spacing: 0.12em;
-  text-transform: uppercase; opacity: 0.6;
-}
+    .hero-pre {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--rune-b);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
 
-.universo-head-text { flex: 1; }
-.universo-name {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 1.4em; font-weight: 700;
-  margin-bottom: 4px; line-height: 1.15;
-}
-.universo.rune  .universo-name { color: var(--rune-c); }
-.universo.taro  .universo-name { color: var(--taro-c); }
-.universo.temp  .universo-name { color: var(--temp-c); }
-.universo.egy   .universo-name { color: var(--egy-c); }
-.universo.git   .universo-name { color: var(--git-c); }
+    .hero-pre::after {
+      content: '';
+      width: 60px;
+      height: 1px;
+      background: var(--rune-b);
+      opacity: 0.4;
+    }
 
-.universo-sub {
-  font-family: 'Cinzel', serif; font-size: 10px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--mist); margin-bottom: 0;
-}
+    .hero h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
 
-.universo-body {
-  padding-left: 92px;
-}
-.universo-desc {
-  font-style: italic;
-  color: rgba(242,232,208,0.7);
-  line-height: 1.95; margin-bottom: 18px;
-  font-size: 1em;
-}
-.universo-desc strong { font-style: normal; color: var(--parchment); }
+    .hero h1 em {
+      color: var(--rune-b);
+      font-style: normal;
+    }
 
-.universo-specs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px; margin-bottom: 18px;
-}
-.spec {
-  padding: 12px 16px;
-  border-radius: 4px; border: 1px solid;
-  font-size: 0.86em;
-}
-.universo.rune  .spec { border-color: rgba(201,146,42,0.2); background: rgba(201,146,42,0.04); }
-.universo.taro  .spec { border-color: rgba(139,47,201,0.2); background: rgba(139,47,201,0.04); }
-.universo.temp  .spec { border-color: rgba(139,0,0,0.2);    background: rgba(139,0,0,0.04); }
-.universo.egy   .spec { border-color: rgba(184,134,11,0.2); background: rgba(184,134,11,0.04); }
-.universo.git   .spec { border-color: rgba(196,94,0,0.2);   background: rgba(196,94,0,0.04); }
+    .hero-lead {
+      font-style: italic;
+      color: rgba(242, 232, 208, 0.7);
+      max-width: 640px;
+      font-size: 1.08em;
+      line-height: 2;
+    }
 
-.spec-label {
-  font-family: 'Cinzel', serif; font-size: 8px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.universo.rune  .spec-label { color: var(--rune-b); }
-.universo.taro  .spec-label { color: var(--taro-b); }
-.universo.temp  .spec-label { color: var(--temp-b); }
-.universo.egy   .spec-label { color: var(--egy-b); }
-.universo.git   .spec-label { color: var(--git-b); }
+    .hero-meta {
+      margin-top: 36px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-.spec-val { color: rgba(242,232,208,0.75); font-style: italic; line-height: 1.5; }
+    .meta-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 2px;
+      border: 1px solid rgba(201, 146, 42, 0.25);
+      color: var(--mist);
+      background: rgba(201, 146, 42, 0.04);
+    }
 
-.universo-tags {
-  display: flex; flex-wrap: wrap; gap: 7px;
-}
-.utag {
-  font-family: 'Cinzel', serif; font-size: 8px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 3px 11px; border-radius: 20px; border: 1px solid;
-}
-.universo.rune  .utag { border-color: rgba(201,146,42,0.25); color: var(--rune-b); background: rgba(201,146,42,0.06); }
-.universo.taro  .utag { border-color: rgba(139,47,201,0.25); color: var(--taro-b); background: rgba(139,47,201,0.06); }
-.universo.temp  .utag { border-color: rgba(139,0,0,0.25);    color: var(--temp-c); background: rgba(139,0,0,0.06); }
-.universo.egy   .utag { border-color: rgba(184,134,11,0.25); color: var(--egy-b);  background: rgba(184,134,11,0.06); }
-.universo.git   .utag { border-color: rgba(196,94,0,0.25);   color: var(--git-b);  background: rgba(196,94,0,0.06); }
+    /* ── THREAD ── */
+    .thread {
+      position: relative;
+      z-index: 1;
+      padding: 72px 60px;
+      max-width: 960px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
 
-.universo-separator {
-  margin-top: 48px; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-}
+    .thread-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 12px;
+    }
 
-/* ── MOTORE COMUNE ── */
-.engine-wrap {
-  position: relative; z-index: 1;
-  padding: 72px 60px;
-  max-width: 960px; margin: 0 auto;
-  border-bottom: 1px solid var(--border);
-}
-.engine-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px; margin-top: 36px;
-}
-.engine-card {
-  padding: 22px 20px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: rgba(255,255,255,0.015);
-  transition: background 0.3s, border-color 0.3s;
-}
-.engine-card:hover {
-  background: rgba(201,146,42,0.04);
-  border-color: rgba(201,146,42,0.2);
-}
-.engine-icon { font-size: 1.5em; margin-bottom: 10px; }
-.engine-title {
-  font-family: 'Cinzel', serif; font-size: 11px;
-  font-weight: 700; letter-spacing: 0.06em;
-  color: var(--rune-b); margin-bottom: 8px;
-}
-.engine-desc {
-  font-style: italic; font-size: 0.86em;
-  color: rgba(242,232,208,0.55); line-height: 1.65;
-}
+    .thread h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      color: var(--parchment);
+      margin-bottom: 8px;
+    }
 
-/* ── ROADMAP ── */
-.roadmap-wrap {
-  position: relative; z-index: 1;
-  padding: 72px 60px 90px;
-  max-width: 960px; margin: 0 auto;
-}
-.roadmap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px; margin-top: 36px;
-}
-.rm-card {
-  padding: 20px 16px;
-  border-radius: 4px; border: 1px solid;
-  text-align: center; transition: transform 0.25s;
-}
-.rm-card:hover { transform: translateY(-4px); }
-.rm-card.active { border-color: rgba(201,146,42,0.5); background: rgba(201,146,42,0.06); }
-.rm-card.soon   { border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.01); }
-.rm-phase {
-  font-family: 'Cinzel', serif; font-size: 8px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.rm-card.active .rm-phase { color: var(--rune-b); }
-.rm-card.soon   .rm-phase { color: var(--mist); }
-.rm-icon { font-size: 1.6em; margin-bottom: 8px; }
-.rm-name {
-  font-family: 'Cinzel', serif; font-size: 11px;
-  font-weight: 700; margin-bottom: 6px; line-height: 1.3;
-}
-.rm-card.active .rm-name { color: var(--rune-c); }
-.rm-card.soon   .rm-name { color: rgba(242,232,208,0.4); }
-.rm-desc {
-  font-style: italic; font-size: 0.8em;
-  color: rgba(242,232,208,0.4); line-height: 1.5;
-}
+    .thread-body {
+      font-style: italic;
+      color: rgba(242, 232, 208, 0.68);
+      max-width: 700px;
+      line-height: 2;
+      margin-bottom: 20px;
+    }
 
-/* ── FOOTER ── */
-footer {
-  position: relative; z-index: 1;
-  text-align: center; padding: 44px;
-  border-top: 1px solid var(--border);
-  color: var(--mist); font-size: 0.82em; font-style: italic;
-}
+    .thread-body strong {
+      color: var(--rune-c);
+      font-style: normal;
+    }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.fade-up { opacity: 0; animation: fadeUp 0.7s ease forwards; }
-.d1{animation-delay:.1s} .d2{animation-delay:.25s} .d3{animation-delay:.4s}
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+      margin: 32px 0;
+      padding-left: 32px;
+    }
 
-@media(max-width:700px){
-  .topbar{padding:12px 16px;} .topbar-nav{display:none;}
-  .hero,.thread,.universi-wrap,.engine-wrap,.roadmap-wrap{padding:56px 20px;}
-  .universo-body{padding-left:0;}
-  .universo-header{flex-direction:column; gap:14px;}
-}
-</style>
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: linear-gradient(180deg,
+          var(--egy-b), var(--git-b), var(--temp-b), var(--taro-b), var(--rune-b));
+      opacity: 0.4;
+    }
+
+    .t-event {
+      position: relative;
+      margin-bottom: 22px;
+      padding-left: 20px;
+    }
+
+    .t-event::before {
+      content: '';
+      position: absolute;
+      left: -28px;
+      top: 9px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 1px solid;
+    }
+
+    .t-event.egy::before {
+      border-color: var(--egy-b);
+      background: rgba(184, 134, 11, 0.3);
+    }
+
+    .t-event.git::before {
+      border-color: var(--git-b);
+      background: rgba(196, 94, 0, 0.3);
+    }
+
+    .t-event.temp::before {
+      border-color: var(--temp-b);
+      background: rgba(139, 0, 0, 0.3);
+    }
+
+    .t-event.taro::before {
+      border-color: var(--taro-b);
+      background: rgba(139, 47, 201, 0.3);
+    }
+
+    .t-event.rune::before {
+      border-color: var(--rune-b);
+      background: rgba(201, 146, 42, 0.3);
+    }
+
+    .t-date {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .t-event.egy .t-date {
+      color: var(--egy-c);
+    }
+
+    .t-event.git .t-date {
+      color: var(--git-c);
+    }
+
+    .t-event.temp .t-date {
+      color: var(--temp-c);
+    }
+
+    .t-event.taro .t-date {
+      color: var(--taro-c);
+    }
+
+    .t-event.rune .t-date {
+      color: var(--rune-c);
+    }
+
+    .t-desc {
+      font-size: 0.92em;
+      color: rgba(242, 232, 208, 0.65);
+      font-style: italic;
+      line-height: 1.65;
+    }
+
+    /* ── UNIVERSI GRID ── */
+    .universi-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 72px 60px;
+      max-width: 960px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .universi-title {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 12px;
+    }
+
+    .universi-title h2 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: var(--parchment);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .universi-lead {
+      font-style: italic;
+      color: rgba(242, 232, 208, 0.65);
+      max-width: 640px;
+      margin-bottom: 48px;
+      font-size: 1em;
+      line-height: 1.9;
+    }
+
+    .universo {
+      margin-bottom: 56px;
+      padding: 0;
+    }
+
+    .universo-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 28px;
+      margin-bottom: 24px;
+    }
+
+    .universo-num {
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      border: 1px solid;
+      font-family: 'Cinzel', serif;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .universo:hover .universo-num {
+      transform: scale(1.08);
+    }
+
+    .universo.rune .universo-num {
+      background: var(--rune-a);
+      border-color: rgba(201, 146, 42, 0.5);
+      color: var(--rune-c);
+      box-shadow: 0 0 20px rgba(201, 146, 42, 0.1);
+    }
+
+    .universo.taro .universo-num {
+      background: var(--taro-a);
+      border-color: rgba(139, 47, 201, 0.5);
+      color: var(--taro-c);
+      box-shadow: 0 0 20px rgba(139, 47, 201, 0.1);
+    }
+
+    .universo.temp .universo-num {
+      background: var(--temp-a);
+      border-color: rgba(139, 0, 0, 0.5);
+      color: var(--temp-c);
+      box-shadow: 0 0 20px rgba(139, 0, 0, 0.1);
+    }
+
+    .universo.egy .universo-num {
+      background: var(--egy-a);
+      border-color: rgba(184, 134, 11, 0.5);
+      color: var(--egy-c);
+      box-shadow: 0 0 20px rgba(184, 134, 11, 0.1);
+    }
+
+    .universo.git .universo-num {
+      background: var(--git-a);
+      border-color: rgba(196, 94, 0, 0.5);
+      color: var(--git-c);
+      box-shadow: 0 0 20px rgba(196, 94, 0, 0.1);
+    }
+
+    .universo-num .rom {
+      font-size: 1.2em;
+      font-weight: 700;
+    }
+
+    .universo-num .sigla {
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.6;
+    }
+
+    .universo-head-text {
+      flex: 1;
+    }
+
+    .universo-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.4em;
+      font-weight: 700;
+      margin-bottom: 4px;
+      line-height: 1.15;
+    }
+
+    .universo.rune .universo-name {
+      color: var(--rune-c);
+    }
+
+    .universo.taro .universo-name {
+      color: var(--taro-c);
+    }
+
+    .universo.temp .universo-name {
+      color: var(--temp-c);
+    }
+
+    .universo.egy .universo-name {
+      color: var(--egy-c);
+    }
+
+    .universo.git .universo-name {
+      color: var(--git-c);
+    }
+
+    .universo-sub {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mist);
+      margin-bottom: 0;
+    }
+
+    .universo-body {
+      padding-left: 92px;
+    }
+
+    .universo-desc {
+      font-style: italic;
+      color: rgba(242, 232, 208, 0.7);
+      line-height: 1.95;
+      margin-bottom: 18px;
+      font-size: 1em;
+    }
+
+    .universo-desc strong {
+      font-style: normal;
+      color: var(--parchment);
+    }
+
+    .universo-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .spec {
+      padding: 12px 16px;
+      border-radius: 4px;
+      border: 1px solid;
+      font-size: 0.86em;
+    }
+
+    .universo.rune .spec {
+      border-color: rgba(201, 146, 42, 0.2);
+      background: rgba(201, 146, 42, 0.04);
+    }
+
+    .universo.taro .spec {
+      border-color: rgba(139, 47, 201, 0.2);
+      background: rgba(139, 47, 201, 0.04);
+    }
+
+    .universo.temp .spec {
+      border-color: rgba(139, 0, 0, 0.2);
+      background: rgba(139, 0, 0, 0.04);
+    }
+
+    .universo.egy .spec {
+      border-color: rgba(184, 134, 11, 0.2);
+      background: rgba(184, 134, 11, 0.04);
+    }
+
+    .universo.git .spec {
+      border-color: rgba(196, 94, 0, 0.2);
+      background: rgba(196, 94, 0, 0.04);
+    }
+
+    .spec-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .universo.rune .spec-label {
+      color: var(--rune-b);
+    }
+
+    .universo.taro .spec-label {
+      color: var(--taro-b);
+    }
+
+    .universo.temp .spec-label {
+      color: var(--temp-b);
+    }
+
+    .universo.egy .spec-label {
+      color: var(--egy-b);
+    }
+
+    .universo.git .spec-label {
+      color: var(--git-b);
+    }
+
+    .spec-val {
+      color: rgba(242, 232, 208, 0.75);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .universo-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .utag {
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 11px;
+      border-radius: 20px;
+      border: 1px solid;
+    }
+
+    .universo.rune .utag {
+      border-color: rgba(201, 146, 42, 0.25);
+      color: var(--rune-b);
+      background: rgba(201, 146, 42, 0.06);
+    }
+
+    .universo.taro .utag {
+      border-color: rgba(139, 47, 201, 0.25);
+      color: var(--taro-b);
+      background: rgba(139, 47, 201, 0.06);
+    }
+
+    .universo.temp .utag {
+      border-color: rgba(139, 0, 0, 0.25);
+      color: var(--temp-c);
+      background: rgba(139, 0, 0, 0.06);
+    }
+
+    .universo.egy .utag {
+      border-color: rgba(184, 134, 11, 0.25);
+      color: var(--egy-b);
+      background: rgba(184, 134, 11, 0.06);
+    }
+
+    .universo.git .utag {
+      border-color: rgba(196, 94, 0, 0.25);
+      color: var(--git-b);
+      background: rgba(196, 94, 0, 0.06);
+    }
+
+    .universo-separator {
+      margin-top: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+    }
+
+    /* ── MOTORE COMUNE ── */
+    .engine-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 72px 60px;
+      max-width: 960px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .engine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .engine-card {
+      padding: 22px 20px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.015);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .engine-card:hover {
+      background: rgba(201, 146, 42, 0.04);
+      border-color: rgba(201, 146, 42, 0.2);
+    }
+
+    .engine-icon {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .engine-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--rune-b);
+      margin-bottom: 8px;
+    }
+
+    .engine-desc {
+      font-style: italic;
+      font-size: 0.86em;
+      color: rgba(242, 232, 208, 0.55);
+      line-height: 1.65;
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap-wrap {
+      position: relative;
+      z-index: 1;
+      padding: 72px 60px 90px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .rm-card {
+      padding: 20px 16px;
+      border-radius: 4px;
+      border: 1px solid;
+      text-align: center;
+      transition: transform 0.25s;
+    }
+
+    .rm-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .rm-card.active {
+      border-color: rgba(201, 146, 42, 0.5);
+      background: rgba(201, 146, 42, 0.06);
+    }
+
+    .rm-card.soon {
+      border-color: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .rm-phase {
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .rm-card.active .rm-phase {
+      color: var(--rune-b);
+    }
+
+    .rm-card.soon .rm-phase {
+      color: var(--mist);
+    }
+
+    .rm-icon {
+      font-size: 1.6em;
+      margin-bottom: 8px;
+    }
+
+    .rm-name {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .rm-card.active .rm-name {
+      color: var(--rune-c);
+    }
+
+    .rm-card.soon .rm-name {
+      color: rgba(242, 232, 208, 0.4);
+    }
+
+    .rm-desc {
+      font-style: italic;
+      font-size: 0.8em;
+      color: rgba(242, 232, 208, 0.4);
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 44px;
+      border-top: 1px solid var(--border);
+      color: var(--mist);
+      font-size: 0.82em;
+      font-style: italic;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    .d1 {
+      animation-delay: .1s
+    }
+
+    .d2 {
+      animation-delay: .25s
+    }
+
+    .d3 {
+      animation-delay: .4s
+    }
+
+    @media(max-width:700px) {
+      .topbar {
+        padding: 12px 16px;
+      }
+
+      .topbar-nav {
+        display: none;
+      }
+
+      .hero,
+      .thread,
+      .universi-wrap,
+      .engine-wrap,
+      .roadmap-wrap {
+        padding: 56px 20px;
+      }
+
+      .universo-body {
+        padding-left: 0;
+      }
+
+      .universo-header {
+        flex-direction: column;
+        gap: 14px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="topbar">
-  <div class="topbar-logo">VHR · Universi Narrativi</div>
-  <nav class="topbar-nav">
-    <a href="#filo">Il Filo</a>
-    <a href="#universi">I Mondi</a>
-    <a href="#motore">Il Motore</a>
-    <a href="#roadmap">Roadmap</a>
-  </nav>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-  <p class="hero-pre fade-up d1">Documento Strategico · VHR Multiverse</p>
-  <h1 class="fade-up d2">Cinque Mondi.<br><em>Una Sola Città.</em></h1>
-  <p class="hero-lead fade-up d3">
-    Vercelli e il Piemonte sono il crocevia di cinque tradizioni simboliche che si sono intrecciate nel corso di tremila anni. Ogni tradizione è un universo di gioco autonomo — con la sua grafica, le sue carte, i suoi obiettivi. Ma tutte camminano sullo stesso motore e abitano la stessa città.
-  </p>
-  <div class="hero-meta fade-up d3">
-    <span class="meta-tag">5 universi narrativi</span>
-    <span class="meta-tag">1 motore Firebase</span>
-    <span class="meta-tag">5 mazzi da 22 carte</span>
-    <span class="meta-tag">Vercelli · Piemonte · Italia</span>
-    <span class="meta-tag">3000 anni di storia</span>
+  <div class="topbar">
+    <div class="topbar-logo">VHR · Universi Narrativi</div>
+    <nav class="topbar-nav">
+      <a href="index.html" style="color: var(--rune-b);">← Dashboard</a>
+      <a href="#filo">Il Filo</a>
+      <a href="#universi">I Mondi</a>
+      <a href="#motore">Il Motore</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
   </div>
-</div>
 
-<!-- IL FILO STORICO -->
-<div class="thread" id="filo">
-  <p class="thread-eyebrow">Il Filo Storico</p>
-  <h2>Come Tutto Converge a Vercelli</h2>
-  <p class="thread-body">
-    Non è una coincidenza che il Piemonte sia diventato la terra delle tradizioni simboliche d'Europa. È geografia, commercio e storia. <strong>Torino fu fondata da coloni egizi</strong> — la leggenda vuole che Fetonte, figlio del Sole, abbia dato il nome alla città sul Po. I simboli egizi nel tessuto urbano torinese non sono decorazione: sono memoria. Da lì, il filo scende verso sud lungo la pianura fino a Vercelli, città dei Libui, dei Romani, dei Longobardi.
-  </p>
-
-  <div class="timeline">
-    <div class="t-event egy">
-      <div class="t-date">~3000 a.C. · Origine</div>
-      <div class="t-desc">Gli antichi Egizi sviluppano un sistema simbolico per leggere il mondo — stelle, cicli, geroglifici. Secondo la tradizione, alcune tribù di Punt (Somalia-Eritrea attuale) contribuiscono alla costruzione delle piramidi come classe operaia specializzata. Il sapere simbolico viaggia con loro.</div>
-    </div>
-    <div class="t-event git">
-      <div class="t-date">~1000 a.C. · La Dispersione</div>
-      <div class="t-desc">Popolazioni nomadi dall'India settentrionale — proto-Sinti e Rom — portano in Europa tecniche di divinazione e lettura dei simboli. Nelle corti medievali italiane saranno i cartomanti di fiducia: conoscono i segreti perché non appartengono a nessun luogo, quindi appartengono a tutti.</div>
-    </div>
-    <div class="t-event temp">
-      <div class="t-date">1119–1312 · I Templari</div>
-      <div class="t-desc">I Cavalieri Templari tornano dalla Terra Santa con conoscenze esoteriche, tecniche di costruzione e una geometria sacra che entra nelle cattedrali gotiche del Piemonte. Vercelli ospita una commenda templare. Le croci templari sono ancora nei capitelli delle chiese vercellesi.</div>
-    </div>
-    <div class="t-event taro">
-      <div class="t-date">1440 · Visconti-Sforza</div>
-      <div class="t-desc">A Milano, sotto i Visconti-Sforza signori di Vercelli, nasce il primo mazzo di tarocchi illustrato della storia: il Tarocco Visconti-Sforza, dipinto da Bonifacio Bembo. Non è un gioco — è un sistema simbolico enciclopedico che raccoglie in 78 carte tutta la conoscenza del Rinascimento.</div>
-    </div>
-    <div class="t-event rune">
-      <div class="t-date">500 a.C. – Oggi · I Libui</div>
-      <div class="t-desc">I Libui, tribù celtica della pianura vercellese, lasciano tracce runiche e simboliche nel territorio. Le loro rune non sono scrittura — sono chiavi per leggere il paesaggio, le stagioni, le stelle. Vercelli Hidden Runes nasce da qui: dalla domanda di un popolo antico su come dare nome all'imprevedibile.</div>
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-pre fade-up d1">Documento Strategico · VHR Multiverse</p>
+    <h1 class="fade-up d2">Cinque Mondi.<br><em>Una Sola Città.</em></h1>
+    <p class="hero-lead fade-up d3">
+      Vercelli e il Piemonte sono il crocevia di cinque tradizioni simboliche che si sono intrecciate nel corso di
+      tremila anni. Ogni tradizione è un universo di gioco autonomo — con la sua grafica, le sue carte, i suoi
+      obiettivi. Ma tutte camminano sullo stesso motore e abitano la stessa città.
+    </p>
+    <div class="hero-meta fade-up d3">
+      <span class="meta-tag">5 universi narrativi</span>
+      <span class="meta-tag">1 motore Firebase</span>
+      <span class="meta-tag">5 mazzi da 22 carte</span>
+      <span class="meta-tag">Vercelli · Piemonte · Italia</span>
+      <span class="meta-tag">3000 anni di storia</span>
     </div>
   </div>
-</div>
 
-<!-- I CINQUE UNIVERSI -->
-<div class="universi-wrap" id="universi">
-  <p class="universi-title">I Cinque Mondi</p>
-  <div class="universi-title"><h2>Gli Universi Narrativi VHR</h2></div>
-  <p class="universi-lead">Cinque giochi autonomi che condividono città, motore tecnico e sistema carte. Ogni universo ha una palette cromatica, una tipografia, un'estetica e un mazzo fisico propri. Si gioca uno alla volta — ma chi li completa tutti vede il disegno completo.</p>
+  <!-- IL FILO STORICO -->
+  <div class="thread" id="filo">
+    <p class="thread-eyebrow">Il Filo Storico</p>
+    <h2>Come Tutto Converge a Vercelli</h2>
+    <p class="thread-body">
+      Non è una coincidenza che il Piemonte sia diventato la terra delle tradizioni simboliche d'Europa. È geografia,
+      commercio e storia. <strong>Torino fu fondata da coloni egizi</strong> — la leggenda vuole che Fetonte, figlio del
+      Sole, abbia dato il nome alla città sul Po. I simboli egizi nel tessuto urbano torinese non sono decorazione: sono
+      memoria. Da lì, il filo scende verso sud lungo la pianura fino a Vercelli, città dei Libui, dei Romani, dei
+      Longobardi.
+    </p>
 
-  <!-- I — RUNE -->
-  <div class="universo rune">
-    <div class="universo-header">
-      <div class="universo-num">
-        <span class="rom">I</span>
-        <span class="sigla">RUNE</span>
+    <div class="timeline">
+      <div class="t-event egy">
+        <div class="t-date">~3000 a.C. · Origine</div>
+        <div class="t-desc">Gli antichi Egizi sviluppano un sistema simbolico per leggere il mondo — stelle, cicli,
+          geroglifici. Secondo la tradizione, alcune tribù di Punt (Somalia-Eritrea attuale) contribuiscono alla
+          costruzione delle piramidi come classe operaia specializzata. Il sapere simbolico viaggia con loro.</div>
       </div>
-      <div class="universo-head-text">
-        <div class="universo-name">Vercelli Hidden Runes</div>
-        <div class="universo-sub">I Libui · L'Alfabeto del Territorio · 500 a.C.</div>
+      <div class="t-event git">
+        <div class="t-date">~1000 a.C. · La Dispersione</div>
+        <div class="t-desc">Popolazioni nomadi dall'India settentrionale — proto-Sinti e Rom — portano in Europa
+          tecniche di divinazione e lettura dei simboli. Nelle corti medievali italiane saranno i cartomanti di fiducia:
+          conoscono i segreti perché non appartengono a nessun luogo, quindi appartengono a tutti.</div>
       </div>
-    </div>
-    <div class="universo-body">
-      <p class="universo-desc">
-        Il primo universo e il cuore del sistema. I Libui celtici abitavano la pianura vercellese prima di Roma — lasciando simboli, rune e tracce in un paesaggio che non ha ancora finito di raccontarle. <strong>Il gioco chiede al giocatore di imparare a leggere il territorio come un testo.</strong> L'enigma non è mai nella risposta — è nel modo di guardare. L'estetica è dark fantasy nordico: oro su inchiostro, rune come marker AR, monumenti medievali come tappe.
-      </p>
-      <div class="universo-specs">
-        <div class="spec">
-          <div class="spec-label">Palette</div>
-          <div class="spec-val">Oro su inchiostro · Pergamena · Foresta notturna</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Font</div>
-          <div class="spec-val">Cinzel Decorative · EB Garamond</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Carte fisiche</div>
-          <div class="spec-val">22 carte runiche stile Magic · Dorso celtico</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Marker AR</div>
-          <div class="spec-val">Rune Elder Futhark · Monumenti medievali</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Contenuti AR</div>
-          <div class="spec-val">Guerrieri celtici 3D · Visioni runiche · Animazioni nodo celtico</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Stato</div>
-          <div class="spec-val">✦ In sviluppo attivo — Fase 1 MVP</div>
-        </div>
+      <div class="t-event temp">
+        <div class="t-date">1119–1312 · I Templari</div>
+        <div class="t-desc">I Cavalieri Templari tornano dalla Terra Santa con conoscenze esoteriche, tecniche di
+          costruzione e una geometria sacra che entra nelle cattedrali gotiche del Piemonte. Vercelli ospita una
+          commenda templare. Le croci templari sono ancora nei capitelli delle chiese vercellesi.</div>
       </div>
-      <div class="universo-tags">
-        <span class="utag">Fantasy nordico</span>
-        <span class="utag">Dark gold</span>
-        <span class="utag">Rune Elder Futhark</span>
-        <span class="utag">Nodi celtici</span>
-        <span class="utag">Missioni territoriali</span>
-        <span class="utag">22 carte Magic-style</span>
+      <div class="t-event taro">
+        <div class="t-date">1440 · Visconti-Sforza</div>
+        <div class="t-desc">A Milano, sotto i Visconti-Sforza signori di Vercelli, nasce il primo mazzo di tarocchi
+          illustrato della storia: il Tarocco Visconti-Sforza, dipinto da Bonifacio Bembo. Non è un gioco — è un sistema
+          simbolico enciclopedico che raccoglie in 78 carte tutta la conoscenza del Rinascimento.</div>
+      </div>
+      <div class="t-event rune">
+        <div class="t-date">500 a.C. – Oggi · I Libui</div>
+        <div class="t-desc">I Libui, tribù celtica della pianura vercellese, lasciano tracce runiche e simboliche nel
+          territorio. Le loro rune non sono scrittura — sono chiavi per leggere il paesaggio, le stagioni, le stelle.
+          Vercelli Hidden Runes nasce da qui: dalla domanda di un popolo antico su come dare nome all'imprevedibile.
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="universo-separator"></div>
+  <!-- I CINQUE UNIVERSI -->
+  <div class="universi-wrap" id="universi">
+    <p class="universi-title">I Cinque Mondi</p>
+    <div class="universi-title">
+      <h2>Gli Universi Narrativi VHR</h2>
+    </div>
+    <p class="universi-lead">Cinque giochi autonomi che condividono città, motore tecnico e sistema carte. Ogni universo
+      ha una palette cromatica, una tipografia, un'estetica e un mazzo fisico propri. Si gioca uno alla volta — ma chi
+      li completa tutti vede il disegno completo.</p>
 
-  <!-- II — TAROCCHI -->
-  <div class="universo taro">
-    <div class="universo-header">
-      <div class="universo-num">
-        <span class="rom">II</span>
-        <span class="sigla">TARO</span>
+    <!-- I — RUNE -->
+    <div class="universo rune">
+      <div class="universo-header">
+        <div class="universo-num">
+          <span class="rom">I</span>
+          <span class="sigla">RUNE</span>
+        </div>
+        <div class="universo-head-text">
+          <div class="universo-name">Vercelli Hidden Runes</div>
+          <div class="universo-sub">I Libui · L'Alfabeto del Territorio · 500 a.C.</div>
+        </div>
       </div>
-      <div class="universo-head-text">
-        <div class="universo-name">Vercelli Visconti Arcana</div>
-        <div class="universo-sub">I Visconti-Sforza · Il Primo Mazzo · 1440 d.C.</div>
+      <div class="universo-body">
+        <p class="universo-desc">
+          Il primo universo e il cuore del sistema. I Libui celtici abitavano la pianura vercellese prima di Roma —
+          lasciando simboli, rune e tracce in un paesaggio che non ha ancora finito di raccontarle. <strong>Il gioco
+            chiede al giocatore di imparare a leggere il territorio come un testo.</strong> L'enigma non è mai nella
+          risposta — è nel modo di guardare. L'estetica è dark fantasy nordico: oro su inchiostro, rune come marker AR,
+          monumenti medievali come tappe.
+        </p>
+        <div class="universo-specs">
+          <div class="spec">
+            <div class="spec-label">Palette</div>
+            <div class="spec-val">Oro su inchiostro · Pergamena · Foresta notturna</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Font</div>
+            <div class="spec-val">Cinzel Decorative · EB Garamond</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Carte fisiche</div>
+            <div class="spec-val">22 carte runiche stile Magic · Dorso celtico</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Marker AR</div>
+            <div class="spec-val">Rune Elder Futhark · Monumenti medievali</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Contenuti AR</div>
+            <div class="spec-val">Guerrieri celtici 3D · Visioni runiche · Animazioni nodo celtico</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Stato</div>
+            <div class="spec-val">✦ In sviluppo attivo — Fase 1 MVP</div>
+          </div>
+        </div>
+        <div class="universo-tags">
+          <span class="utag">Fantasy nordico</span>
+          <span class="utag">Dark gold</span>
+          <span class="utag">Rune Elder Futhark</span>
+          <span class="utag">Nodi celtici</span>
+          <span class="utag">Missioni territoriali</span>
+          <span class="utag">22 carte Magic-style</span>
+        </div>
       </div>
     </div>
-    <div class="universo-body">
-      <p class="universo-desc">
-        I Visconti-Sforza erano signori di Vercelli quando commissionarono il primo mazzo di tarocchi illustrato della storia. <strong>Questo universo porta quel mazzo nel presente: ogni carta è un personaggio storico reale della corte vercellese-milanese</strong>, ogni missione ricostruisce un episodio della loro storia. L'estetica è rinascimentale lussuosa: viola profondo, oro, miniature medievali, architetture gotiche lombarde. Completamente diverso dal primo universo — stessa città, altra epoca.
-      </p>
-      <div class="universo-specs">
-        <div class="spec">
-          <div class="spec-label">Palette</div>
-          <div class="spec-val">Viola profondo · Oro antico · Lacca rossa</div>
+
+    <div class="universo-separator"></div>
+
+    <!-- II — TAROCCHI -->
+    <div class="universo taro">
+      <div class="universo-header">
+        <div class="universo-num">
+          <span class="rom">II</span>
+          <span class="sigla">TARO</span>
         </div>
-        <div class="spec">
-          <div class="spec-label">Font</div>
-          <div class="spec-val">Uncial Antiqua · Cormorant Garamond</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Carte fisiche</div>
-          <div class="spec-val">22 Arcani Maggiori in stile miniatura medievale</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Marker AR</div>
-          <div class="spec-val">Stemmi nobiliari · Architetture gotiche</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Contenuti AR</div>
-          <div class="spec-val">Personaggi storici 3D · Affreschi animati · Corti rinascimentali</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Stato</div>
-          <div class="spec-val">◎ Pianificato — dopo completamento Universo I</div>
+        <div class="universo-head-text">
+          <div class="universo-name">Vercelli Visconti Arcana</div>
+          <div class="universo-sub">I Visconti-Sforza · Il Primo Mazzo · 1440 d.C.</div>
         </div>
       </div>
-      <div class="universo-tags">
-        <span class="utag">Rinascimento lombardo</span>
-        <span class="utag">Viola e oro</span>
-        <span class="utag">Visconti-Sforza</span>
-        <span class="utag">Tarocchi storici</span>
-        <span class="utag">Miniature medievali</span>
+      <div class="universo-body">
+        <p class="universo-desc">
+          I Visconti-Sforza erano signori di Vercelli quando commissionarono il primo mazzo di tarocchi illustrato della
+          storia. <strong>Questo universo porta quel mazzo nel presente: ogni carta è un personaggio storico reale della
+            corte vercellese-milanese</strong>, ogni missione ricostruisce un episodio della loro storia. L'estetica è
+          rinascimentale lussuosa: viola profondo, oro, miniature medievali, architetture gotiche lombarde.
+          Completamente diverso dal primo universo — stessa città, altra epoca.
+        </p>
+        <div class="universo-specs">
+          <div class="spec">
+            <div class="spec-label">Palette</div>
+            <div class="spec-val">Viola profondo · Oro antico · Lacca rossa</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Font</div>
+            <div class="spec-val">Uncial Antiqua · Cormorant Garamond</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Carte fisiche</div>
+            <div class="spec-val">22 Arcani Maggiori in stile miniatura medievale</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Marker AR</div>
+            <div class="spec-val">Stemmi nobiliari · Architetture gotiche</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Contenuti AR</div>
+            <div class="spec-val">Personaggi storici 3D · Affreschi animati · Corti rinascimentali</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Stato</div>
+            <div class="spec-val">◎ Pianificato — dopo completamento Universo I</div>
+          </div>
+        </div>
+        <div class="universo-tags">
+          <span class="utag">Rinascimento lombardo</span>
+          <span class="utag">Viola e oro</span>
+          <span class="utag">Visconti-Sforza</span>
+          <span class="utag">Tarocchi storici</span>
+          <span class="utag">Miniature medievali</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="universo-separator"></div>
+
+    <!-- III — TEMPLARI -->
+    <div class="universo temp">
+      <div class="universo-header">
+        <div class="universo-num">
+          <span class="rom">III</span>
+          <span class="sigla">TEMP</span>
+        </div>
+        <div class="universo-head-text">
+          <div class="universo-name">Vercelli Templi Sacri</div>
+          <div class="universo-sub">I Cavalieri Templari · La Geometria Sacra · 1119–1312</div>
+        </div>
+      </div>
+      <div class="universo-body">
+        <p class="universo-desc">
+          Vercelli ospitava una commenda templare e le sue chiese portano ancora la geometria sacra che i Cavalieri
+          portarono dall'Oriente. <strong>Questo universo è il più misterioso: le missioni ricostruiscono la rete di
+            conoscenza templare nascosta nell'architettura vercellese.</strong> I marker AR sono croci templari e
+          proporzioni auree incise nella pietra. L'estetica è austera e drammatica: rosso sangue su pietra grigia, croce
+          patente, geometria pura.
+        </p>
+        <div class="universo-specs">
+          <div class="spec">
+            <div class="spec-label">Palette</div>
+            <div class="spec-val">Rosso sangue · Pietra grigia · Bianco osseo</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Font</div>
+            <div class="spec-val">Trajan Pro · Palatino</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Carte fisiche</div>
+            <div class="spec-val">22 carte con geometria sacra e croci templari</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Marker AR</div>
+            <div class="spec-val">Croci patenti · Proporzioni auree · Rose finestre</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Contenuti AR</div>
+            <div class="spec-val">Cavalieri in armatura 3D · Costruzioni gotiche animate · Mappe templari</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Stato</div>
+            <div class="spec-val">◎ Pianificato — dopo completamento Universo II</div>
+          </div>
+        </div>
+        <div class="universo-tags">
+          <span class="utag">Geometria sacra</span>
+          <span class="utag">Rosso e pietra</span>
+          <span class="utag">Architettura gotica</span>
+          <span class="utag">Misteri templari</span>
+          <span class="utag">Croce patente</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="universo-separator"></div>
+
+    <!-- IV — EGIZIO -->
+    <div class="universo egy">
+      <div class="universo-header">
+        <div class="universo-num">
+          <span class="rom">IV</span>
+          <span class="sigla">EGY</span>
+        </div>
+        <div class="universo-head-text">
+          <div class="universo-name">Torino Città del Sole</div>
+          <div class="universo-sub">Egizi · Torino · Il Filo da Punt · ~3000 a.C.</div>
+        </div>
+      </div>
+      <div class="universo-body">
+        <p class="universo-desc">
+          L'unico universo che esce da Vercelli e abbraccia Torino — la città fondata, secondo la tradizione, da coloni
+          egizi. Il Museo Egizio di Torino è il secondo più importante al mondo dopo Il Cairo. <strong>Questo universo
+            traccia il filo che collega Punt, le piramidi, Torino e infine la pianura vercellese.</strong> È il più
+          cosmopolito e il più antico. L'estetica è egiziana pura: oro su lapislazzuli, geroglifici come marker AR, il
+          Nilo che diventa il Po.
+        </p>
+        <div class="universo-specs">
+          <div class="spec">
+            <div class="spec-label">Palette</div>
+            <div class="spec-val">Oro reale · Lapislazzuli · Sabbia del deserto</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Font</div>
+            <div class="spec-val">Caratteri ispirati ai geroglifici · Papyrus refinato</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Carte fisiche</div>
+            <div class="spec-val">22 carte con divinità egizie adattate al Piemonte</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Marker AR</div>
+            <div class="spec-val">Geroglifici · Occhio di Ra · Piramidi stilizzate</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Contenuti AR</div>
+            <div class="spec-val">Divinità egizie 3D · Papiri animati · Visioni del Nilo sul Po</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Stato</div>
+            <div class="spec-val">◎ Pianificato — espansione a Torino</div>
+          </div>
+        </div>
+        <div class="universo-tags">
+          <span class="utag">Egitto antico</span>
+          <span class="utag">Oro su lapislazzuli</span>
+          <span class="utag">Torino + Vercelli</span>
+          <span class="utag">Geroglifici AR</span>
+          <span class="utag">Divinità</span>
+          <span class="utag">Punt · Somalia</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="universo-separator"></div>
+
+    <!-- V — GITANI -->
+    <div class="universo git">
+      <div class="universo-header">
+        <div class="universo-num">
+          <span class="rom">V</span>
+          <span class="sigla">GITA</span>
+        </div>
+        <div class="universo-head-text">
+          <div class="universo-name">La Via dei Cartomanti</div>
+          <div class="universo-sub">Sinti e Rom · Le Corti Medievali · ~XIV secolo</div>
+        </div>
+      </div>
+      <div class="universo-body">
+        <p class="universo-desc">
+          I Sinti e i Rom arrivarono in Europa dall'India attraverso la Persia e l'Egitto — portando tecniche di
+          divinazione, lettura dei simboli e cartomanzia. Nelle corti medievali piemontesi erano ospiti ambivalenti:
+          temuti e consultati. <strong>Questo universo è il più narrativo e il più umano: il giocatore segue le tracce
+            di una famiglia di cartomanti che percorse il Piemonte nel XIV secolo</strong>, lasciando carte e profezie
+          nei luoghi che attraversò. L'estetica è calda, nomade, fiabesca.
+        </p>
+        <div class="universo-specs">
+          <div class="spec">
+            <div class="spec-label">Palette</div>
+            <div class="spec-val">Arancio fuoco · Porpora · Oro caldo · Notte stellata</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Font</div>
+            <div class="spec-val">Caratteri calligrafici · Decorativi orientali</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Carte fisiche</div>
+            <div class="spec-val">22 carte stile cartomanzia gitana · Illustrazioni fiabesche</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Marker AR</div>
+            <div class="spec-val">Simboli Romani / Sinti · Mani aperte · Occhi</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Contenuti AR</div>
+            <div class="spec-val">Carri animati · Danze 3D · Visioni profetiche · Cristalli</div>
+          </div>
+          <div class="spec">
+            <div class="spec-label">Stato</div>
+            <div class="spec-val">◎ Pianificato — ultimo universo della serie</div>
+          </div>
+        </div>
+        <div class="universo-tags">
+          <span class="utag">Cartomanzia</span>
+          <span class="utag">Arancio e viola</span>
+          <span class="utag">Nomadi medievali</span>
+          <span class="utag">Fiabesco</span>
+          <span class="utag">Narrativa personale</span>
+          <span class="utag">India · Persia · Piemonte</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="universo-separator"></div>
-
-  <!-- III — TEMPLARI -->
-  <div class="universo temp">
-    <div class="universo-header">
-      <div class="universo-num">
-        <span class="rom">III</span>
-        <span class="sigla">TEMP</span>
-      </div>
-      <div class="universo-head-text">
-        <div class="universo-name">Vercelli Templi Sacri</div>
-        <div class="universo-sub">I Cavalieri Templari · La Geometria Sacra · 1119–1312</div>
-      </div>
+  <!-- MOTORE COMUNE -->
+  <div class="engine-wrap" id="motore">
+    <p class="universi-title">Il Motore Comune</p>
+    <div class="universi-title">
+      <h2>Cosa Condividono Tutti i Mondi</h2>
     </div>
-    <div class="universo-body">
-      <p class="universo-desc">
-        Vercelli ospitava una commenda templare e le sue chiese portano ancora la geometria sacra che i Cavalieri portarono dall'Oriente. <strong>Questo universo è il più misterioso: le missioni ricostruiscono la rete di conoscenza templare nascosta nell'architettura vercellese.</strong> I marker AR sono croci templari e proporzioni auree incise nella pietra. L'estetica è austera e drammatica: rosso sangue su pietra grigia, croce patente, geometria pura.
-      </p>
-      <div class="universo-specs">
-        <div class="spec">
-          <div class="spec-label">Palette</div>
-          <div class="spec-val">Rosso sangue · Pietra grigia · Bianco osseo</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Font</div>
-          <div class="spec-val">Trajan Pro · Palatino</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Carte fisiche</div>
-          <div class="spec-val">22 carte con geometria sacra e croci templari</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Marker AR</div>
-          <div class="spec-val">Croci patenti · Proporzioni auree · Rose finestre</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Contenuti AR</div>
-          <div class="spec-val">Cavalieri in armatura 3D · Costruzioni gotiche animate · Mappe templari</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Stato</div>
-          <div class="spec-val">◎ Pianificato — dopo completamento Universo II</div>
-        </div>
+    <p class="universi-lead">Cinque esperienze diverse — un'unica infrastruttura. Questo è il vantaggio competitivo del
+      sistema: ogni nuovo universo costa una frazione del primo perché il motore è già costruito.</p>
+
+    <div class="engine-grid">
+      <div class="engine-card">
+        <div class="engine-icon">🔥</div>
+        <div class="engine-title">Firebase Backend</div>
+        <div class="engine-desc">Stessa autenticazione, stesso Firestore, stesse Cloud Functions, stesso Stripe. Solo i
+          contenuti cambiano — la struttura dati è identica per tutti gli universi.</div>
       </div>
-      <div class="universo-tags">
-        <span class="utag">Geometria sacra</span>
-        <span class="utag">Rosso e pietra</span>
-        <span class="utag">Architettura gotica</span>
-        <span class="utag">Misteri templari</span>
-        <span class="utag">Croce patente</span>
+      <div class="engine-card">
+        <div class="engine-icon">📍</div>
+        <div class="engine-title">Sistema AR</div>
+        <div class="engine-desc">AR.js + Three.js per tutti gli universi. I marker cambiano tema — rune, geroglifici,
+          croci — ma il meccanismo di riconoscimento è lo stesso.</div>
+      </div>
+      <div class="engine-card">
+        <div class="engine-icon">🃏</div>
+        <div class="engine-title">Sistema Carte</div>
+        <div class="engine-desc">22 carte per universo. Stesso schema dati su Firestore: cardId, universeId, merchantId,
+          meaning. L'animazione di rivelazione è identica — cambia solo il tema visivo.</div>
+      </div>
+      <div class="engine-card">
+        <div class="engine-icon">🏪</div>
+        <div class="engine-title">Rete Commercianti</div>
+        <div class="engine-desc">Gli stessi commercianti partecipano a più universi con carte diverse. Un ristorante può
+          essere Il Seminatore in VHR Rune e Il Sole in VHR Tarocchi.</div>
+      </div>
+      <div class="engine-card">
+        <div class="engine-icon">🌑</div>
+        <div class="engine-title">Progressione Nascosta</div>
+        <div class="engine-desc">Le tre fasi Cercatore, Costruttore, Custode sono uguali in tutti gli universi. Il testo
+          delle Rivelazioni cambia — la logica no.</div>
+      </div>
+      <div class="engine-card">
+        <div class="engine-icon">💳</div>
+        <div class="engine-title">Pagamenti e Coupon</div>
+        <div class="engine-desc">Stripe gestisce tutti gli universi con lo stesso flusso. Il giocatore può acquistare
+          missioni da universi diversi dallo stesso account.</div>
       </div>
     </div>
   </div>
 
-  <div class="universo-separator"></div>
-
-  <!-- IV — EGIZIO -->
-  <div class="universo egy">
-    <div class="universo-header">
-      <div class="universo-num">
-        <span class="rom">IV</span>
-        <span class="sigla">EGY</span>
-      </div>
-      <div class="universo-head-text">
-        <div class="universo-name">Torino Città del Sole</div>
-        <div class="universo-sub">Egizi · Torino · Il Filo da Punt · ~3000 a.C.</div>
-      </div>
+  <!-- ROADMAP -->
+  <div class="roadmap-wrap" id="roadmap">
+    <p class="universi-title">Roadmap</p>
+    <div class="universi-title">
+      <h2>L'Ordine di Costruzione</h2>
     </div>
-    <div class="universo-body">
-      <p class="universo-desc">
-        L'unico universo che esce da Vercelli e abbraccia Torino — la città fondata, secondo la tradizione, da coloni egizi. Il Museo Egizio di Torino è il secondo più importante al mondo dopo Il Cairo. <strong>Questo universo traccia il filo che collega Punt, le piramidi, Torino e infine la pianura vercellese.</strong> È il più cosmopolito e il più antico. L'estetica è egiziana pura: oro su lapislazzuli, geroglifici come marker AR, il Nilo che diventa il Po.
-      </p>
-      <div class="universo-specs">
-        <div class="spec">
-          <div class="spec-label">Palette</div>
-          <div class="spec-val">Oro reale · Lapislazzuli · Sabbia del deserto</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Font</div>
-          <div class="spec-val">Caratteri ispirati ai geroglifici · Papyrus refinato</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Carte fisiche</div>
-          <div class="spec-val">22 carte con divinità egizie adattate al Piemonte</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Marker AR</div>
-          <div class="spec-val">Geroglifici · Occhio di Ra · Piramidi stilizzate</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Contenuti AR</div>
-          <div class="spec-val">Divinità egizie 3D · Papiri animati · Visioni del Nilo sul Po</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Stato</div>
-          <div class="spec-val">◎ Pianificato — espansione a Torino</div>
-        </div>
+    <p class="universi-lead">Si costruisce un universo alla volta. Il primo finanzia il secondo. Il secondo rende il
+      terzo più veloce.</p>
+
+    <div class="roadmap-grid">
+      <div class="rm-card active">
+        <div class="rm-phase">Ora · Fase 1</div>
+        <div class="rm-icon">ᚢ</div>
+        <div class="rm-name">VHR Rune</div>
+        <div class="rm-desc">MVP · 22 carte · Centro storico Vercelli</div>
       </div>
-      <div class="universo-tags">
-        <span class="utag">Egitto antico</span>
-        <span class="utag">Oro su lapislazzuli</span>
-        <span class="utag">Torino + Vercelli</span>
-        <span class="utag">Geroglifici AR</span>
-        <span class="utag">Divinità</span>
-        <span class="utag">Punt · Somalia</span>
+      <div class="rm-card soon">
+        <div class="rm-phase">Fase 2</div>
+        <div class="rm-icon">🃏</div>
+        <div class="rm-name">Visconti Arcana</div>
+        <div class="rm-desc">Tarocchi rinascimentali · Vercelli medievale</div>
+      </div>
+      <div class="rm-card soon">
+        <div class="rm-phase">Fase 3</div>
+        <div class="rm-icon">✝</div>
+        <div class="rm-name">Templi Sacri</div>
+        <div class="rm-desc">Geometria templare · Architetture gotiche</div>
+      </div>
+      <div class="rm-card soon">
+        <div class="rm-phase">Fase 4</div>
+        <div class="rm-icon">𓂀</div>
+        <div class="rm-name">Città del Sole</div>
+        <div class="rm-desc">Egizio · Torino + Vercelli · Punt</div>
+      </div>
+      <div class="rm-card soon">
+        <div class="rm-phase">Fase 5</div>
+        <div class="rm-icon">🔮</div>
+        <div class="rm-name">Via dei Cartomanti</div>
+        <div class="rm-desc">Sinti · XIV secolo · Piemonte nomade</div>
       </div>
     </div>
   </div>
 
-  <div class="universo-separator"></div>
-
-  <!-- V — GITANI -->
-  <div class="universo git">
-    <div class="universo-header">
-      <div class="universo-num">
-        <span class="rom">V</span>
-        <span class="sigla">GITA</span>
-      </div>
-      <div class="universo-head-text">
-        <div class="universo-name">La Via dei Cartomanti</div>
-        <div class="universo-sub">Sinti e Rom · Le Corti Medievali · ~XIV secolo</div>
-      </div>
-    </div>
-    <div class="universo-body">
-      <p class="universo-desc">
-        I Sinti e i Rom arrivarono in Europa dall'India attraverso la Persia e l'Egitto — portando tecniche di divinazione, lettura dei simboli e cartomanzia. Nelle corti medievali piemontesi erano ospiti ambivalenti: temuti e consultati. <strong>Questo universo è il più narrativo e il più umano: il giocatore segue le tracce di una famiglia di cartomanti che percorse il Piemonte nel XIV secolo</strong>, lasciando carte e profezie nei luoghi che attraversò. L'estetica è calda, nomade, fiabesca.
-      </p>
-      <div class="universo-specs">
-        <div class="spec">
-          <div class="spec-label">Palette</div>
-          <div class="spec-val">Arancio fuoco · Porpora · Oro caldo · Notte stellata</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Font</div>
-          <div class="spec-val">Caratteri calligrafici · Decorativi orientali</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Carte fisiche</div>
-          <div class="spec-val">22 carte stile cartomanzia gitana · Illustrazioni fiabesche</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Marker AR</div>
-          <div class="spec-val">Simboli Romani / Sinti · Mani aperte · Occhi</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Contenuti AR</div>
-          <div class="spec-val">Carri animati · Danze 3D · Visioni profetiche · Cristalli</div>
-        </div>
-        <div class="spec">
-          <div class="spec-label">Stato</div>
-          <div class="spec-val">◎ Pianificato — ultimo universo della serie</div>
-        </div>
-      </div>
-      <div class="universo-tags">
-        <span class="utag">Cartomanzia</span>
-        <span class="utag">Arancio e viola</span>
-        <span class="utag">Nomadi medievali</span>
-        <span class="utag">Fiabesco</span>
-        <span class="utag">Narrativa personale</span>
-        <span class="utag">India · Persia · Piemonte</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MOTORE COMUNE -->
-<div class="engine-wrap" id="motore">
-  <p class="universi-title">Il Motore Comune</p>
-  <div class="universi-title"><h2>Cosa Condividono Tutti i Mondi</h2></div>
-  <p class="universi-lead">Cinque esperienze diverse — un'unica infrastruttura. Questo è il vantaggio competitivo del sistema: ogni nuovo universo costa una frazione del primo perché il motore è già costruito.</p>
-
-  <div class="engine-grid">
-    <div class="engine-card">
-      <div class="engine-icon">🔥</div>
-      <div class="engine-title">Firebase Backend</div>
-      <div class="engine-desc">Stessa autenticazione, stesso Firestore, stesse Cloud Functions, stesso Stripe. Solo i contenuti cambiano — la struttura dati è identica per tutti gli universi.</div>
-    </div>
-    <div class="engine-card">
-      <div class="engine-icon">📍</div>
-      <div class="engine-title">Sistema AR</div>
-      <div class="engine-desc">AR.js + Three.js per tutti gli universi. I marker cambiano tema — rune, geroglifici, croci — ma il meccanismo di riconoscimento è lo stesso.</div>
-    </div>
-    <div class="engine-card">
-      <div class="engine-icon">🃏</div>
-      <div class="engine-title">Sistema Carte</div>
-      <div class="engine-desc">22 carte per universo. Stesso schema dati su Firestore: cardId, universeId, merchantId, meaning. L'animazione di rivelazione è identica — cambia solo il tema visivo.</div>
-    </div>
-    <div class="engine-card">
-      <div class="engine-icon">🏪</div>
-      <div class="engine-title">Rete Commercianti</div>
-      <div class="engine-desc">Gli stessi commercianti partecipano a più universi con carte diverse. Un ristorante può essere Il Seminatore in VHR Rune e Il Sole in VHR Tarocchi.</div>
-    </div>
-    <div class="engine-card">
-      <div class="engine-icon">🌑</div>
-      <div class="engine-title">Progressione Nascosta</div>
-      <div class="engine-desc">Le tre fasi Cercatore, Costruttore, Custode sono uguali in tutti gli universi. Il testo delle Rivelazioni cambia — la logica no.</div>
-    </div>
-    <div class="engine-card">
-      <div class="engine-icon">💳</div>
-      <div class="engine-title">Pagamenti e Coupon</div>
-      <div class="engine-desc">Stripe gestisce tutti gli universi con lo stesso flusso. Il giocatore può acquistare missioni da universi diversi dallo stesso account.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ROADMAP -->
-<div class="roadmap-wrap" id="roadmap">
-  <p class="universi-title">Roadmap</p>
-  <div class="universi-title"><h2>L'Ordine di Costruzione</h2></div>
-  <p class="universi-lead">Si costruisce un universo alla volta. Il primo finanzia il secondo. Il secondo rende il terzo più veloce.</p>
-
-  <div class="roadmap-grid">
-    <div class="rm-card active">
-      <div class="rm-phase">Ora · Fase 1</div>
-      <div class="rm-icon">ᚢ</div>
-      <div class="rm-name">VHR Rune</div>
-      <div class="rm-desc">MVP · 22 carte · Centro storico Vercelli</div>
-    </div>
-    <div class="rm-card soon">
-      <div class="rm-phase">Fase 2</div>
-      <div class="rm-icon">🃏</div>
-      <div class="rm-name">Visconti Arcana</div>
-      <div class="rm-desc">Tarocchi rinascimentali · Vercelli medievale</div>
-    </div>
-    <div class="rm-card soon">
-      <div class="rm-phase">Fase 3</div>
-      <div class="rm-icon">✝</div>
-      <div class="rm-name">Templi Sacri</div>
-      <div class="rm-desc">Geometria templare · Architetture gotiche</div>
-    </div>
-    <div class="rm-card soon">
-      <div class="rm-phase">Fase 4</div>
-      <div class="rm-icon">𓂀</div>
-      <div class="rm-name">Città del Sole</div>
-      <div class="rm-desc">Egizio · Torino + Vercelli · Punt</div>
-    </div>
-    <div class="rm-card soon">
-      <div class="rm-phase">Fase 5</div>
-      <div class="rm-icon">🔮</div>
-      <div class="rm-name">Via dei Cartomanti</div>
-      <div class="rm-desc">Sinti · XIV secolo · Piemonte nomade</div>
-    </div>
-  </div>
-</div>
-
-<footer>
-  Vercelli Hidden Runes · Universi Narrativi v1.0 · Documento strategico riservato<br>
-  <em>"Cinque storie. Una città. Tremila anni di simboli ancora da leggere."</em>
-</footer>
+  <footer>
+    Vercelli Hidden Runes · Universi Narrativi v1.0 · Documento strategico riservato<br>
+    <em>"Cinque storie. Una città. Tremila anni di simboli ancora da leggere."</em>
+  </footer>
 
 </body>
+
 </html>

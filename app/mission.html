@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHR — Missione</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1209;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #f2e8d0;
+            --mist: #8a7d65;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        /* Topbar */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 18, 9, 0.97);
+            border-bottom: 1px solid rgba(201, 146, 42, 0.18);
+            display: flex;
+            align-items: center;
+            padding: 14px 40px;
+            gap: 20px;
+        }
+
+        .topbar a {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            color: var(--mist);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color .2s;
+        }
+
+        .topbar a:hover {
+            color: var(--gold);
+        }
+
+        .topbar-title {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Page */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 40px 80px;
+        }
+
+        /* Mission header */
+        .mission-hero {
+            border: 1px solid rgba(201, 146, 42, 0.18);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 36px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 80% 50%, rgba(201, 146, 42, 0.06), transparent 70%);
+            pointer-events: none;
+        }
+
+        .mh-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .mh-element {
+            font-size: 3.5em;
+            flex-shrink: 0;
+        }
+
+        .mh-info {
+            flex: 1;
+        }
+
+        .mh-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--mist);
+            margin-bottom: 8px;
+        }
+
+        .mh-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-weight: 700;
+            color: var(--parchment);
+            margin-bottom: 6px;
+        }
+
+        .mh-location {
+            font-style: italic;
+            color: var(--mist);
+            font-size: 0.95em;
+        }
+
+        .mh-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .badge-pill {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .badge-pill.diff-facile {
+            color: #6dbf67;
+            border-color: rgba(109, 191, 103, 0.35);
+            background: rgba(109, 191, 103, 0.08);
+        }
+
+        .badge-pill.diff-media {
+            color: var(--gold-lt);
+            border-color: rgba(232, 184, 75, 0.35);
+            background: rgba(232, 184, 75, 0.08);
+        }
+
+        .badge-pill.diff-difficile {
+            color: #ff8c6b;
+            border-color: rgba(255, 140, 107, 0.35);
+            background: rgba(255, 140, 107, 0.08);
+        }
+
+        .badge-pill.diff-mitica {
+            color: #d4a0ff;
+            border-color: rgba(212, 160, 255, 0.35);
+            background: rgba(212, 160, 255, 0.08);
+        }
+
+        .badge-pill.gold {
+            color: var(--gold);
+            border-color: rgba(201, 146, 42, 0.35);
+            background: rgba(201, 146, 42, 0.08);
+        }
+
+        .mh-desc {
+            font-style: italic;
+            color: rgba(242, 232, 208, 0.72);
+            line-height: 1.9;
+            font-size: 1.05em;
+        }
+
+        /* Purchase CTA */
+        .purchase-box {
+            background: rgba(201, 146, 42, 0.06);
+            border: 1px solid rgba(201, 146, 42, 0.25);
+            border-radius: 4px;
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .purchase-text {
+            font-style: italic;
+            color: var(--mist);
+            font-size: 0.95em;
+            max-width: 340px;
+        }
+
+        .purchase-price {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.8em;
+            color: var(--gold-lt);
+        }
+
+        .btn-purchase {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+            padding: 12px 32px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all .3s;
+            box-shadow: 0 0 20px rgba(201, 146, 42, 0.2);
+        }
+
+        .btn-purchase:hover {
+            box-shadow: 0 0 40px rgba(201, 146, 42, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-free {
+            background: rgba(109, 191, 103, 0.15);
+            border: 1px solid rgba(109, 191, 103, 0.4);
+            color: #6dbf67;
+        }
+
+        .btn-free:hover {
+            background: rgba(109, 191, 103, 0.25);
+        }
+
+        /* Stops */
+        .stops-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95em;
+            letter-spacing: 0.08em;
+            color: var(--parchment);
+            border-bottom: 1px solid rgba(201, 146, 42, 0.15);
+            padding-bottom: 10px;
+            margin-bottom: 24px;
+        }
+
+        .stops-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stop-card {
+            border: 1px solid rgba(201, 146, 42, 0.12);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 22px 20px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            transition: border-color .3s;
+        }
+
+        .stop-card.active {
+            border-color: rgba(201, 146, 42, 0.35);
+            background: rgba(201, 146, 42, 0.04);
+        }
+
+        .stop-card.done {
+            border-color: rgba(109, 191, 103, 0.25);
+            background: rgba(109, 191, 103, 0.03);
+        }
+
+        .stop-card.locked {
+            opacity: 0.45;
+        }
+
+        .stop-num {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 146, 42, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            color: var(--gold);
+        }
+
+        .stop-card.done .stop-num {
+            background: rgba(109, 191, 103, 0.15);
+            border-color: rgba(109, 191, 103, 0.4);
+            color: #6dbf67;
+        }
+
+        .stop-body {
+            flex: 1;
+        }
+
+        .stop-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95em;
+            color: var(--parchment);
+            margin-bottom: 4px;
+        }
+
+        .stop-location {
+            font-style: italic;
+            color: var(--mist);
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .stop-hint {
+            font-size: 0.85em;
+            color: rgba(242, 232, 208, 0.55);
+            font-style: italic;
+        }
+
+        .btn-start-stop {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--gold);
+            padding: 9px 24px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .btn-start-stop:hover {
+            background: var(--gold-lt);
+        }
+
+        .done-badge {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-top: 10px;
+            color: #6dbf67;
+            border: 1px solid rgba(109, 191, 103, 0.35);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        @media(max-width:600px) {
+            .page {
+                padding: 24px 16px 60px;
+            }
+
+            .mh-top {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .purchase-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <a href="dashboard-player.html">← Dashboard</a>
+        <span class="topbar-title" id="topbar-title">Missione</span>
+    </header>
+
+    <div class="page">
+        <div id="mission-content"><!-- JS --></div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ── MISSION DATA ──────────────────────────────────────────
+        const MISSIONS = {
+            m1: {
+                id: 'm1', name: 'La Risaia dei Libui', location: 'Campi risicoli a nord', element: '🌿',
+                diff: 'Facile', xp: 280, price: 0, free: true,
+                desc: 'I Libui, tribù celtica fondatrice di Vercelli, custodivano tra i filari di riso i segreti della terra. Segui il vento tra le spighe e ascolta le voci degli antenati.',
+                stops: [
+                    { id: 's1', name: 'L\'Ingresso dei Campi', location: 'Bivio via Leri Nord', riddle: 'Quale runa rappresenta la fertilità della terra?', answer: 'ᛟ', hint: 'Cercala tra le radici', markerRune: 'ᚢ' },
+                    { id: 's2', name: 'Il Pozzo dei Libui', location: 'Podere abbandonato, nord-ovest', riddle: 'Quante stagioni proteggeva il guardiano del pozzo?', answer: '4', hint: 'Le stagioni del raccolto', markerRune: 'ᚷ' },
+                    { id: 's3', name: 'Il Confine Sacro', location: 'Argine canale, nord', riddle: 'Qual è il nome celtico del dio delle acque?', answer: 'verbumnus', hint: 'Dio celtico di fiumi e abbondanza', markerRune: 'ᚺ' },
+                ]
+            },
+            m2: {
+                id: 'm2', name: 'Il Canale dei Segreti', location: 'Canale Cavour, centro', element: '💧',
+                diff: 'Media', xp: 420, price: 3.99, free: false,
+                desc: 'Un sistema di canali costruito su vie d\'acqua millenarie. Sotto la superficie scorrono non solo acque, ma messaggi cifrati che i Templari usavano per comunicare.',
+                stops: [
+                    { id: 's1', name: 'La Prima Chiusa', location: 'Sbarramento nord, via Po', riddle: 'Quale runa significa acqua corrente?', answer: 'ᛚ', hint: 'Runa lagu — l\'acqua', markerRune: 'ᛚ' },
+                    { id: 's2', name: 'Il Palazzo dell\'Acqua', location: 'Edificio storico canale', riddle: 'In che anno fu costruito il Canale Cavour?', answer: '1866', hint: 'Metà Ottocento, Risorgimento', markerRune: 'ᚢ' },
+                    { id: 's3', name: 'Il Ponte dei Sussurri', location: 'Passerella pedonale, centro', riddle: 'Qual è il nome della dea dell\'acqua celtica?', answer: 'coventina', hint: 'Dea dei pozzi e delle sorgenti', markerRune: 'ᚱ' },
+                    { id: 's4', name: 'La Foce Segreta', location: 'Confluenza canali, est', riddle: 'Quante rune ancestrali compongono il Futhark Antico?', answer: '24', hint: 'Il tuo alfabeto runico', markerRune: 'ᚷ' },
+                ]
+            },
+            m3: { id: 'm3', name: "Battistero di Sant'Eusebio", location: "Piazza Sant'Eusebio", element: '💧', diff: 'Facile', xp: 260, price: 2.99, free: false, desc: 'Il battistero più antico del Piemonte. Sotto le fondamenta ottagonali si nasconde un codice trasmesso di vescovo in vescovo per 1600 anni.', stops: [{ id: 's1', name: 'Atrio Antico', location: "Ingresso Piazza Sant'Eusebio", riddle: 'Chi era il primo vescovo di Vercelli?', answer: 'eusebio', hint: 'IV secolo d.C.', markerRune: 'ᚢ' }, { id: 's2', name: 'La Fontana Battesimale', location: 'Centro battistero', riddle: 'Quanti lati ha il battistero?', answer: '8', hint: 'Forma ottagonale', markerRune: 'ᚺ' }, { id: 's3', name: 'Le Fondamenta Romane', location: 'Cripta sotterranea', riddle: 'In quale lingua erano scritte le prime pergamene vercellesi?', answer: 'latino', hint: 'Lingua della chiesa medievale', markerRune: 'ᚱ' }] },
+            m4: { id: 'm4', name: 'Il Mercato Medievale', location: 'Centro storico', element: '🌿', diff: 'Media', xp: 510, price: 3.99, free: false, desc: 'Per secoli piazza Cavour fu il cuore pulsante di scambi e segreti. Ogni banco nascondeva un codice commerciale che solo gli iniziati sapevano decifrare.', stops: [{ id: 's1', name: 'Palazzo del Comune', location: 'Piazza Cavour, lato nord', riddle: 'Quale materiale costruiva i tessitori vercellesi famosi in tutta Europa?', answer: 'lino', hint: 'Una fibra naturale', markerRune: 'ᚢ' }, { id: 's2', name: 'Il Vicolo dei Mercanti', location: 'Via Gioberti, laterale', riddle: 'Qual è il nome del mercato annuale medievale di Vercelli?', answer: 'fiera', hint: 'Si teneva d\'estate', markerRune: 'ᚷ' }, { id: 's3', name: 'La Loggia dei Lanaioli', location: 'Angolo via Cavour/Verdi', riddle: 'Quale corporazione dominava il commercio vercellese nel 1200?', answer: 'arte della lana', hint: 'Tessitori e commercianti di tessuti', markerRune: 'ᛖ' }, { id: 's4', name: 'La Fontana Centrale', location: 'Centro piazza', riddle: 'Quante sentinelle guardavano le mura medievali di notte?', answer: '12', hint: 'Una per ogni torre', markerRune: 'ᚺ' }, { id: 's5', name: 'La Loggia del Tesoro', location: 'Palazzo Cenni, est', riddle: 'In quale lingua parlavano i mercanti arabi che visitavano Vercelli?', answer: 'arabo', hint: 'Lingua dei mercati orientali', markerRune: 'ᛚ' }] },
+            m5: { id: 'm5', name: 'La Torre del Fuoco', location: 'Torre angolare, sudovest', element: '🔥', diff: 'Difficile', xp: 850, price: 5.99, free: false, desc: 'La torre più alta e misteriosa delle mura di Vercelli. I custodi usavano segnali di fuoco per comunicare con sentinelle distanti. Ogni fiamma era un messaggio.', stops: [{ id: 's1', name: 'Base della Torre', location: 'Accesso via Vela', riddle: 'Quale runa representa il fuoco?', answer: 'ᚲ', hint: 'Runa Kenaz o Kaunan', markerRune: 'ᚲ' }, { id: 's2', name: 'Il Primo Livello', location: 'Accesso interno (simulato)', riddle: 'A quanti km si vedevano i segnali di fuoco delle torri vercellesi?', answer: '30', hint: 'Visibili fino alle Alpi nelle notti limpide', markerRune: 'ᚢ' }, { id: 's3', name: 'La Feritoia del Guardiano', location: 'Lato est della torre', riddle: 'Che nome aveva il capitano delle sentinelle del 1300?', answer: 'ardito', hint: 'Significato: audace, coraggioso', markerRune: 'ᚷ' }, { id: 's4', name: 'Il Cammino di Ronda', location: 'Perimetro esterno mura', riddle: 'Quante torri componevano le mura medievali originali?', answer: '16', hint: 'Alcune sono ancora visibili', markerRune: 'ᚺ' }, { id: 's5', name: 'Il Magazzino delle Armi', location: 'Corpo nord delle mura', riddle: 'Quale materiale era usato per le frecce delle balestre vercellesi?', answer: 'legno di frassino', hint: 'Albero sacro ai Vichinghi', markerRune: 'ᛖ' }, { id: 's6', name: 'La Sommità', location: 'Camera superiore (simbolica)', riddle: 'Qual è la runa della vittoria?', answer: 'ᛏ', hint: 'Runa Tiwaz, dio guerriero', markerRune: 'ᛏ' }] },
+            m6: { id: 'm6', name: 'Le Antiche Mura', location: 'Mura Romane, centro storico', element: '⚡', diff: 'Mitica', xp: 1400, price: 8.99, free: false, desc: 'Prima dei Libui, prima dei Romani, c\'erano le mura. Costruite su linee di forza telluriche, oggi ancora vibrano di un\'energia che pochi sanno percepire. Sei uno di loro?', stops: [{ id: 's1', name: 'Porta Orientale', location: 'Inizio via Galileo Ferraris', riddle: 'Come si chiamava Vercelli in latino Romano?', answer: 'vercellae', hint: 'Nome su tutte le mappe imperiali', markerRune: 'ᚢ' }, { id: 's2', name: 'Il Tratto Intatto', location: 'Tratto mura via Verdi', riddle: 'In quale secolo furono costruite le prime mura romane di Vercelli?', answer: 'II', hint: 'Secolo prima di Cristo', markerRune: 'ᚺ' }, { id: 's3', name: 'La Torre Semicircolare', location: 'Angolo mura nord', riddle: 'Quanti metri erano le mura originali di Vercellae?', answer: '3000', hint: 'Un perimetro enorme per l\'epoca', markerRune: 'ᚱ' }, { id: 's4', name: 'Il Camminamento', location: 'Interno lato mura nord-ovest', riddle: 'Quale imperatore romano passò da Vercelli nel 69 d.C.?', answer: 'vitellio', hint: 'Anno dei quattro imperatori', markerRune: 'ᚷ' }, { id: 's5', name: 'La Pietra Miliare', location: 'Angolo via Foa/via Galileo', riddle: 'Quale pietra usavano i romani per le mura di Vercelli?', answer: 'granito', hint: 'Estratto dalle cave alpine', markerRune: 'ᛖ' }, { id: 's6', name: 'Il Bastione dei Segreti', location: 'Tratto mura via Don Minzoni', riddle: 'Qual è la runa della protezione?', answer: 'ᚨ', hint: 'Runa Ansuz — la mente divina', markerRune: 'ᛚ' }, { id: 's7', name: 'La Porta Nascosta', location: 'Accesso nascosto, sudovest', riddle: 'Pronuncia la parola dei Libui che significa "custode eterno".', answer: 'vercel', hint: 'La radice del nome stesso della città', markerRune: 'ᛟ' }] },
+        };
+
+        const params = new URLSearchParams(location.search);
+        const missionId = params.get('id') || 'm1';
+        const mission = MISSIONS[missionId];
+
+        let currentUser = null;
+        let userData = {};
+
+        function init(user, data) {
+            currentUser = user; userData = data;
+            if (!mission) { document.getElementById('mission-content').innerHTML = '<p style="color:var(--mist);padding:40px 0;font-style:italic">Missione non trovata.</p>'; return; }
+            renderMission();
+        }
+
+        // ── RENDER ─────────────────────────────────────────────────
+        function renderMission() {
+            document.title = `VHR — ${mission.name}`;
+            document.getElementById('topbar-title').textContent = mission.name;
+
+            const active = userData.activeMissions || [];
+            const unlocked = active.includes(missionId);
+            const completedSt = userData.completedStops || {};
+            const mDone = completedSt[missionId] || [];
+
+            const diffClass = 'diff-' + mission.diff.toLowerCase();
+
+            const purchaseBlock = (!mission.free && !unlocked) ? `
+      <div class="purchase-box">
+        <div>
+          <div class="purchase-price">€ ${mission.price.toFixed(2)}</div>
+          <div class="purchase-text">Sblocca questa missione per iniziare l'avventura ed accedere a tutte le tappe AR.</div>
+        </div>
+        <button class="btn-purchase" onclick="mockPurchase()">✦ Sblocca Missione</button>
+      </div>` : '';
+
+            const stopsHTML = mission.stops.map((s, i) => {
+                const prevDone = i === 0 || mDone.includes(mission.stops[i - 1].id);
+                const isDone = mDone.includes(s.id);
+                const isActive = (mission.free || unlocked) && !isDone && prevDone;
+                const isLocked = !isDone && !isActive;
+                const cardClass = isDone ? 'done' : isActive ? 'active' : 'locked';
+                const action = isActive
+                    ? `<a href="ar-scanner.html?mission=${missionId}&stop=${s.id}&rune=${encodeURIComponent(s.markerRune)}" class="btn-start-stop">📱 Avvia Tappa AR</a>`
+                    : isDone
+                        ? `<span class="done-badge">✓ Completata</span>`
+                        : '';
+                return `
+        <div class="stop-card ${cardClass}">
+          <div class="stop-num">${isDone ? '✓' : i + 1}</div>
+          <div class="stop-body">
+            <div class="stop-name">${s.name}</div>
+            <div class="stop-location">📍 ${s.location}</div>
+            ${isActive ? `<div class="stop-hint">Cerca il marker: <strong>${s.markerRune}</strong> — punta la fotocamera sulla runa stampata</div>` : ''}
+            ${action}
+          </div>
+        </div>`;
+            }).join('');
+
+            document.getElementById('mission-content').innerHTML = `
+      <div class="mission-hero">
+        <div class="mh-top">
+          <div class="mh-element">${mission.element}</div>
+          <div class="mh-info">
+            <div class="mh-eyebrow">Missione · ${mission.diff} · ${mission.stops.length} Tappe</div>
+            <h1 class="mh-title">${mission.name}</h1>
+            <div class="mh-location">📍 ${mission.location}</div>
+            <div class="mh-badges">
+              <span class="badge-pill ${diffClass}">${mission.diff}</span>
+              <span class="badge-pill gold">⚡ ${mission.xp} XP</span>
+              ${mission.free ? '<span class="badge-pill" style="color:#6dbf67;border-color:rgba(109,191,103,0.35)">Gratuita</span>' : ''}
+            </div>
+          </div>
+        </div>
+        <p class="mh-desc">${mission.desc}</p>
+      </div>
+
+      ${purchaseBlock}
+
+      <div class="stops-title">Tappe della Missione</div>
+      <div class="stops-list">${stopsHTML}</div>
+    `;
+        }
+
+        // ── MOCK PURCHASE ─────────────────────────────────────────
+        window.mockPurchase = async () => {
+            if (!currentUser) return;
+            // Simulazione pagamento (mock)
+            const btn = document.querySelector('.btn-purchase');
+            btn.textContent = '⏳ Elaborazione...'; btn.disabled = true;
+            await new Promise(r => setTimeout(r, 1400)); // Simula latenza
+
+            try {
+                await updateDoc(doc(db, 'users', currentUser.uid), {
+                    activeMissions: arrayUnion(missionId)
+                });
+                userData.activeMissions = [...(userData.activeMissions || []), missionId];
+                renderMission();
+            } catch (e) {
+                // Offline fallback
+                userData.activeMissions = [...(userData.activeMissions || []), missionId];
+                renderMission();
+            }
+        };
+
+        // ── AUTH GUARD ───────────────────────────────────────────
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        onAuthStateChanged(auth, async user => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            const snap = await getDoc(doc(db, 'users', user.uid));
+            init(user, snap.exists() ? snap.data() : {});
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHR — Dashboard Commerciante</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1209;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #f2e8d0;
+            --mist: #8a7d65;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 18, 9, 0.97);
+            border-bottom: 1px solid rgba(201, 146, 42, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 40px;
+        }
+
+        .topbar-logo {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 14px;
+            color: var(--gold);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .status-pill {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .status-pill.pending {
+            color: #e8b84b;
+            border-color: rgba(232, 184, 75, 0.35);
+            background: rgba(232, 184, 75, 0.08);
+        }
+
+        .status-pill.approved {
+            color: #6dbf67;
+            border-color: rgba(109, 191, 103, 0.35);
+            background: rgba(109, 191, 103, 0.08);
+        }
+
+        .btn-logout {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--mist);
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            padding: 6px 16px;
+            background: none;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            color: var(--gold);
+            border-color: rgba(201, 146, 42, 0.4);
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 40px 80px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--parchment);
+        }
+
+        .page-sub {
+            font-style: italic;
+            color: var(--mist);
+            margin-top: 6px;
+        }
+
+        /* Pending state */
+        .pending-box {
+            border: 1px solid rgba(232, 184, 75, 0.25);
+            background: rgba(232, 184, 75, 0.05);
+            border-radius: 4px;
+            padding: 36px;
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .pending-icon {
+            font-size: 3em;
+            margin-bottom: 16px;
+        }
+
+        .pending-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1em;
+            color: var(--gold-lt);
+            margin-bottom: 8px;
+        }
+
+        .pending-text {
+            font-style: italic;
+            color: var(--mist);
+            max-width: 380px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            padding: 22px 18px;
+            border: 1px solid rgba(201, 146, 42, 0.15);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-family: 'Cinzel', serif;
+            font-size: 2em;
+            color: var(--gold-lt);
+        }
+
+        .stat-lbl {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--mist);
+            margin-top: 4px;
+        }
+
+        /* Section */
+        .sec-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95em;
+            letter-spacing: 0.08em;
+            color: var(--parchment);
+            border-bottom: 1px solid rgba(201, 146, 42, 0.15);
+            padding-bottom: 10px;
+            margin-bottom: 24px;
+        }
+
+        /* Coupon form */
+        .form-card {
+            border: 1px solid rgba(201, 146, 42, 0.18);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+            padding: 28px;
+            margin-bottom: 36px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1/-1;
+        }
+
+        label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--mist);
+            margin-bottom: 6px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            border-radius: 2px;
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            font-size: 1em;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: rgba(201, 146, 42, 0.5);
+        }
+
+        select {
+            background: rgba(26, 18, 9, 0.9);
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+            padding: 12px 32px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all .3s;
+            margin-top: 16px;
+            box-shadow: 0 0 16px rgba(201, 146, 42, 0.2);
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 0 32px rgba(201, 146, 42, 0.4);
+        }
+
+        /* Coupon list */
+        .coupons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 40px;
+        }
+
+        .coupon-card {
+            border: 1px dashed rgba(201, 146, 42, 0.25);
+            border-radius: 4px;
+            background: rgba(201, 146, 42, 0.03);
+            padding: 20px 18px;
+        }
+
+        .cc-status {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .cc-status.pending {
+            color: #e8b84b;
+            border-color: rgba(232, 184, 75, 0.35);
+            background: rgba(232, 184, 75, 0.08);
+        }
+
+        .cc-status.approved {
+            color: #6dbf67;
+            border-color: rgba(109, 191, 103, 0.35);
+            background: rgba(109, 191, 103, 0.08);
+        }
+
+        .cc-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95em;
+            color: var(--parchment);
+            margin-bottom: 4px;
+        }
+
+        .cc-detail {
+            font-style: italic;
+            color: var(--mist);
+            font-size: 0.85em;
+        }
+
+        .cc-used {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            color: var(--gold);
+            margin-top: 8px;
+        }
+
+        .msg {
+            padding: 12px 16px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .msg.success {
+            background: rgba(50, 180, 80, 0.1);
+            border: 1px solid rgba(50, 180, 80, 0.3);
+            color: #8affa0;
+        }
+
+        .msg.error {
+            background: rgba(180, 30, 30, 0.1);
+            border: 1px solid rgba(180, 30, 30, 0.3);
+            color: #ff8a8a;
+        }
+
+        .no-items {
+            font-style: italic;
+            color: var(--mist);
+            opacity: 0.7;
+            padding: 10px 0;
+        }
+
+        @media(max-width:600px) {
+            .page {
+                padding: 24px 16px 60px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <span class="topbar-logo">VHR · Commerciante</span>
+        <div class="topbar-right">
+            <span class="status-pill" id="merchant-status">In attesa</span>
+            <button class="btn-logout" onclick="doLogout()">Esci</button>
+        </div>
+    </header>
+
+    <div class="page">
+        <div class="page-header">
+            <div class="page-eyebrow">ᚢ · ᚺ · ᚱ · Pannello Commerciante</div>
+            <h1 class="page-title" id="shop-name">Il Tuo Negozio</h1>
+            <p class="page-sub">Gestisci i tuoi coupon e monitora i visitatori</p>
+        </div>
+
+        <div class="pending-box" id="pending-box" style="display:none;">
+            <div class="pending-icon">⏳</div>
+            <div class="pending-title">Approvazione in Corso</div>
+            <p class="pending-text">Il tuo profilo commerciante è in fase di revisione. Riceverai una notifica quando
+                sarà approvato. Di solito richiede 24-48 ore.</p>
+        </div>
+
+        <div id="main-content" style="display:none;">
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-coupons">0</div>
+                    <div class="stat-lbl">Coupon Creati</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-used">0</div>
+                    <div class="stat-lbl">Coupon Usati</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-visitors">—</div>
+                    <div class="stat-lbl">Visitatori VHR</div>
+                </div>
+            </div>
+
+            <!-- Create coupon -->
+            <div class="sec-title">Crea Nuovo Coupon</div>
+            <div class="msg" id="coupon-msg"></div>
+            <div class="form-card">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="c-title">Titolo Coupon</label>
+                        <input type="text" id="c-title" placeholder="Es. 10% su tutti i prodotti">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-discount">Sconto</label>
+                        <input type="text" id="c-discount" placeholder="Es. 10% oppure €5 di sconto">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-qty">Quantità disponibile</label>
+                        <input type="number" id="c-qty" placeholder="50" min="1" max="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-expires">Scade il</label>
+                        <input type="date" id="c-expires">
+                    </div>
+                    <div class="form-group full">
+                        <label for="c-mission">Missione associata (opzionale)</label>
+                        <select id="c-mission">
+                            <option value="">Tutte le missioni</option>
+                            <option value="m1">La Risaia dei Libui</option>
+                            <option value="m2">Il Canale dei Segreti</option>
+                            <option value="m3">Battistero di Sant'Eusebio</option>
+                            <option value="m4">Il Mercato Medievale</option>
+                            <option value="m5">La Torre del Fuoco</option>
+                            <option value="m6">Le Antiche Mura</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-submit" onclick="createCoupon()">✦ Invia per Approvazione</button>
+            </div>
+
+            <!-- Coupon list -->
+            <div class="sec-title">I Tuoi Coupon</div>
+            <div class="coupons-grid" id="coupons-list">
+                <p class="no-items">Nessun coupon creato ancora.</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, collection, addDoc, query, where, getDocs, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        let currentUser = null;
+        let merchantData = null;
+        let merchantId = null;
+
+        onAuthStateChanged(auth, async user => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            currentUser = user;
+
+            // Find merchant record for this user
+            const q = query(collection(db, 'merchants'), where('uid', '==', user.uid));
+            const snap = await getDocs(q);
+            if (!snap.empty) {
+                snap.forEach(d => { merchantId = d.id; merchantData = d.data(); });
+                document.getElementById('shop-name').textContent = merchantData.name || 'Il Tuo Negozio';
+                if (merchantData.approved) {
+                    document.getElementById('merchant-status').textContent = 'Approvato';
+                    document.getElementById('merchant-status').className = 'status-pill approved';
+                    document.getElementById('main-content').style.display = 'block';
+                    loadCoupons();
+                } else {
+                    document.getElementById('pending-box').style.display = 'block';
+                }
+            } else {
+                // New merchant — redirect to register
+                window.location.href = 'merchant-register.html';
+            }
+        });
+
+        async function loadCoupons() {
+            if (!merchantId) return;
+            const q = query(collection(db, 'coupons'), where('merchantId', '==', merchantId));
+            const snap = await getDocs(q);
+            const grid = document.getElementById('coupons-list');
+            if (snap.empty) return;
+            let total = 0, used = 0;
+            let html = '';
+            snap.forEach(d => {
+                const c = d.data(); total++; used += (c.used || 0);
+                html += `
+        <div class="coupon-card">
+          <span class="cc-status ${c.approved ? 'approved' : 'pending'}">${c.approved ? 'Approvato' : 'In attesa'}</span>
+          <div class="cc-title">${c.title}</div>
+          <div class="cc-detail">Sconto: ${c.discount}</div>
+          <div class="cc-detail">Scade: ${c.expiresAt?.toDate?.()?.toLocaleDateString('it') || '—'}</div>
+          <div class="cc-used">Usato: ${c.used || 0}/${c.quantity}</div>
+        </div>`;
+            });
+            grid.innerHTML = html;
+            document.getElementById('stat-coupons').textContent = total;
+            document.getElementById('stat-used').textContent = used;
+        }
+
+        window.createCoupon = async () => {
+            const title = document.getElementById('c-title').value.trim();
+            const discount = document.getElementById('c-discount').value.trim();
+            const qty = parseInt(document.getElementById('c-qty').value) || 50;
+            const expires = document.getElementById('c-expires').value;
+            const mission = document.getElementById('c-mission').value;
+
+            const msg = document.getElementById('coupon-msg');
+            if (!title || !discount) { msg.textContent = 'Compila titolo e sconto.'; msg.className = 'msg error'; msg.style.display = 'block'; return; }
+
+            try {
+                const code = 'VHR-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+                await addDoc(collection(db, 'coupons'), {
+                    merchantId, merchantName: merchantData?.name || '',
+                    title, discount, code, quantity: qty, used: 0, approved: false,
+                    missionId: mission || null,
+                    expiresAt: expires ? Timestamp.fromDate(new Date(expires)) : null,
+                    createdAt: serverTimestamp()
+                });
+                msg.textContent = '✓ Coupon inviato per approvazione admin!'; msg.className = 'msg success'; msg.style.display = 'block';
+                // Reset form
+                ['c-title', 'c-discount', 'c-qty', 'c-expires'].forEach(id => { document.getElementById(id).value = ''; });
+                loadCoupons();
+            } catch (e) {
+                msg.textContent = 'Errore durante la creazione.'; msg.className = 'msg error'; msg.style.display = 'block';
+            }
+        };
+
+        window.doLogout = async () => { await signOut(auth); window.location.href = 'login.html'; };
+    </script>
+</body>
+
+</html>

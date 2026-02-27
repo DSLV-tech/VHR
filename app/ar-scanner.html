@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VHR — Scanner AR</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- AR.js + A-Frame -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <style>
+        :root {
+            --ink: #1a1209;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #f2e8d0;
+            --mist: #8a7d65;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* A-Frame canvas takes full page */
+        a-scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ── OVERLAY UI ── */
+        #ar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Topbar */
+        #ar-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: linear-gradient(180deg, rgba(26, 18, 9, 0.85) 0%, transparent 100%);
+            pointer-events: auto;
+        }
+
+        .ar-back {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            background: rgba(26, 18, 9, 0.7);
+            border: 1px solid rgba(201, 146, 42, 0.4);
+            padding: 8px 18px;
+            border-radius: 2px;
+            cursor: pointer;
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .ar-info {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            color: var(--parchment);
+            background: rgba(26, 18, 9, 0.7);
+            border: 1px solid rgba(201, 146, 42, 0.25);
+            padding: 6px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+            text-align: center;
+        }
+
+        .ar-info small {
+            color: var(--mist);
+            display: block;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+        }
+
+        /* Scanning reticle */
+        #reticle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 220px;
+            height: 220px;
+            pointer-events: none;
+        }
+
+        #reticle .corner {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            border-color: var(--gold);
+            border-style: solid;
+            opacity: 0.85;
+        }
+
+        #reticle .corner.tl {
+            top: 0;
+            left: 0;
+            border-width: 3px 0 0 3px;
+        }
+
+        #reticle .corner.tr {
+            top: 0;
+            right: 0;
+            border-width: 3px 3px 0 0;
+        }
+
+        #reticle .corner.bl {
+            bottom: 0;
+            left: 0;
+            border-width: 0 0 3px 3px;
+        }
+
+        #reticle .corner.br {
+            bottom: 0;
+            right: 0;
+            border-width: 0 3px 3px 0;
+        }
+
+        #scan-line {
+            position: absolute;
+            left: 4px;
+            right: 4px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: scanMove 2.5s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes scanMove {
+            0% {
+                top: 4px;
+            }
+
+            50% {
+                top: calc(100% - 6px);
+            }
+
+            100% {
+                top: 4px;
+            }
+        }
+
+        /* Status message */
+        #scan-status {
+            position: absolute;
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-align: center;
+            background: rgba(26, 18, 9, 0.75);
+            padding: 8px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(201, 146, 42, 0.3);
+            backdrop-filter: blur(6px);
+            white-space: nowrap;
+            pointer-events: none;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.7
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        /* Rune instruction */
+        #rune-hint {
+            position: absolute;
+            bottom: 210px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        #rune-hint .rune-char {
+            font-size: 60px;
+            color: var(--gold-lt);
+            filter: drop-shadow(0 0 12px rgba(201, 146, 42, 0.6));
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 8px rgba(201, 146, 42, 0.4))
+            }
+
+            50% {
+                filter: drop-shadow(0 0 24px rgba(201, 146, 42, 0.8))
+            }
+        }
+
+        #rune-hint small {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            color: var(--mist);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* ── PUZZLE PANEL ── */
+        #puzzle-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            background: rgba(20, 14, 6, 0.97);
+            border-top: 1px solid rgba(201, 146, 42, 0.25);
+            padding: 24px 24px 36px;
+            transform: translateY(100%);
+            transition: transform .4s cubic-bezier(.2, .8, .2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        #puzzle-panel.open {
+            transform: translateY(0);
+        }
+
+        .pp-rune {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 16px rgba(201, 146, 42, 0.6));
+        }
+
+        .pp-riddle {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
+            color: rgba(242, 232, 208, 0.85);
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .pp-riddle strong {
+            color: var(--parchment);
+            font-style: normal;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85em;
+            letter-spacing: 0.1em;
+        }
+
+        .pp-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        #answer-input {
+            flex: 1;
+            padding: 13px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(201, 146, 42, 0.25);
+            border-radius: 2px;
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            font-size: 1.05em;
+            outline: none;
+        }
+
+        #answer-input:focus {
+            border-color: rgba(201, 146, 42, 0.5);
+        }
+
+        #btn-answer {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--gold);
+            padding: 13px 24px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        #btn-answer:hover {
+            background: var(--gold-lt);
+        }
+
+        .pp-hint-row {
+            text-align: center;
+        }
+
+        #btn-hint {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--mist);
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 4px 12px;
+            transition: color .2s;
+        }
+
+        #btn-hint:hover {
+            color: var(--gold);
+        }
+
+        #hint-text {
+            color: var(--mist);
+            font-style: italic;
+            font-size: 0.9em;
+            margin-top: 6px;
+            display: none;
+            text-align: center;
+        }
+
+        .pp-feedback {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            padding: 8px;
+            border-radius: 2px;
+        }
+
+        .pp-feedback.error {
+            color: #ff8a8a;
+            background: rgba(180, 30, 30, 0.1);
+        }
+
+        .pp-feedback.success {
+            color: #6dbf67;
+            background: rgba(50, 180, 80, 0.1);
+        }
+
+        /* ── SUCCESS OVERLAY ── */
+        #success-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            background: rgba(10, 7, 3, 0.95);
+            backdrop-filter: blur(8px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        #success-overlay.show {
+            display: flex;
+        }
+
+        .so-rune {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: soGlow 1s ease-out;
+        }
+
+        @keyframes soGlow {
+            from {
+                transform: scale(0.5);
+                opacity: 0
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        .so-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6em;
+            color: var(--gold-lt);
+            margin-bottom: 8px;
+        }
+
+        .so-xp {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+
+        .so-name {
+            font-style: italic;
+            color: var(--mist);
+            margin-bottom: 32px;
+        }
+
+        .btn-continue {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+            padding: 14px 44px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(201, 146, 42, 0.3);
+            transition: all .3s;
+        }
+
+        .btn-continue:hover {
+            box-shadow: 0 0 50px rgba(201, 146, 42, 0.5);
+        }
+
+        /* Compat error */
+        #compat-error {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: var(--ink);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        #compat-error.show {
+            display: flex;
+        }
+
+        .ce-icon {
+            font-size: 3em;
+            margin-bottom: 16px;
+        }
+
+        .ce-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3em;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .ce-text {
+            font-style: italic;
+            color: var(--mist);
+            max-width: 360px;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .ce-btn {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid rgba(201, 146, 42, 0.4);
+            padding: 10px 28px;
+            background: none;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        @media(min-width:768px) {
+
+            /* Desktop fallback – centered simulator */
+            #puzzle-panel {
+                max-width: 520px;
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%) translateY(100%);
+                border: 1px solid rgba(201, 146, 42, 0.2);
+                border-radius: 4px 4px 0 0;
+            }
+
+            #puzzle-panel.open {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── COMPATIBILITY ERROR ── -->
+    <div id="compat-error">
+        <div class="ce-icon">📵</div>
+        <h1 class="ce-title">Dispositivo non compatibile</h1>
+        <p class="ce-text">
+            L'esperienza AR richiede la fotocamera del tuo smartphone.<br>
+            Apri questa pagina da <strong>Chrome su Android</strong> oppure <strong>Safari su iPhone</strong>.
+        </p>
+        <a href="mission.html" class="ce-btn">← Torna alla Missione</a>
+    </div>
+
+    <!-- ── A-FRAME SCENE ── -->
+    <a-scene id="ar-scene" embedded
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        renderer="logarithmicDepthBuffer: true; antialias: true;" vr-mode-ui="enabled: false">
+        <!-- Lights -->
+        <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
+        <a-light type="directional" position="1 1 0.5" intensity="0.6" color="#e8b84b"></a-light>
+
+        <!-- Marker 1 — ᚢ (pattern based on hiro for demo) -->
+        <a-marker type="pattern" url="../assets/markers/marker-uruz.patt" id="marker-uruz">
+            <a-entity id="ar-content-uruz"></a-entity>
+        </a-marker>
+
+        <!-- Marker generic (Hiro fallback for desktop testing) -->
+        <a-marker preset="hiro" id="marker-hiro">
+            <a-entity id="ar-content-hiro"></a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- ── OVERLAY ── -->
+    <div id="ar-overlay">
+        <div id="ar-topbar">
+            <a href="javascript:history.back()" class="ar-back">← Missione</a>
+            <div class="ar-info">
+                <span id="ar-stop-name">Tappa 1</span>
+                <small id="ar-mission-name">Missione</small>
+            </div>
+        </div>
+
+        <!-- Scanning reticle -->
+        <div id="reticle">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+            <div id="scan-line"></div>
+        </div>
+
+        <!-- Rune to find -->
+        <div id="rune-hint">
+            <div class="rune-char" id="rune-char">ᚢ</div>
+            <small>Cerca questa runa stampata</small>
+        </div>
+
+        <div id="scan-status">Inquadra il marker runico</div>
+    </div>
+
+    <!-- ── PUZZLE PANEL ── -->
+    <div id="puzzle-panel">
+        <div class="pp-rune" id="pp-rune">ᚢ</div>
+        <p class="pp-riddle" id="pp-riddle">
+            <strong>L'Enigma della Runa</strong><br>
+            <span id="pp-riddle-text">Caricamento...</span>
+        </p>
+        <div class="pp-input-row">
+            <input type="text" id="answer-input" placeholder="La tua risposta..." autocomplete="off" autocorrect="off"
+                autocapitalize="none">
+            <button id="btn-answer" onclick="checkAnswer()">Conferma</button>
+        </div>
+        <div class="pp-hint-row">
+            <button id="btn-hint" onclick="showHint()">🔍 Mostra suggerimento</button>
+            <div id="hint-text"></div>
+        </div>
+        <div class="pp-feedback" id="pp-feedback"></div>
+    </div>
+
+    <!-- ── SUCCESS OVERLAY ── -->
+    <div id="success-overlay">
+        <div class="so-rune" id="so-rune">ᚢ</div>
+        <div class="so-title">Runa Svelata! ✦</div>
+        <div class="so-xp" id="so-xp">+0 XP</div>
+        <div class="so-name" id="so-name">Tappa completata</div>
+        <button class="btn-continue" onclick="continueJourney()">Continua l'Avventura</button>
+    </div>
+
+    <script type="module">
+        // ── IMPORTS ────────────────────────────────────────────────
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, updateDoc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ── MISSION DATA (same as mission.html) ───────────────────
+        const STOPS = {
+            m1: [
+                { id: 's1', name: "L'Ingresso dei Campi", riddle: 'Quale runa rappresenta la fertilità della terra?', answer: 'ᛟ', hint: 'Cercala tra le radici', rune: 'ᚢ', xp: 90 },
+                { id: 's2', name: 'Il Pozzo dei Libui', riddle: 'Quante stagioni proteggeva il guardiano del pozzo?', answer: '4', hint: 'Le stagioni del raccolto', rune: 'ᚷ', xp: 90 },
+                { id: 's3', name: 'Il Confine Sacro', riddle: 'Qual è il nome celtico del dio delle acque?', answer: 'verbumnus', hint: 'Dio celtico di fiumi e abbondanza', rune: 'ᚺ', xp: 100 },
+            ],
+            m2: [
+                { id: 's1', name: 'La Prima Chiusa', riddle: 'Quale runa significa acqua corrente?', answer: 'ᛚ', hint: 'Runa lagu — l\'acqua', rune: 'ᛚ', xp: 100 },
+                { id: 's2', name: 'Il Palazzo dell\'Acqua', riddle: 'In che anno fu costruito il Canale Cavour?', answer: '1866', hint: 'Metà Ottocento, Risorgimento', rune: 'ᚢ', xp: 110 },
+                { id: 's3', name: 'Il Ponte dei Sussurri', riddle: 'Qual è il nome della dea dell\'acqua celtica?', answer: 'coventina', hint: 'Dea dei pozzi e delle sorgenti', rune: 'ᚱ', xp: 100 },
+                { id: 's4', name: 'La Foce Segreta', riddle: 'Quante rune ancestrali compongono il Futhark Antico?', answer: '24', hint: 'Il tuo alfabeto runico', rune: 'ᚷ', xp: 110 },
+            ],
+        };
+
+        // ── URL PARAMS ────────────────────────────────────────────
+        const params = new URLSearchParams(location.search);
+        const missionId = params.get('mission') || 'm1';
+        const stopId = params.get('stop') || 's1';
+        const runeChar = decodeURIComponent(params.get('rune') || 'ᚢ');
+
+        // Find stop data
+        const mStops = STOPS[missionId] || STOPS.m1;
+        const stop = mStops.find(s => s.id === stopId) || mStops[0];
+
+        let currentUser = null;
+        let markerFound = false;
+        let hintShown = false;
+
+        // ── AUTH ──────────────────────────────────────────────────
+        onAuthStateChanged(auth, user => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            currentUser = user;
+            initAR();
+            updateUI();
+        });
+
+        // ── UI INIT ───────────────────────────────────────────────
+        function updateUI() {
+            document.getElementById('ar-stop-name').textContent = stop.name;
+            document.getElementById('ar-mission-name').textContent = `Missione ${missionId.toUpperCase()}`;
+            document.getElementById('rune-char').textContent = stop.rune || runeChar;
+            document.getElementById('pp-rune').textContent = stop.rune || runeChar;
+            document.getElementById('pp-riddle-text').textContent = stop.riddle;
+            document.getElementById('hint-text').textContent = stop.hint;
+            document.getElementById('so-rune').textContent = stop.rune || runeChar;
+            document.getElementById('so-xp').textContent = `+${stop.xp} XP`;
+            document.getElementById('so-name').textContent = stop.name;
+        }
+
+        // ── AR SETUP ──────────────────────────────────────────────
+        function initAR() {
+            // Check camera support
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                document.getElementById('compat-error').classList.add('show');
+                return;
+            }
+
+            // Build 3D rune content for each marker
+            buildRuneContent('ar-content-uruz', stop.rune || '???');
+            buildRuneContent('ar-content-hiro', stop.rune || '???');
+
+            // Detect marker found
+            const scene = document.querySelector('a-scene');
+            scene.addEventListener('loaded', () => {
+                const markers = document.querySelectorAll('a-marker');
+                markers.forEach(marker => {
+                    marker.addEventListener('markerFound', () => {
+                        if (!markerFound) onMarkerFound();
+                    });
+                    marker.addEventListener('markerLost', () => {
+                        // optional: could dim the puzzle but keep it open
+                    });
+                });
+            });
+
+            // Desktop/sim: Auto-trigger for testing after 5s
+            if (!/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                setTimeout(() => {
+                    if (!markerFound) {
+                        document.getElementById('scan-status').textContent = '⚡ Simulazione desktop — marker rilevato';
+                        setTimeout(onMarkerFound, 800);
+                    }
+                }, 4000);
+            }
+        }
+
+        function buildRuneContent(containerId, rune) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Animated golden rune in 3D space
+            container.innerHTML = `
+      <a-text
+        value="${rune}" color="#e8b84b"
+        align="center" width="3"
+        position="0 0.5 0" rotation="-90 0 0"
+        scale="1.5 1.5 1.5"
+        animation="property:rotation; to:-90 360 0; dur:6000; loop:true; easing:linear"
+      ></a-text>
+      <a-ring color="#c9922a" radius-inner="0.7" radius-outer="0.75"
+        rotation="-90 0 0" position="0 0.02 0" opacity="0.6"
+        animation="property:rotation; from:-90 0 0; to:-90 360 0; dur:4000; loop:true; easing:linear"
+      ></a-ring>
+      <a-ring color="#e8b84b" radius-inner="0.9" radius-outer="0.93"
+        rotation="-90 0 0" position="0 0.01 0" opacity="0.3"
+        animation="property:rotation; from:-90 0 0; to:-90 -360 0; dur:8000; loop:true; easing:linear"
+      ></a-ring>
+      <a-sphere radius="0.06" color="#e8b84b" opacity="0.9"
+        position="0 0 0"
+        animation__pos="property:position; dir:alternate; dur:1200; to:0 0.3 0; loop:true; easing:easeInOutSine"
+        animation__sc="property:scale; dir:alternate; dur:800; from:1 1 1; to:1.3 1.3 1.3; loop:true"
+      ></a-sphere>
+    `;
+        }
+
+        // ── MARKER FOUND ─────────────────────────────────────────
+        function onMarkerFound() {
+            markerFound = true;
+            document.getElementById('scan-status').textContent = '✦ Runa rilevata!';
+            setTimeout(() => { document.getElementById('puzzle-panel').classList.add('open'); }, 600);
+        }
+
+        // ── ANSWER CHECK ─────────────────────────────────────────
+        window.checkAnswer = () => {
+            const input = document.getElementById('answer-input').value.trim().toLowerCase();
+            const correct = stop.answer.toLowerCase();
+            const feedback = document.getElementById('pp-feedback');
+
+            if (!input) { feedback.textContent = 'Inserisci una risposta.'; feedback.className = 'pp-feedback error'; feedback.style.display = 'block'; return; }
+
+            if (input === correct || input.includes(correct) || correct.includes(input)) {
+                feedback.style.display = 'none';
+                document.getElementById('puzzle-panel').classList.remove('open');
+                setTimeout(() => {
+                    document.getElementById('success-overlay').classList.add('show');
+                    saveProgress();
+                }, 300);
+            } else {
+                feedback.textContent = '✗ Risposta errata. Riprova o usa il suggerimento.';
+                feedback.className = 'pp-feedback error'; feedback.style.display = 'block';
+                document.getElementById('answer-input').style.borderColor = 'rgba(180,30,30,0.5)';
+                setTimeout(() => { document.getElementById('answer-input').style.borderColor = ''; }, 1000);
+            }
+        };
+
+        window.showHint = () => {
+            const h = document.getElementById('hint-text');
+            h.style.display = h.style.display === 'block' ? 'none' : 'block';
+            hintShown = true;
+        };
+
+        // Allow Enter key
+        document.getElementById('answer-input').addEventListener('keydown', e => { if (e.key === 'Enter') window.checkAnswer(); });
+
+        // ── SAVE PROGRESS ─────────────────────────────────────────
+        async function saveProgress() {
+            if (!currentUser) return;
+            try {
+                const ref = doc(db, 'users', currentUser.uid);
+                await updateDoc(ref, {
+                    [`completedStops.${missionId}`]: arrayUnion(stopId),
+                    xp: increment(stop.xp),
+                    activeMissions: arrayUnion(missionId),
+                });
+            } catch (e) {
+                console.warn('Offline — progress saved locally only');
+                const local = JSON.parse(localStorage.getItem('vhr_progress') || '{}');
+                local[missionId] = [...(local[missionId] || []), stopId];
+                localStorage.setItem('vhr_progress', JSON.stringify(local));
+            }
+        }
+
+        // ── CONTINUE ────────────────────────────────────────────
+        window.continueJourney = () => {
+            window.location.href = `mission.html?id=${missionId}`;
+        };
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHR — Dashboard Guardiano</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1209;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #f2e8d0;
+            --mist: #8a7d65;
+            --stone: #3d3528;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 18, 9, 0.96);
+            border-bottom: 1px solid rgba(201, 146, 42, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 40px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-logo {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 14px;
+            color: var(--gold);
+            letter-spacing: 0.06em;
+            text-decoration: none;
+        }
+
+        .xp-pill {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid rgba(201, 146, 42, 0.3);
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .user-name {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            color: var(--mist);
+        }
+
+        .btn-logout {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--mist);
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            padding: 6px 16px;
+            background: none;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            color: var(--gold);
+            border-color: rgba(201, 146, 42, 0.4);
+        }
+
+        /* ── LAYOUT ── */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 53px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.015);
+            border-right: 1px solid rgba(201, 146, 42, 0.1);
+            padding: 28px 0;
+            position: sticky;
+            top: 53px;
+            height: calc(100vh - 53px);
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 6px;
+        }
+
+        .sidebar-label {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--mist);
+            padding: 10px 20px 4px;
+            opacity: 0.7;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 20px;
+            color: rgba(242, 232, 208, 0.6);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            border-left: 2px solid transparent;
+            transition: all .15s;
+        }
+
+        .sidebar a:hover {
+            color: var(--parchment);
+            background: rgba(201, 146, 42, 0.05);
+            border-left-color: rgba(201, 146, 42, 0.3);
+        }
+
+        .sidebar a.active {
+            color: var(--gold);
+            background: rgba(201, 146, 42, 0.08);
+            border-left-color: var(--gold);
+        }
+
+        .sidebar .s-icon {
+            font-size: 1em;
+            opacity: 0.7;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main {
+            flex: 1;
+            padding: 40px 48px 80px;
+            max-width: 900px;
+        }
+
+        /* Welcome header */
+        .welcome-header {
+            margin-bottom: 40px;
+        }
+
+        .welcome-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+
+        .welcome-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 700;
+            color: var(--parchment);
+            margin-bottom: 4px;
+        }
+
+        .welcome-title span {
+            color: var(--gold);
+        }
+
+        /* Stat cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            padding: 22px 18px;
+            border: 1px solid rgba(201, 146, 42, 0.15);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 3px;
+            text-align: center;
+            transition: border-color .3s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(201, 146, 42, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        .stat-val {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--gold-lt);
+        }
+
+        .stat-lbl {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--mist);
+            margin-top: 4px;
+        }
+
+        /* Section title */
+        .sec-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .sec-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95em;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--parchment);
+            border-bottom: 1px solid rgba(201, 146, 42, 0.15);
+            padding-bottom: 10px;
+            flex: 1;
+        }
+
+        .sec-badge {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            color: var(--gold);
+            border: 1px solid rgba(201, 146, 42, 0.3);
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 14px;
+        }
+
+        /* Mission cards */
+        .missions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+            margin-bottom: 48px;
+        }
+
+        .mission-card {
+            border: 1px solid rgba(201, 146, 42, 0.15);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 24px 20px;
+            text-decoration: none;
+            color: var(--parchment);
+            display: block;
+            transition: all .3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+        .mission-card:hover {
+            border-color: rgba(201, 146, 42, 0.35);
+            background: rgba(201, 146, 42, 0.04);
+            transform: translateY(-2px);
+        }
+
+        .mission-card:hover::before {
+            opacity: 1;
+        }
+
+        .mission-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .mission-card.locked:hover {
+            transform: none;
+        }
+
+        .mc-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .mc-element {
+            font-size: 2em;
+        }
+
+        .mc-difficulty {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .mc-difficulty.facile {
+            color: #6dbf67;
+            border-color: rgba(109, 191, 103, 0.3);
+            background: rgba(109, 191, 103, 0.08);
+        }
+
+        .mc-difficulty.media {
+            color: var(--gold-lt);
+            border-color: rgba(232, 184, 75, 0.3);
+            background: rgba(232, 184, 75, 0.08);
+        }
+
+        .mc-difficulty.difficile {
+            color: #ff8c6b;
+            border-color: rgba(255, 140, 107, 0.3);
+            background: rgba(255, 140, 107, 0.08);
+        }
+
+        .mc-difficulty.mitica {
+            color: #d4a0ff;
+            border-color: rgba(212, 160, 255, 0.3);
+            background: rgba(212, 160, 255, 0.08);
+        }
+
+        .mc-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--parchment);
+            margin-bottom: 6px;
+        }
+
+        .mc-location {
+            font-style: italic;
+            font-size: 0.85em;
+            color: var(--mist);
+            margin-bottom: 14px;
+        }
+
+        .mc-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mc-xp {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--gold);
+        }
+
+        .mc-stops {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            color: var(--mist);
+        }
+
+        .mc-status {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+        }
+
+        /* Free badge */
+        .mc-free {
+            font-family: 'Cinzel', serif;
+            font-size: 8px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--gold);
+            padding: 2px 9px;
+            border-radius: 20px;
+        }
+
+        /* Coupon section */
+        .coupons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 48px;
+        }
+
+        .coupon-card {
+            border: 1px dashed rgba(201, 146, 42, 0.3);
+            border-radius: 4px;
+            background: rgba(201, 146, 42, 0.04);
+            padding: 20px 16px;
+        }
+
+        .coupon-shop {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: var(--gold-lt);
+            margin-bottom: 4px;
+        }
+
+        .coupon-desc {
+            font-style: italic;
+            font-size: 0.9em;
+            color: var(--mist);
+            margin-bottom: 10px;
+        }
+
+        .coupon-code {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--gold);
+            padding: 4px 12px;
+            display: inline-block;
+            border-radius: 2px;
+        }
+
+        .coupon-exp {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            color: var(--mist);
+            margin-top: 8px;
+            letter-spacing: 0.1em;
+        }
+
+        .no-coupons {
+            font-style: italic;
+            color: var(--mist);
+            opacity: 0.7;
+            padding: 16px 0;
+        }
+
+        /* Badges */
+        .badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 14px;
+            border: 1px solid rgba(201, 146, 42, 0.15);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+            min-width: 90px;
+        }
+
+        .badge-icon {
+            font-size: 2em;
+        }
+
+        .badge-name {
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--mist);
+            text-align: center;
+        }
+
+        .badge-item.locked {
+            opacity: 0.3;
+        }
+
+        @media(max-width:700px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 24px 16px 60px;
+            }
+
+            .topbar {
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <a href="../index.html" class="topbar-logo">VHR</a>
+            <div class="xp-pill" id="xp-display">✦ 0 XP</div>
+        </div>
+        <div class="topbar-right">
+            <span class="user-name" id="user-name">Guardiano</span>
+            <button class="btn-logout" onclick="doLogout()">Esci</button>
+        </div>
+    </header>
+
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-label">Principale</div>
+                <a href="dashboard-player.html" class="active"><span class="s-icon">🏠</span> Dashboard</a>
+                <a href="#missioni"><span class="s-icon">🗺️</span> Missioni</a>
+                <a href="#coupon"><span class="s-icon">🎫</span> Coupon</a>
+                <a href="#badge"><span class="s-icon">🏅</span> Badge</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-label">Esplora</div>
+                <a href="onboarding.html"><span class="s-icon">📖</span> Come funziona</a>
+                <a href="../A4_Test_Print.html" target="_blank"><span class="s-icon">🖨️</span> Stampa Marker</a>
+            </div>
+        </nav>
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <!-- Welcome -->
+            <div class="welcome-header">
+                <div class="welcome-eyebrow">ᚢ · ᚺ · ᚱ · Centro Operativo</div>
+                <h1 class="welcome-title">Benvenuto, <span id="display-name">Guardiano</span></h1>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row" id="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-val" id="stat-xp">0</div>
+                    <div class="stat-lbl">Punti Esperienza</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚔️</div>
+                    <div class="stat-val" id="stat-missions">0</div>
+                    <div class="stat-lbl">Missioni Completate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏅</div>
+                    <div class="stat-val" id="stat-badges">0</div>
+                    <div class="stat-lbl">Badge Conquistati</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎫</div>
+                    <div class="stat-val" id="stat-coupons">0</div>
+                    <div class="stat-lbl">Coupon Attivi</div>
+                </div>
+            </div>
+
+            <!-- MISSIONI -->
+            <div id="missioni">
+                <div class="sec-header">
+                    <div class="sec-title">Missioni Disponibili</div>
+                    <span class="sec-badge">Fase I</span>
+                </div>
+                <div class="missions-grid" id="missions-grid">
+                    <!-- Generato via JS -->
+                </div>
+            </div>
+
+            <!-- COUPON -->
+            <div id="coupon">
+                <div class="sec-header">
+                    <div class="sec-title">I Tuoi Coupon</div>
+                </div>
+                <div class="coupons-grid" id="coupons-grid">
+                    <p class="no-coupons">Nessun coupon sbloccato. Completa una missione per guadagnarne!</p>
+                </div>
+            </div>
+
+            <!-- BADGE -->
+            <div id="badge">
+                <div class="sec-header">
+                    <div class="sec-title">Badge e Traguardi</div>
+                </div>
+                <div class="badges-row" id="badges-row">
+                    <!-- Generato via JS -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../firebase/firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ── MISSIONS DATA (demo offline) ──────────────────────────
+        const MISSIONS = [
+            { id: 'm1', name: 'La Risaia dei Libui', location: 'Campi risicoli a nord', element: '🌿', diff: 'Facile', xp: 280, stops: 3, free: true, price: 0 },
+            { id: 'm2', name: 'Il Canale dei Segreti', location: 'Canale Cavour, centro', element: '💧', diff: 'Media', xp: 420, stops: 4, free: false, price: 3.99 },
+            { id: 'm3', name: 'Battistero di Sant\'Eusebio', location: 'Piazza Sant\'Eusebio', element: '💧', diff: 'Facile', xp: 260, stops: 3, free: false, price: 2.99 },
+            { id: 'm4', name: 'Il Mercato Medievale', location: 'Centro storico', element: '🌿', diff: 'Media', xp: 510, stops: 5, free: false, price: 3.99 },
+            { id: 'm5', name: 'La Torre del Fuoco', location: 'Torre Angolare, sudovest', element: '🔥', diff: 'Difficile', xp: 850, stops: 6, free: false, price: 5.99 },
+            { id: 'm6', name: 'Le Antiche Mura', location: 'Mura Romane, centro storico', element: '⚡', diff: 'Mitica', xp: 1400, stops: 7, free: false, price: 8.99 },
+        ];
+
+        const ALL_BADGES = [
+            { id: 'b1', icon: '🌿', name: 'Primo Passo', desc: 'Prima tappa completata' },
+            { id: 'b2', icon: '🔥', name: 'Cacciatore', desc: 'Prima missione completata' },
+            { id: 'b3', icon: '⚡', name: 'Esploratore', desc: '3 missioni completate' },
+            { id: 'b4', icon: '🏆', name: 'Guardiano', desc: 'Tutte le missioni' },
+            { id: 'b5', icon: '💧', name: 'Runa Nascosta', desc: 'Risposta segreta trovata' },
+            { id: 'b6', icon: '🌙', name: 'Ombra della Notte', desc: 'Missione completata di notte' },
+        ];
+
+        let currentUser = null;
+        let userData = {};
+
+        onAuthStateChanged(auth, async user => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            currentUser = user;
+            const snap = await getDoc(doc(db, 'users', user.uid));
+            userData = snap.exists() ? snap.data() : { xp: 0, badges: [], activeMissions: [] };
+            renderUI();
+            loadCoupons(user.uid);
+        });
+
+        function renderUI() {
+            const name = userData.displayName || currentUser.displayName || 'Guardiano';
+            document.getElementById('display-name').textContent = name;
+            document.getElementById('user-name').textContent = name;
+            document.getElementById('xp-display').textContent = `✦ ${userData.xp || 0} XP`;
+            document.getElementById('stat-xp').textContent = (userData.xp || 0).toLocaleString('it');
+            document.getElementById('stat-badges').textContent = (userData.badges || []).length;
+            renderMissions();
+            renderBadges();
+        }
+
+        function renderMissions() {
+            const completed = userData.activeMissions || [];
+            const grid = document.getElementById('missions-grid');
+            grid.innerHTML = MISSIONS.map(m => {
+                const done = completed.includes(m.id);
+                const diffClass = m.diff.toLowerCase();
+                return `
+        <a href="mission.html?id=${m.id}" class="mission-card ${done ? '' : ''}">
+          ${done ? '<div class="mc-status"></div>' : ''}
+          <div class="mc-top">
+            <span class="mc-element">${m.element}</span>
+            <span class="mc-difficulty ${diffClass}">${m.diff}</span>
+          </div>
+          <div class="mc-name">${m.name}</div>
+          <div class="mc-location">📍 ${m.location}</div>
+          <div class="mc-footer">
+            <span class="mc-xp">⚡ ${m.xp} XP</span>
+            ${m.free ? '<span class="mc-free">GRATIS</span>' : `<span class="mc-stops">€${m.price}</span>`}
+            <span class="mc-stops">${m.stops} tappe</span>
+          </div>
+        </a>`;
+            }).join('');
+            document.getElementById('stat-missions').textContent = completed.length;
+        }
+
+        function renderBadges() {
+            const earned = userData.badges || [];
+            document.getElementById('badges-row').innerHTML = ALL_BADGES.map(b => `
+      <div class="badge-item ${earned.includes(b.id) ? '' : 'locked'}" title="${b.desc}">
+        <div class="badge-icon">${b.icon}</div>
+        <div class="badge-name">${b.name}</div>
+      </div>`).join('');
+        }
+
+        async function loadCoupons(uid) {
+            try {
+                const q = query(collection(db, 'coupons'), where('approved', '==', true));
+                const snap = await getDocs(q);
+                const grid = document.getElementById('coupons-grid');
+                if (snap.empty) return;
+                const userSnap = await getDoc(doc(db, 'users', uid));
+                const unlockedCoupons = (userSnap.data()?.unlockedCoupons) || [];
+                const available = [];
+                snap.forEach(d => { if (unlockedCoupons.includes(d.id)) available.push({ id: d.id, ...d.data() }); });
+                if (available.length === 0) return;
+                document.getElementById('stat-coupons').textContent = available.length;
+                grid.innerHTML = available.map(c => `
+        <div class="coupon-card">
+          <div class="coupon-shop">🏪 ${c.merchantName || 'Negozio'}</div>
+          <div class="coupon-desc">${c.title}</div>
+          <div class="coupon-code">${c.code || 'VHR-CODE'}</div>
+          <div class="coupon-exp">Scade: ${c.expiresAt?.toDate?.()?.toLocaleDateString('it') || '—'}</div>
+        </div>`).join('');
+            } catch (e) { /* Offline o no coupon */ }
+        }
+
+        window.doLogout = async () => {
+            await signOut(auth);
+            window.location.href = 'login.html';
+        };
+    </script>
+</body>
+
+</html>

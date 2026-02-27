@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VHR — Accedi o Registrati</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1209;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #f2e8d0;
+            --mist: #8a7d65;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, rgba(201, 146, 42, 0.06) 0%, transparent 70%);
+        }
+
+        .login-wrap {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+        }
+
+        /* Logo & header */
+        .login-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            filter: drop-shadow(0 0 12px rgba(201, 146, 42, 0.4));
+            display: block;
+        }
+
+        .logo-ring-anim {
+            animation: rotateSlow 30s linear infinite;
+            transform-origin: center;
+        }
+
+        @keyframes rotateSlow {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .login-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--parchment);
+        }
+
+        .login-title span {
+            color: var(--gold);
+        }
+
+        .login-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            color: var(--mist);
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: var(--mist);
+            background: rgba(255, 255, 255, 0.02);
+            transition: all .2s;
+            border: none;
+        }
+
+        .tab.active {
+            background: rgba(201, 146, 42, 0.12);
+            color: var(--gold);
+        }
+
+        .tab:hover:not(.active) {
+            color: var(--parchment);
+        }
+
+        /* Form card */
+        .form-card {
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(201, 146, 42, 0.18);
+            border-radius: 4px;
+            padding: 36px 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--mist);
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            border-radius: 2px;
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            font-size: 1em;
+            transition: border-color .2s;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: rgba(201, 146, 42, 0.5);
+        }
+
+        input::placeholder {
+            color: var(--mist);
+            opacity: 0.6;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(26, 18, 9, 0.9);
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            border-radius: 2px;
+            color: var(--parchment);
+            font-family: 'EB Garamond', serif;
+            font-size: 1em;
+            transition: border-color .2s;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: rgba(201, 146, 42, 0.5);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+            color: var(--ink);
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transition: all .3s;
+            box-shadow: 0 0 20px rgba(201, 146, 42, 0.2);
+            margin-top: 8px;
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 0 40px rgba(201, 146, 42, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(201, 146, 42, 0.15);
+        }
+
+        .divider span {
+            position: relative;
+            background: rgba(36, 26, 12, 1);
+            padding: 0 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            color: var(--mist);
+            text-transform: uppercase;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(201, 146, 42, 0.18);
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            color: var(--parchment);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all .2s;
+        }
+
+        .btn-google:hover {
+            border-color: rgba(201, 146, 42, 0.4);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        /* Status messages */
+        .msg {
+            padding: 12px 16px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        .msg.error {
+            background: rgba(180, 30, 30, 0.12);
+            border: 1px solid rgba(180, 30, 30, 0.3);
+            color: #ff8a8a;
+        }
+
+        .msg.success {
+            background: rgba(50, 180, 80, 0.12);
+            border: 1px solid rgba(50, 180, 80, 0.3);
+            color: #8affa0;
+        }
+
+        .msg.loading {
+            background: rgba(201, 146, 42, 0.1);
+            border: 1px solid rgba(201, 146, 42, 0.3);
+            color: var(--gold-lt);
+        }
+
+        /* Panel toggle */
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* Back link */
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            color: var(--mist);
+            text-transform: uppercase;
+        }
+
+        .back-link a {
+            color: var(--mist);
+            text-decoration: none;
+            transition: color .2s;
+        }
+
+        .back-link a:hover {
+            color: var(--gold);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-wrap">
+
+        <!-- Header -->
+        <div class="login-header">
+            <svg class="login-logo" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="lg" x1="75" y1="88" x2="185" y2="168" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#e8b84b" />
+                        <stop offset="50%" stop-color="#c9922a" />
+                        <stop offset="100%" stop-color="#e8b84b" />
+                    </linearGradient>
+                </defs>
+                <g class="logo-ring-anim">
+                    <circle cx="130" cy="130" r="118" stroke="#c9922a" stroke-width="1.5" stroke-dasharray="4 6"
+                        opacity="0.5" />
+                    <line x1="130" y1="12" x2="130" y2="24" stroke="#c9922a" stroke-width="2" />
+                    <line x1="130" y1="236" x2="130" y2="248" stroke="#c9922a" stroke-width="2" />
+                    <line x1="12" y1="130" x2="24" y2="130" stroke="#c9922a" stroke-width="2" />
+                    <line x1="236" y1="130" x2="248" y2="130" stroke="#c9922a" stroke-width="2" />
+                    <circle cx="130" cy="20" r="2.5" fill="#c9922a" opacity="0.7" />
+                    <circle cx="228" cy="75" r="2.5" fill="#c9922a" opacity="0.7" />
+                    <circle cx="32" cy="185" r="2.5" fill="#c9922a" opacity="0.7" />
+                </g>
+                <circle cx="130" cy="130" r="88" stroke="#c9922a" stroke-width="1" opacity="0.2" />
+                <path d="M 75 88 L 99 158 L 130 100 L 161 158 L 185 88" stroke="url(#lg)" stroke-width="4" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <line x1="110" y1="118" x2="150" y2="118" stroke="url(#lg)" stroke-width="4" stroke-linecap="round" />
+                <line x1="110" y1="88" x2="110" y2="158" stroke="url(#lg)" stroke-width="4" stroke-linecap="round" />
+                <line x1="150" y1="88" x2="150" y2="158" stroke="url(#lg)" stroke-width="4" stroke-linecap="round" />
+                <path d="M 150 118 Q 175 118 175 103 Q 175 88 150 88" stroke="url(#lg)" stroke-width="4" fill="none"
+                    stroke-linecap="round" />
+                <line x1="150" y1="118" x2="178" y2="158" stroke="url(#lg)" stroke-width="4" stroke-linecap="round" />
+                <circle cx="110" cy="118" r="5" fill="#c9922a" opacity="0.9" />
+                <circle cx="150" cy="118" r="5" fill="#c9922a" opacity="0.9" />
+            </svg>
+            <div class="login-title">Vercelli <span>Hidden Runes</span></div>
+            <div class="login-subtitle">ᚢ · ᚺ · ᚱ · Portale Guardiani</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" id="tab-login" onclick="switchTab('login')">Accedi</button>
+            <button class="tab" id="tab-register" onclick="switchTab('register')">Registrati</button>
+        </div>
+
+        <!-- Messages -->
+        <div class="msg" id="msg"></div>
+
+        <div class="form-card">
+
+            <!-- LOGIN PANEL -->
+            <div class="panel active" id="panel-login">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="il@tuo.email" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="login-pass">Password</label>
+                    <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+                </div>
+                <button class="btn-submit" onclick="doLogin()">Accedi al Multiverso</button>
+                <div class="divider"><span>oppure</span></div>
+                <button class="btn-google" onclick="doGoogleLogin()">
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                        <path
+                            d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
+                            fill="#4285F4" />
+                        <path
+                            d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+                            fill="#34A853" />
+                        <path
+                            d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"
+                            fill="#FBBC05" />
+                        <path
+                            d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"
+                            fill="#EA4335" />
+                    </svg>
+                    Continua con Google
+                </button>
+            </div>
+
+            <!-- REGISTER PANEL -->
+            <div class="panel" id="panel-register">
+                <div class="form-group">
+                    <label for="reg-name">Il tuo Nome da Guardiano</label>
+                    <input type="text" id="reg-name" placeholder="Es. Cristian il Cacciatore di Rune">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" placeholder="il@tuo.email" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="reg-pass">Password</label>
+                    <input type="password" id="reg-pass" placeholder="Minimo 6 caratteri" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="reg-role">Sei un…</label>
+                    <select id="reg-role">
+                        <option value="player">Giocatore — Esploro la città</option>
+                        <option value="merchant">Commerciante — Offro premi ai giocatori</option>
+                    </select>
+                </div>
+                <button class="btn-submit" onclick="doRegister()">Entra nel Multiverso VHR</button>
+                <div class="divider"><span>oppure</span></div>
+                <button class="btn-google" onclick="doGoogleLogin()">
+                    <svg width="18" height="18" viewBox="0 0 18 18">
+                        <path
+                            d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
+                            fill="#4285F4" />
+                        <path
+                            d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+                            fill="#34A853" />
+                        <path
+                            d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"
+                            fill="#FBBC05" />
+                        <path
+                            d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"
+                            fill="#EA4335" />
+                    </svg>
+                    Continua con Google
+                </button>
+            </div>
+        </div>
+
+        <div class="back-link"><a href="onboarding.html">← Torna alla Home</a></div>
+    </div>
+
+    <script type="module">
+        // ── AUTH LOGIC ────────────────────────────────────────────────
+        // Import Firebase (cambia il percorso se necessario)
+        import { auth, db, googleProvider } from '../firebase/firebase-config.js';
+        import {
+            signInWithEmailAndPassword, createUserWithEmailAndPassword,
+            signInWithPopup, onAuthStateChanged, updateProfile
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Se l'utente è già loggato, redirect immediato
+        onAuthStateChanged(auth, async user => {
+            if (user) {
+                const snap = await getDoc(doc(db, 'users', user.uid));
+                if (snap.exists()) redirectByRole(snap.data().role);
+            }
+        });
+
+        function redirectByRole(role) {
+            if (role === 'admin') { window.location.href = 'admin.html'; return; }
+            if (role === 'merchant') { window.location.href = 'merchant-dashboard.html'; return; }
+            window.location.href = 'dashboard-player.html';
+        }
+
+        function showMsg(text, type = 'error') {
+            const el = document.getElementById('msg');
+            el.textContent = text; el.className = 'msg ' + type; el.style.display = 'block';
+        }
+        function hideMsg() { document.getElementById('msg').style.display = 'none'; }
+
+        // Login email/pass
+        window.doLogin = async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-pass').value;
+            if (!email || !pass) { showMsg('Inserisci email e password.'); return; }
+            showMsg('Apertura del portale…', 'loading');
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                const snap = await getDoc(doc(db, 'users', cred.user.uid));
+                redirectByRole(snap.exists() ? snap.data().role : 'player');
+            } catch (e) {
+                showMsg(friendlyError(e.code));
+            }
+        };
+
+        // Register
+        window.doRegister = async () => {
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-pass').value;
+            const role = document.getElementById('reg-role').value;
+            if (!name || !email || !pass) { showMsg('Compila tutti i campi.'); return; }
+            if (pass.length < 6) { showMsg('La password deve avere almeno 6 caratteri.'); return; }
+            showMsg('Forgiatura identità runica…', 'loading');
+            try {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                await updateProfile(cred.user, { displayName: name });
+                await setDoc(doc(db, 'users', cred.user.uid), {
+                    displayName: name, email, role,
+                    xp: 0, badges: [], activeMissions: [],
+                    createdAt: serverTimestamp()
+                });
+                redirectByRole(role);
+            } catch (e) {
+                showMsg(friendlyError(e.code));
+            }
+        };
+
+        // Google
+        window.doGoogleLogin = async () => {
+            showMsg('Connessione con Google…', 'loading');
+            try {
+                const cred = await signInWithPopup(auth, googleProvider);
+                const ref = doc(db, 'users', cred.user.uid);
+                const snap = await getDoc(ref);
+                if (!snap.exists()) {
+                    await setDoc(ref, {
+                        displayName: cred.user.displayName, email: cred.user.email,
+                        role: 'player', xp: 0, badges: [], activeMissions: [],
+                        createdAt: serverTimestamp()
+                    });
+                }
+                const data = (await getDoc(ref)).data();
+                redirectByRole(data.role);
+            } catch (e) {
+                showMsg(friendlyError(e.code));
+            }
+        };
+
+        function friendlyError(code) {
+            const map = {
+                'auth/user-not-found': 'Nessun account trovato con questa email.',
+                'auth/wrong-password': 'Password errata. Riprova.',
+                'auth/email-already-in-use': 'Questa email è già registrata. Prova ad accedere.',
+                'auth/invalid-email': 'Email non valida.',
+                'auth/weak-password': 'Password troppo debole. Usa almeno 6 caratteri.',
+                'auth/popup-closed-by-user': 'Popup chiuso. Riprova.',
+                'auth/network-request-failed': 'Errore di rete. Controlla la connessione.',
+            };
+            return map[code] || 'Errore di autenticazione. Riprova.';
+        }
+    </script>
+
+    <script>
+        // Tab switching (vanilla, no module needed)
+        function switchTab(tab) {
+            document.getElementById('panel-login').classList.toggle('active', tab === 'login');
+            document.getElementById('panel-register').classList.toggle('active', tab === 'register');
+            document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+            document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+            document.getElementById('msg').style.display = 'none';
+        }
+        // Auto-switch if URL has ?mode=register
+        if (new URLSearchParams(location.search).get('mode') === 'register') switchTab('register');
+    </script>
+</body>
+
+</html>
