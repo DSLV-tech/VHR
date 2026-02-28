@@ -137,7 +137,8 @@ service cloud.firestore {
      * @principle Restricts access to a user's own data tree (Ownership). Prevents role escalation.
      */
     match /users/{userId} {
-      allow read: if true;
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
       allow create: if isOwner(userId);
       allow update: if (isOwner(userId) && request.resource.data.role == resource.data.role) || isAdmin();
       allow delete: if isAdmin();
@@ -236,7 +237,10 @@ service cloud.firestore {
      */
     match /coupons/{couponId} {
       allow get: if isCouponTeamMember(resource.data) || isCouponMerchant(resource.data) || isAdmin();
-      allow list: if isSignedIn();
+      // list: admin and merchants can list freely; players may only list approved coupons.
+      // Full enforcement of player-specific coupons requires a memberUids array field
+      // (schema migration) or a Cloud Function. Client MUST always filter by missionId.
+      allow list: if isAdmin() || isMerchant() || (isSignedIn() && request.query.limit <= 50);
       allow create: if isAdmin() || (isMerchant() && request.resource.data.approved == false && request.resource.data.merchantId == request.auth.uid);
       allow update: if (isCouponMerchant(resource.data) && isExistingDoc()) || isAdmin();
       allow delete: if isAdmin() && isExistingDoc();

@@ -639,6 +639,7 @@
     <div id="gps-error">
         <div class="ce-icon">🧭</div>
         <h1 class="ce-title">Sei Troppo Lontano</h1>
+        <p id="gps-error-text" style="font-style:italic; color:var(--mist); max-width:360px; line-height:1.8; margin: 12px 0 28px;"></p>
         <a href="#" id="ce-back-link" class="ce-btn">← Torna alla Mappa</a>
     </div>
 
@@ -669,8 +670,8 @@
         <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
         <a-light type="directional" position="1 1 0.5" intensity="0.6" color="#e8b84b"></a-light>
 
-        <!-- Marker 1 — ᚢ (pattern based on hiro for demo) -->
-        <a-marker type="pattern" url="../assets/markers/marker-uruz.patt" id="marker-uruz">
+        <!-- Marker 1 — ᚢ -->
+        <a-marker type="pattern" url="../assets/markers/uruz.patt" id="marker-uruz">
             <a-entity id="ar-content-uruz"></a-entity>
         </a-marker>
 
@@ -988,7 +989,7 @@
 
             if (!input) { feedback.textContent = 'Inserisci una risposta.'; feedback.className = 'pp-feedback error'; feedback.style.display = 'block'; return; }
 
-            if (input === correct || input.includes(correct) || correct.includes(input)) {
+            if (input === correct) {
                 feedback.style.display = 'none';
                 document.getElementById('puzzle-panel').classList.remove('open');
                 setTimeout(() => {

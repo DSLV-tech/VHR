@@ -654,7 +654,7 @@
           <div class="stop-num">${isDone ? '✓' : i + 1}</div>
           <div class="stop-body">
             <div class="stop-name">${s.name || 'Tappa Sconosciuta'}</div>
-            <div class="stop-location">📍 ${s.name}</div>
+            <div class="stop-location">📍 ${s.location || s.address || 'Vercelli'}</div>
             ${isActive ? `<div class="stop-hint">Cerca il marker: <strong>${s.rune || 'ᚢ'}</strong> — punta la fotocamera sulla runa stampata</div>` : ''}
             ${action}
           </div>

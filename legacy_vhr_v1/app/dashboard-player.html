@@ -99,6 +99,26 @@
             gap: 14px;
         }
 
+        .btn-logout {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--mist);
+            background: transparent;
+            border: 1px solid rgba(201, 146, 42, 0.25);
+            padding: 5px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-logout:hover {
+            color: var(--parchment);
+            border-color: rgba(201, 146, 42, 0.5);
+            background: rgba(201, 146, 42, 0.06);
+        }
+
         .user-name {
             font-family: 'Cinzel', serif;
             font-size: 11px;
@@ -546,6 +566,27 @@
             letter-spacing: 0.1em;
         }
 
+        .btn-action {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 8px 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            transition: all .2s;
+        }
+
+        .btn-action:hover {
+            background: var(--gold-lt);
+            border-color: var(--gold-lt);
+        }
+
         .no-coupons {
             font-style: italic;
             color: var(--mist);
@@ -806,11 +847,11 @@
 
     <!-- ── BOTTOM NAVIGATION ── -->
     <nav class="bottom-nav">
-        <a href="#missioni" class="nav-item active">
+        <a href="#missioni" class="nav-item" data-section="missioni">
             <span class="nav-icon">🗺️</span>
             Missioni
         </a>
-        <a href="#coupon" class="nav-item">
+        <a href="#coupon" class="nav-item" data-section="coupon">
             <span class="nav-icon">🎫</span>
             Coupon
         </a>
@@ -922,22 +963,40 @@
 
         async function loadCoupons(uid) {
             try {
-                const q = query(collection(db, 'coupons'), where('approved', '==', true));
-                const snap = await getDocs(q);
                 const grid = document.getElementById('coupons-grid');
-                if (snap.empty) return;
 
-                // Get user's completed missions
-                const userSnap = await getDoc(doc(db, 'users', uid));
-                const completedMissions = (userSnap.data()?.activeMissions) || [];
+                // Fetch only the current user's data (already loaded above, reuse userData)
+                const completedMissions = userData.activeMissions || [];
 
+                // Query only coupons tied to missions the user has unlocked, plus global ones.
+                // Two targeted queries instead of dumping the entire collection client-side.
+                // NOTE: Full server-side enforcement requires moving coupon codes to a
+                // subcollection or Cloud Function. This limits exposure to relevant missions.
+                const queries = [
+                    // Global coupons (no missionId)
+                    getDocs(query(collection(db, 'coupons'),
+                        where('approved', '==', true),
+                        where('missionId', '==', null))),
+                ];
+
+                // One query per completed mission (Firestore 'in' is capped at 30 values)
+                const missionBatch = completedMissions.slice(0, 30);
+                if (missionBatch.length > 0) {
+                    queries.push(getDocs(query(collection(db, 'coupons'),
+                        where('approved', '==', true),
+                        where('missionId', 'in', missionBatch))));
+                }
+
+                const results = await Promise.all(queries);
+                const seen = new Set();
                 const available = [];
-                snap.forEach(d => {
-                    const data = d.data();
-                    // A coupon is unlocked if it has no specific mission (global) OR if the user completed the required mission
-                    if (!data.missionId || completedMissions.includes(data.missionId)) {
-                        available.push({ id: d.id, ...data });
-                    }
+                results.forEach(snap => {
+                    snap.forEach(d => {
+                        if (!seen.has(d.id)) {
+                            seen.add(d.id);
+                            available.push({ id: d.id, ...d.data() });
+                        }
+                    });
                 });
 
                 if (available.length === 0) return;
@@ -949,10 +1008,32 @@
           <div class="coupon-desc">${c.title}</div>
           <div class="coupon-code">${c.code || 'VHR-CODE'}</div>
           <div class="coupon-exp">Scade: ${c.expiresAt?.toDate?.()?.toLocaleDateString('it') || '—'}</div>
-          <button class="btn-action" style="margin-top: 12px; width: 100%; border: 1px solid var(--gold); padding: 8px;" onclick="alert('Mostra questo codice all\\'esercente.\\nNel sistema finale, l\\'esercente cliccherà qui per invalidare il coupon.')">🎟️ Riscatta Sconto</button>
+          <button class="btn-action" onclick="alert('Mostra questo codice all\\'esercente.\\nNel sistema finale, l\\'esercente cliccherà qui per invalidare il coupon.')">🎟️ Riscatta Sconto</button>
         </div>`).join('');
             } catch (e) { console.error("Error loading coupons:", e); }
         }
+
+        // ── BOTTOM NAV SCROLLSPY ──────────────────────────────
+        (function () {
+            const navLinks = document.querySelectorAll('.bottom-nav a[data-section]');
+            const sectionIds = ['missioni', 'coupon', 'badge'];
+
+            // Activate Missioni on load as default
+            const setActive = (id) => navLinks.forEach(link =>
+                link.classList.toggle('active', link.dataset.section === id));
+            setActive('missioni');
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) setActive(entry.target.id);
+                });
+            }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+            sectionIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) observer.observe(el);
+            });
+        })();
 
         window.doLogout = async () => {
             await signOut(auth);
