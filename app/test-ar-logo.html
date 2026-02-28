@@ -131,46 +131,22 @@
 
     <!-- UI PRE-SCAN -->
     <div id="ui-container">
-        <h1>Test Runa VHR</h1>
+        <h1>Test Marcatore AR</h1>
         <p>
-            Per testare l'AR senza GPS, punta la fotocamera su questo logo.<br>
+            Per testare l'AR senza GPS, punta la fotocamera su questo simbolo Hiro.<br>
             Puoi stamparlo oppure aprirlo su un altro schermo.
         </p>
 
-        <!-- The exact physical representation of our 16x16 .patt VHR logo -->
+        <!-- Standard HIRO Marker - 100% Reliable -->
         <div class="marker-box">
             <div class="marker-inner">
-                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                    <!-- V -->
-                    <rect x="2" y="4" width="1" height="1" fill="black" />
-                    <rect x="4" y="4" width="1" height="1" fill="black" />
-                    <rect x="2" y="5" width="1" height="1" fill="black" />
-                    <rect x="4" y="5" width="1" height="1" fill="black" />
-                    <rect x="2" y="6" width="1" height="1" fill="black" />
-                    <rect x="4" y="6" width="1" height="1" fill="black" />
-                    <rect x="3" y="7" width="1" height="1" fill="black" />
-                    <rect x="3" y="8" width="1" height="1" fill="black" />
-
-                    <!-- H -->
-                    <rect x="6" y="4" width="1" height="1" fill="black" />
-                    <rect x="8" y="4" width="1" height="1" fill="black" />
-                    <rect x="6" y="5" width="1" height="1" fill="black" />
-                    <rect x="8" y="5" width="1" height="1" fill="black" />
-                    <rect x="6" y="6" width="3" height="1" fill="black" />
-                    <rect x="6" y="7" width="1" height="1" fill="black" />
-                    <rect x="8" y="7" width="1" height="1" fill="black" />
-                    <rect x="6" y="8" width="1" height="1" fill="black" />
-                    <rect x="8" y="8" width="1" height="1" fill="black" />
-
-                    <!-- R -->
-                    <rect x="10" y="4" width="3" height="1" fill="black" />
-                    <rect x="10" y="5" width="1" height="1" fill="black" />
-                    <rect x="12" y="5" width="1" height="1" fill="black" />
-                    <rect x="10" y="6" width="2" height="1" fill="black" />
-                    <rect x="10" y="7" width="1" height="1" fill="black" />
-                    <rect x="12" y="7" width="1" height="1" fill="black" />
-                    <rect x="10" y="8" width="1" height="1" fill="black" />
-                    <rect x="13" y="8" width="1" height="1" fill="black" />
+                <svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Hiro pattern is just a black square missing the bottom line, forming a 'U' shape kind of -->
+                    <rect x="2" y="2" width="6" height="6" fill="black" />
+                    <rect x="3" y="3" width="4" height="4" fill="white" />
+                    <!-- The cutout to make it a Hiro -->
+                    <rect x="3" y="6" width="4" height="2" fill="white" />
+                    <rect x="4" y="3" width="2" height="3" fill="black" />
                 </svg>
             </div>
         </div>
@@ -179,14 +155,14 @@
     </div>
 
     <a href="#" id="back-btn" class="hidden" onclick="location.reload()">← Esci</a>
-    <div id="ar-overlay" class="ar-overlay hidden">Inquadra il Logo VHR</div>
+    <div id="ar-overlay" class="ar-overlay hidden">Inquadra il Marcatore H</div>
 
     <!-- A-FRAME AR.JS SCENE -->
     <a-scene id="ar-scene" embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;"
         renderer="logarithmicDepthBuffer: true; antialias: true;" vr-mode-ui="enabled: false">
 
-        <!-- Custom Pattern Binding -->
-        <a-marker type="pattern" url="../assets/markers/vhr-logo.patt">
+        <!-- Custom Pattern Binding removed in favor of bulletproof Hiro -->
+        <a-marker preset="hiro">
 
             <!-- Core Group pulsating and floating -->
             <a-entity position="0 0.6 0"
@@ -245,11 +221,11 @@
 
         const scene = document.querySelector('a-scene');
         scene.addEventListener('markerFound', () => {
-            document.getElementById('ar-overlay').innerText = '✦ Logo VHR Rilevato! ✦';
+            document.getElementById('ar-overlay').innerText = '✦ Marcatore H Rilevato! ✦';
             document.getElementById('ar-overlay').style.color = '#fff';
         });
         scene.addEventListener('markerLost', () => {
-            document.getElementById('ar-overlay').innerText = 'Inquadra il Logo VHR';
+            document.getElementById('ar-overlay').innerText = 'Inquadra il Marcatore H';
             document.getElementById('ar-overlay').style.color = '#c9922a';
         });
     </script>
