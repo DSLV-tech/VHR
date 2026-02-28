@@ -140,8 +140,14 @@
         <!-- Standard HIRO Marker - 100% Reliable -->
         <div class="marker-box" style="padding:0; background:none;">
             <div class="marker-inner" style="background:none;">
-                <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png"
-                    alt="Hiro Marker" style="width: 100%; height: 100%; object-fit: contain; display: block;" />
+                <!-- Uruz Rune mathematically matched to uruz.patt -->
+                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"
+                    style="width: 100%; height: 100%; object-fit: contain; display: block; border: 4px solid black; box-sizing: border-box; background: white; padding: 1px;">
+                    <!-- The exact 16x16 geometry corresponding to uruz.patt -->
+                    <rect x="4" y="2" width="2" height="12" fill="black" />
+                    <rect x="10" y="5" width="2" height="7" fill="black" />
+                    <polygon points="4,2 6,2 12,5 10,5" fill="black" />
+                </svg>
             </div>
         </div>
 
@@ -156,7 +162,7 @@
         renderer="logarithmicDepthBuffer: true; antialias: true;" vr-mode-ui="enabled: false">
 
         <!-- Custom Pattern Binding removed in favor of bulletproof Hiro -->
-        <a-marker preset="hiro">
+        <a-marker type="pattern" url="../assets/markers/uruz.patt">
 
             <!-- Core Group pulsating and floating -->
             <a-entity position="0 0.6 0"
