@@ -499,9 +499,34 @@
                     Continua con Google
                 </button>
             </div>
+
+            <!-- ADMIN PANEL -->
+            <div class="panel" id="panel-admin">
+                <div style="text-align:center; margin-bottom: 20px;">
+                    <span style="font-size: 30px;">🗝️</span>
+                    <h3 style="color: var(--gold); font-family: 'Cinzel', serif; margin-top:10px;">Accesso Master</h3>
+                    <p style="font-size: 12px; color: var(--mist); margin-top:5px;">Area riservata all'amministratore
+                        supremo.</p>
+                </div>
+                <div class="form-group">
+                    <label for="admin-email">Email di Sistema</label>
+                    <input type="email" id="admin-email" placeholder="Email Admin">
+                </div>
+                <div class="form-group">
+                    <label for="admin-pass">Password</label>
+                    <input type="password" id="admin-pass" placeholder="••••••••">
+                </div>
+                <button class="btn-submit"
+                    style="background: linear-gradient(135deg, #a41919, #590909); color: #fff; margin-top: 10px;"
+                    onclick="doAdminLogin(this)">Sblocca Pannello di Controllo</button>
+            </div>
         </div>
 
-        <div class="back-link"><a href="onboarding.html">← Torna alla Home</a></div>
+        <div class="back-link" style="display:flex; justify-content:center; gap: 12px; align-items:center;">
+            <a href="onboarding.html">← Torna alla Home</a>
+            <span style="color:var(--mist); opacity:0.3;">|</span>
+            <a href="#" onclick="switchTab('admin'); return false;">Area Riservata</a>
+        </div>
     </div>
 
     <script type="module">
@@ -547,6 +572,30 @@
                 redirectByRole(snap.exists() ? snap.data().role : 'player');
             } catch (e) {
                 console.error("Login Error: ", e);
+                showMsg(friendlyError(e.code));
+                if (btn) btn.disabled = false;
+            }
+        };
+
+        // Admin specific login
+        window.doAdminLogin = async (btn) => {
+            const email = document.getElementById('admin-email').value.trim();
+            const pass = document.getElementById('admin-pass').value;
+            if (!email || !pass) { showMsg('Inserisci credenziali Master.'); return; }
+            if (btn) btn.disabled = true;
+            showMsg('Verifica privilegi di sistema…', 'loading');
+            try {
+                const cred = await signInWithEmailAndPassword(auth, email, pass);
+                const snap = await getDoc(doc(db, 'users', cred.user.uid));
+                if (snap.exists() && snap.data().role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    showMsg('Accesso negato: non sei un amministratore certificato.');
+                    await auth.signOut(); // Log them back out if they aren't admin
+                    if (btn) btn.disabled = false;
+                }
+            } catch (e) {
+                console.error("Admin Login Error: ", e);
                 showMsg(friendlyError(e.code));
                 if (btn) btn.disabled = false;
             }
@@ -624,8 +673,14 @@
         function switchTab(tab) {
             document.getElementById('panel-login').classList.toggle('active', tab === 'login');
             document.getElementById('panel-register').classList.toggle('active', tab === 'register');
-            document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-            document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+            const adminPanel = document.getElementById('panel-admin');
+            if (adminPanel) adminPanel.classList.toggle('active', tab === 'admin');
+
+            const tabLogin = document.getElementById('tab-login');
+            if (tabLogin) tabLogin.classList.toggle('active', tab === 'login');
+            const tabReg = document.getElementById('tab-register');
+            if (tabReg) tabReg.classList.toggle('active', tab === 'register');
+
             document.getElementById('msg').style.display = 'none';
         }
         // Auto-switch if URL has ?mode=register
@@ -635,8 +690,10 @@
         window.selectRole = function (role) {
             document.getElementById('reg-role').value = role;
             const cards = document.querySelectorAll('.role-card');
-            cards[0].classList.toggle('active', role === 'player');
-            cards[1].classList.toggle('active', role === 'merchant');
+            if (cards.length >= 2) {
+                cards[0].classList.toggle('active', role === 'player');
+                cards[1].classList.toggle('active', role === 'merchant');
+            }
         }
     </script>
 </body>
