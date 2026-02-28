@@ -4,18 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vercelli Hidden Runes - Dashboard Applicazione</title>
+    <title>Vercelli Hidden Runes — Inizia l'Avventura</title>
+    <meta name="description"
+        content="Esplora Vercelli come non hai mai fatto. Risolvi enigmi runici, sblocca segreti e vinci premi reali nel centro storico.">
     <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
         rel="stylesheet">
     <style>
-        body {
-            background-color: #0d1117;
-            color: #f2e8d0;
-            font-family: 'EB Garamond', serif;
+        :root {
+            --ink: #1a1209;
+            --gold: #c9922a;
+            --gold-lt: #e8b84b;
+            --parchment: #f2e8d0;
+            --mist: #8a7d65;
+            --stone: #3d3528;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
             margin: 0;
-            padding: 40px;
-            text-align: center;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: 'EB Garamond', Georgia, serif;
+            overflow-x: hidden;
             opacity: 0;
             animation: fadeIn 0.8s forwards;
         }
@@ -26,551 +47,706 @@
             }
         }
 
-        h1 {
-            font-family: 'Cinzel', serif;
-            color: #c9922a;
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            color: #8a7d65;
-            margin-bottom: 50px;
-            font-style: italic;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background: #161b22;
-            border: 1px solid rgba(201, 146, 42, 0.3);
-            padding: 30px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #f2e8d0;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card:hover {
-            box-shadow: 0 0 20px rgba(201, 146, 42, 0.2);
-            border-color: #c9922a;
-            transform: translateY(-5px);
-            background: #1c2128;
-        }
-
-        .card h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 1.4em;
-            color: #e8b84b;
-            margin: 0 0 10px 0;
-        }
-
-        .card p {
-            margin: 0;
-            font-size: 1em;
-            color: rgba(242, 232, 208, 0.7);
-        }
-
-        .action-container {
-            margin-top: 60px;
-            padding-top: 40px;
-            border-top: 1px solid rgba(201, 146, 42, 0.2);
-        }
-
-        .action-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 32px;
-            background: rgba(201, 146, 42, 0.1);
-            color: #e8b84b;
-            border: 1px solid #c9922a;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 1.2em;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            transition: all 0.3s;
-        }
-
-        .action-button:hover {
-            background: #c9922a;
-            color: #0d1117;
-            box-shadow: 0 0 25px rgba(201, 146, 42, 0.4);
-        }
-
-        /* Rune Frame */
+        /* Grain */
         body::before {
             content: '';
             position: fixed;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            border: 2px solid rgba(201, 146, 42, 0.15);
+            inset: 0;
+            z-index: 0;
             pointer-events: none;
-            z-index: -1;
-            border-radius: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.4;
         }
 
-        body::after {
-            content: 'ᚢ ᚺ ᚱ ᚠ ᚡ ᚢ ᚣ ᚤ ᚥ ᚦ ᚧ ᚨ ᚩ ᚪ ᚫ ᚬ ᚭ ᚮ ᚯ ᚰ ᚱ ᚲ ᚳ ᚴ ᚵ ᚶ ᚷ ᚸ ᚹ ᚺ ᚻ ᚼ ᚽ ᚾ ᚿ ᛀ ᛁ ᛂ ᛃ ᛄ ᛅ ᛆ ᛇ ᛈ ᛉ ᛊ ᛋ ᛌ ᛍ ᛎ ᛏ ᛐ ᛑ ᛒ ᛓ ᛔ ᛕ ᛖ ᛗ ᛘ ᛙ ᛚ ᛛ ᛜ ᛝ ᛞ ᛟ ᛠ ᛡ ᛢ ᛣ ᛤ ᛥ ᛦ ᛧ ᛨ ᛩ ᛪ';
+        /* ── NAV ── */
+        nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: -2;
-            opacity: 0.03;
-            font-size: 24px;
-            color: #c9922a;
-            overflow: hidden;
-            word-wrap: break-word;
-            line-height: 2;
-            text-align: justify;
-            animation: pulseRunes 8s infinite alternate ease-in-out;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 48px;
+            background: rgba(26, 18, 9, 0.9);
+            border-bottom: 1px solid rgba(201, 146, 42, 0.2);
         }
 
-        @keyframes pulseRunes {
-            0% {
-                opacity: 0.02;
-                transform: scale(1);
-            }
+        .nav-brand {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            letter-spacing: 0.22em;
+            color: var(--gold);
+            text-transform: uppercase;
+            text-decoration: none;
+        }
 
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            color: var(--mist);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color .2s;
+        }
+
+        .nav-link:hover {
+            color: var(--gold-lt);
+        }
+
+        .nav-cta {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            color: var(--ink);
+            background: var(--gold);
+            padding: 8px 22px;
+            border-radius: 2px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: background .2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold-lt);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 32px 60px;
+            background: radial-gradient(ellipse at center bottom, rgba(201, 146, 42, 0.08) 0%, transparent 70%);
+        }
+
+        /* Rune ring animation */
+        .hero-logo {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 36px;
+            filter: drop-shadow(0 0 20px rgba(201, 146, 42, 0.4));
+        }
+
+        .logo-ring-anim {
+            animation: rotateSlow 30s linear infinite;
+            transform-origin: center;
+        }
+
+        @keyframes rotateSlow {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hero-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.35em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: 0.04em;
+            color: var(--parchment);
+            margin-bottom: 10px;
+        }
+
+        .hero-title span {
+            color: var(--gold);
+        }
+
+        .hero-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.28em;
+            color: var(--mist);
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .hero-desc {
+            max-width: 540px;
+            font-style: italic;
+            font-size: 1.15em;
+            color: rgba(242, 232, 208, 0.7);
+            line-height: 1.9;
+            margin-bottom: 44px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+            padding: 15px 44px;
+            border-radius: 2px;
+            text-decoration: none;
+            box-shadow: 0 0 30px rgba(201, 146, 42, 0.25);
+            transition: all .3s;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 50px rgba(201, 146, 42, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold);
+            padding: 14px 32px;
+            border: 1px solid rgba(201, 146, 42, 0.4);
+            border-radius: 2px;
+            text-decoration: none;
+            transition: all .3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            background: rgba(201, 146, 42, 0.06);
+        }
+
+        /* Scroll indicator */
+        .scroll-hint {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.3em;
+            color: var(--mist);
+            opacity: 0.5;
+            text-transform: uppercase;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
             100% {
-                opacity: 0.06;
-                transform: scale(1.02);
-            }
-        }
-
-        /* Gem Assistant */
-        #gem-assistant {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-            z-index: 1000;
-            animation: floatGem 4s ease-in-out infinite;
-            filter: drop-shadow(0 0 15px rgba(201, 146, 42, 0.6));
-            transition: transform 0.3s;
-        }
-
-        #gem-assistant:hover {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 25px rgba(201, 146, 42, 0.9));
-        }
-
-        @keyframes floatGem {
-            0% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translateX(-50%) translateY(0)
             }
 
             50% {
-                transform: translateY(-15px) rotate(5deg);
-            }
-
-            100% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translateX(-50%) translateY(6px)
             }
         }
 
-        /* Tutorial Overlay & Tooltips */
-        #tutorial-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(13, 17, 23, 0.85);
-            z-index: 900;
-            display: none;
-            backdrop-filter: blur(3px);
-        }
-
-        .tutorial-active .card {
-            pointer-events: none;
-            opacity: 0.3;
-        }
-
-        .tutorial-active .card.highlighted {
-            opacity: 1;
-            z-index: 950;
+        /* ── HOW IT WORKS ── */
+        .section {
             position: relative;
-            box-shadow: 0 0 30px rgba(201, 146, 42, 0.8);
-            transform: scale(1.05);
-            pointer-events: auto;
+            z-index: 1;
+            padding: 100px 48px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
-        .tutorial-dialog {
-            position: absolute;
-            background: #161b22;
-            border: 2px solid #c9922a;
-            border-radius: 8px;
-            padding: 20px;
-            width: 300px;
-            z-index: 960;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            color: #f2e8d0;
-            text-align: left;
+        .section+.section {
+            border-top: 1px solid rgba(201, 146, 42, 0.1);
         }
 
-        .tutorial-dialog::after {
-            content: '';
-            position: absolute;
-            border-style: solid;
-        }
-
-        /* Top pointer */
-        .tutorial-dialog.pointer-top::after {
-            top: -10px;
-            left: 50%;
-            margin-left: -10px;
-            border-width: 0 10px 10px 10px;
-            border-color: transparent transparent #c9922a transparent;
-        }
-
-        /* Bottom pointer */
-        .tutorial-dialog.pointer-bottom::after {
-            bottom: -10px;
-            left: 50%;
-            margin-left: -10px;
-            border-width: 10px 10px 0 10px;
-            border-color: #c9922a transparent transparent transparent;
-        }
-
-        .dialog-title {
-            color: #e8b84b;
+        .sec-eyebrow {
             font-family: 'Cinzel', serif;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(201, 146, 42, 0.3);
-            padding-bottom: 5px;
-        }
-
-        .dialog-text {
-            font-size: 0.95em;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-
-        .dialog-btn {
-            background: #c9922a;
-            color: #0d1117;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            display: block;
-            width: 100%;
-            transition: background 0.2s;
-        }
-
-        .dialog-btn:hover {
-            background: #e8b84b;
-        }
-
-        /* Minigame Counter */
-        #gem-counter {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(22, 27, 34, 0.9);
-            border: 1px solid #c9922a;
-            padding: 8px 16px;
-            border-radius: 20px;
-            color: #e8b84b;
-            font-family: 'Cinzel', serif;
-            font-size: 14px;
-            z-index: 1000;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 0 15px rgba(201, 146, 42, 0.2);
+            gap: 12px;
         }
 
-        .mini-gem {
-            width: 16px;
-            height: 16px;
+        .sec-eyebrow::after {
+            content: '';
+            flex: 1;
+            max-width: 50px;
+            height: 1px;
+            background: var(--gold);
+            opacity: .4;
+        }
+
+        .sec-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 700;
+            color: var(--parchment);
+            margin-bottom: 10px;
+        }
+
+        .sec-desc {
+            color: var(--mist);
+            font-style: italic;
+            max-width: 520px;
+            margin-bottom: 56px;
+        }
+
+        /* Steps */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .step-card {
+            padding: 32px 28px;
+            border: 1px solid rgba(201, 146, 42, 0.15);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.02);
+            transition: border-color .3s, transform .3s;
+        }
+
+        .step-card:hover {
+            border-color: rgba(201, 146, 42, 0.35);
+            transform: translateY(-4px);
+        }
+
+        .step-num {
+            font-family: 'Cinzel', serif;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            opacity: 0.7;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .step-icon {
+            font-size: 2em;
+            margin-bottom: 14px;
+        }
+
+        .step-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.05em;
+            color: var(--parchment);
+            margin-bottom: 10px;
+        }
+
+        .step-text {
+            font-style: italic;
+            color: rgba(242, 232, 208, 0.65);
+            font-size: 0.95em;
+            line-height: 1.75;
+        }
+
+        /* ── MAP SECTION ── */
+        .map-box {
+            border: 1px solid rgba(201, 146, 42, 0.2);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-box::before {
+            content: 'ᚢᚺᚱᚷᛖᛚᚢᚺᚱᚷᛖᛚᚢᚺᚱ';
+            position: absolute;
+            font-size: 60px;
+            color: var(--gold);
+            opacity: 0.03;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            letter-spacing: 0.5em;
+        }
+
+        .map-badge {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid rgba(201, 146, 42, 0.3);
+            padding: 4px 14px;
+            margin-bottom: 20px;
+        }
+
+        .map-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3em;
+            color: var(--parchment);
+            margin-bottom: 12px;
+        }
+
+        .map-text {
+            font-style: italic;
+            color: var(--mist);
+            max-width: 420px;
+            margin: 0 auto 32px;
+            line-height: 1.8;
+        }
+
+        .locations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .loc-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--mist);
+            opacity: 0.8;
+            padding: 6px 16px;
+            border: 1px solid rgba(201, 146, 42, 0.15);
+            border-radius: 2px;
+        }
+
+        /* ── MISSION PREVIEW ── */
+        .missions-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .mission-preview {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(201, 146, 42, 0.12);
+            border-radius: 4px;
+            padding: 24px 20px;
+            transition: border-color .3s, background .3s;
+        }
+
+        .mission-preview:hover {
+            border-color: rgba(201, 146, 42, 0.3);
+            background: rgba(201, 146, 42, 0.04);
+        }
+
+        .mp-element {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .mp-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95em;
+            color: var(--parchment);
+            margin-bottom: 6px;
+        }
+
+        .mp-xp {
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            opacity: 0.7;
+        }
+
+        .mp-diff {
+            float: right;
+            font-size: 10px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.1em;
+            color: var(--mist);
+        }
+
+        /* ── CTA BOTTOM ── */
+        .cta-bottom {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 100px 32px;
+            background: radial-gradient(ellipse at center, rgba(201, 146, 42, 0.07) 0%, transparent 70%);
+        }
+
+        .cta-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-title em {
+            color: var(--gold);
+            font-style: normal;
+        }
+
+        .cta-text {
+            font-style: italic;
+            color: var(--mist);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 48px;
+            border-top: 1px solid rgba(201, 146, 42, 0.1);
+            color: var(--mist);
+            font-size: 0.82em;
+            font-style: italic;
+        }
+
+        .footer-rune {
+            letter-spacing: 1em;
+            opacity: 0.3;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        /* Fade animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media(max-width:700px) {
+            nav {
+                padding: 14px 20px;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .hero {
+                padding: 80px 20px 60px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Gem Counter (Minigame) -->
-    <div id="gem-counter">
-        <svg class="mini-gem" viewBox="0 0 100 100">
-            <polygon points="50,5 90,35 90,65 50,95 10,65 10,35" fill="none" stroke="#e8b84b" stroke-width="4" />
-            <polygon points="50,15 75,35 50,80 25,35" fill="#e8b84b" opacity="0.6" />
-            <polygon points="50,15 75,35 50,55 25,35" fill="#f5d688" opacity="0.8" />
-        </svg>
-        Gemme Didattiche: <span id="gem-count">0</span>/5
-    </div>
+    <!-- NAV -->
+    <nav>
+        <a href="/" class="nav-brand">VHR · Vercelli Hidden Runes</a>
+        <div class="nav-links">
+            <a href="#come-funziona" class="nav-link">Come funziona</a>
+            <a href="#missioni" class="nav-link">Missioni</a>
+            <a href="app/login.html" class="nav-cta">Inizia</a>
+        </div>
+    </nav>
 
-    <!-- SVG Gem Assistant -->
-    <div id="gem-assistant" onclick="startTutorial()" title="Clicca per avviare la guida didattica">
-        <svg viewBox="0 0 100 100" width="80" height="80">
-            <!-- Outer Glow / Halo -->
-            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(201,146,42,0.3)" stroke-width="2"
-                stroke-dasharray="8 4">
-                <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s"
-                    repeatCount="indefinite" />
-            </circle>
-            <!-- Core Structure -->
-            <polygon points="50,5 90,40 50,95 10,40" fill="url(#gemGrad)" stroke="#e8b84b" stroke-width="2" />
-            <!-- Facets -->
-            <polygon points="50,5 90,40 50,55" fill="url(#gemGradLight)" />
-            <polygon points="50,5 10,40 50,55" fill="rgba(255,255,255,0.1)" />
-            <polygon points="50,55 90,40 50,95" fill="rgba(0,0,0,0.2)" />
-            <polygon points="50,55 10,40 50,95" fill="url(#gemGradDark)" />
-            <!-- Inner magic core -->
-            <circle cx="50" cy="45" r="10" fill="#fff" opacity="0.6">
-                <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" />
-            </circle>
+    <!-- HERO -->
+    <section class="hero">
+        <!-- Logo SVG Brand Identity -->
+        <svg class="hero-logo" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-                <linearGradient id="gemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#f5d688" />
+                <linearGradient id="g1" x1="75" y1="88" x2="185" y2="168" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#e8b84b" />
                     <stop offset="50%" stop-color="#c9922a" />
-                    <stop offset="100%" stop-color="#8a5d15" />
-                </linearGradient>
-                <linearGradient id="gemGradLight" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
-                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.1" />
-                </linearGradient>
-                <linearGradient id="gemGradDark" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#000000" stop-opacity="0.1" />
-                    <stop offset="100%" stop-color="#000000" stop-opacity="0.6" />
+                    <stop offset="100%" stop-color="#e8b84b" />
                 </linearGradient>
             </defs>
+            <g class="logo-ring-anim">
+                <circle cx="130" cy="130" r="118" stroke="#c9922a" stroke-width="1.5" stroke-dasharray="4 6"
+                    opacity="0.5" />
+                <circle cx="130" cy="130" r="110" stroke="#c9922a" stroke-width="0.5" opacity="0.3" />
+                <line x1="130" y1="12" x2="130" y2="24" stroke="#c9922a" stroke-width="2" />
+                <line x1="130" y1="236" x2="130" y2="248" stroke="#c9922a" stroke-width="2" />
+                <line x1="12" y1="130" x2="24" y2="130" stroke="#c9922a" stroke-width="2" />
+                <line x1="236" y1="130" x2="248" y2="130" stroke="#c9922a" stroke-width="2" />
+                <circle cx="130" cy="20" r="2.5" fill="#c9922a" opacity="0.7" />
+                <circle cx="228" cy="75" r="2.5" fill="#c9922a" opacity="0.7" />
+                <circle cx="228" cy="185" r="2.5" fill="#c9922a" opacity="0.7" />
+                <circle cx="130" cy="240" r="2.5" fill="#c9922a" opacity="0.7" />
+                <circle cx="32" cy="185" r="2.5" fill="#c9922a" opacity="0.7" />
+                <circle cx="32" cy="75" r="2.5" fill="#c9922a" opacity="0.7" />
+            </g>
+            <circle cx="130" cy="130" r="88" stroke="#c9922a" stroke-width="1" opacity="0.25" />
+            <path d="M 75 88 L 99 158 L 130 100 L 161 158 L 185 88" stroke="url(#g1)" stroke-width="4" fill="none"
+                stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="110" y1="118" x2="150" y2="118" stroke="url(#g1)" stroke-width="4" stroke-linecap="round" />
+            <line x1="110" y1="88" x2="110" y2="158" stroke="url(#g1)" stroke-width="4" stroke-linecap="round" />
+            <line x1="150" y1="88" x2="150" y2="158" stroke="url(#g1)" stroke-width="4" stroke-linecap="round" />
+            <path d="M 150 118 Q 175 118 175 103 Q 175 88 150 88" stroke="url(#g1)" stroke-width="4" fill="none"
+                stroke-linecap="round" />
+            <line x1="150" y1="118" x2="178" y2="158" stroke="url(#g1)" stroke-width="4" stroke-linecap="round" />
+            <circle cx="110" cy="118" r="5" fill="#c9922a" opacity="0.9" />
+            <circle cx="150" cy="118" r="5" fill="#c9922a" opacity="0.9" />
+            <polygon points="130,170 136,180 130,190 124,180" fill="#c9922a" opacity="0.6" />
         </svg>
+
+        <p class="hero-eyebrow">ᚢ · ᚺ · ᚱ · Vercelli · Est. 2025</p>
+        <h1 class="hero-title">Vercelli<br><span>Hidden Runes</span></h1>
+        <p class="hero-subtitle">Esperienze di Gioco Aumentato</p>
+        <p class="hero-desc">
+            La città nasconde i suoi segreti da duemila anni.<br>
+            Rune celtiche, enigmi medievali, realtà aumentata.<br>
+            <em>Sei pronto a svelarli?</em>
+        </p>
+        <div class="hero-ctas">
+            <a href="app/login.html" class="btn-primary">Inizia la tua Missione</a>
+            <a href="#come-funziona" class="btn-secondary">Scopri come funziona</a>
+        </div>
+        <div class="scroll-hint">↓ Scorri per scoprire</div>
+    </section>
+
+    <!-- COME FUNZIONA -->
+    <div id="come-funziona">
+        <div class="section">
+            <p class="sec-eyebrow">01 · Il Sistema</p>
+            <h2 class="sec-title">Come funziona</h2>
+            <p class="sec-desc">In tre passi, dal tuo smartphone ai segreti millenari di Vercelli.</p>
+
+            <div class="steps-grid">
+                <div class="step-card fade-up">
+                    <div class="step-num">Passo 01</div>
+                    <div class="step-icon">🗺️</div>
+                    <div class="step-title">Scegli la tua Missione</div>
+                    <p class="step-text">Seleziona un percorso tra fuoco, acqua, terra e vento. Ogni elemento nasconde
+                        una storia diversa. La difficoltà è tua scelta.</p>
+                </div>
+                <div class="step-card fade-up">
+                    <div class="step-num">Passo 02</div>
+                    <div class="step-icon">📱</div>
+                    <div class="step-title">Esplora la Città</div>
+                    <p class="step-text">Raggiungi i luoghi storici, trova i marker runici e punta la fotocamera. La
+                        realtà si trasforma: appaiono le rune ancestrali.</p>
+                </div>
+                <div class="step-card fade-up">
+                    <div class="step-num">Passo 03</div>
+                    <div class="step-icon">⚔️</div>
+                    <div class="step-title">Risolvi e Rivendica</div>
+                    <p class="step-text">Rispondi all'enigma della runa, accumula XP e sblocca coupon reali dai
+                        commercianti del centro storico.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Tutorial Overlay -->
-    <div id="tutorial-overlay"></div>
-    <div id="tutorial-dialog" class="tutorial-dialog">
-        <div class="dialog-title" id="dialog-title">Benvenuto</div>
-        <div class="dialog-text" id="dialog-text">Testo tutorial</div>
-        <button class="dialog-btn" id="dialog-btn" onclick="nextTutorialStep()">Raccogli Gemma e Prosegui</button>
+    <!-- MAPPA -->
+    <div class="section">
+        <p class="sec-eyebrow">02 · Il Teatro</p>
+        <h2 class="sec-title">Il Centro Storico di Vercelli</h2>
+        <p class="sec-desc">Ogni angolo cela un enigma. Ogni pietra ha memoria.</p>
+        <div class="map-box fade-up">
+            <div class="map-badge">Fase I — Zona Centro</div>
+            <div class="map-title">6 Luoghi. 6 Misteri.</div>
+            <p class="map-text">
+                Dalla Basilica di Sant'Andrea alle risaie dei Libui, dalle antiche mura romane al Canale dei Segreti.
+                Vercelli è il tuo dungeon a cielo aperto.
+            </p>
+            <div class="locations">
+                <span class="loc-tag">🏛️ Basilica di Sant'Andrea</span>
+                <span class="loc-tag">💧 Canale dei Segreti</span>
+                <span class="loc-tag">🌿 Risaia dei Libui</span>
+                <span class="loc-tag">🏰 Le Antiche Mura</span>
+                <span class="loc-tag">⛪ Battistero di Sant'Eusebio</span>
+                <span class="loc-tag">🏪 Mercato Medievale</span>
+            </div>
+        </div>
     </div>
 
-    <h1>Vercelli Hidden Runes</h1>
-    <div class="subtitle">Dashboard MVP Principale</div>
-
-    <!-- APP SECTION -->
-    <div class="subtitle" style="margin-top: 0; margin-bottom: 20px; font-size: 0.9em;">🚀 App MVP — Avvia l'Esperienza
-    </div>
-    <div class="grid">
-        <a href="app/onboarding.html" class="card" style="border-color:rgba(201,146,42,0.5);" id="card-app1">
-            <h2>🏠 Entra nel Gioco</h2>
-            <p>Landing page — onboarding e registrazione giocatore</p>
-        </a>
-        <a href="app/dashboard-player.html" class="card" id="card-app2">
-            <h2>🗺️ Dashboard Giocatore</h2>
-            <p>Missioni, XP, badge e coupon sbloccati</p>
-        </a>
-        <a href="app/merchant-dashboard.html" class="card" id="card-app3">
-            <h2>🏪 Dashboard Commerciante</h2>
-            <p>Crea coupon e gestisci i premi</p>
-        </a>
-        <a href="app/admin.html" class="card" id="card-app4">
-            <h2>⚙️ Pannello Admin</h2>
-            <p>Approvazione commercianti e coupon</p>
-        </a>
-    </div>
-
-    <div class="subtitle" style="margin-top: 50px; margin-bottom: 20px; font-size: 0.9em;">📚 Documenti di Progetto
-    </div>
-    <div class="grid">
-        <a href="VHR_Brand_Identity.html" class="card" id="card-1">
-            <h2>Brand Identity</h2>
-            <p>Linee guida e sistema visivo</p>
-        </a>
-        <a href="VHR_Mission_Cards.html" class="card" id="card-2">
-            <h2>Missioni — Carte</h2>
-            <p>Prototipo sistema delle carte</p>
-        </a>
-        <a href="VHR_SOP_Collega_AI.html" class="card" id="card-3">
-            <h2>SOP per AI</h2>
-            <p>Standard operativi del progetto</p>
-        </a>
-        <a href="VHR_Universi_Narrativi.html" class="card" id="card-4">
-            <h2>Universi Narrativi</h2>
-            <p>I cinque mondi del Multiverso VHR</p>
-        </a>
-        <a href="VHR_Poster.html" class="card" id="card-5">
-            <h2>Locandina</h2>
-            <p>Poster promozionale ufficiale</p>
-        </a>
+    <!-- MISSIONI PREVIEW -->
+    <div id="missioni" class="section">
+        <p class="sec-eyebrow">03 · Le Missioni</p>
+        <h2 class="sec-title">Missioni disponibili</h2>
+        <p class="sec-desc">Fase I — Origini. Sei percorsi nascosti tra le pietre di Vercelli.</p>
+        <div class="missions-row">
+            <div class="mission-preview fade-up">
+                <div class="mp-element">🔥</div>
+                <div class="mp-name">La Torre del Fuoco</div>
+                <div><span class="mp-xp">850 XP</span><span class="mp-diff">Difficile</span></div>
+            </div>
+            <div class="mission-preview fade-up">
+                <div class="mp-element">💧</div>
+                <div class="mp-name">Il Canale dei Segreti</div>
+                <div><span class="mp-xp">420 XP</span><span class="mp-diff">Media</span></div>
+            </div>
+            <div class="mission-preview fade-up">
+                <div class="mp-element">🌿</div>
+                <div class="mp-name">La Risaia dei Libui</div>
+                <div><span class="mp-xp">280 XP</span><span class="mp-diff">Facile</span></div>
+            </div>
+            <div class="mission-preview fade-up">
+                <div class="mp-element">⚡</div>
+                <div class="mp-name">Le Antiche Mura</div>
+                <div><span class="mp-xp">1400 XP</span><span class="mp-diff">Mitica</span></div>
+            </div>
+            <div class="mission-preview fade-up">
+                <div class="mp-element">💧</div>
+                <div class="mp-name">Battistero di Sant'Eusebio</div>
+                <div><span class="mp-xp">260 XP</span><span class="mp-diff">Facile</span></div>
+            </div>
+            <div class="mission-preview fade-up">
+                <div class="mp-element">🌿</div>
+                <div class="mp-name">Il Mercato Medievale</div>
+                <div><span class="mp-xp">510 XP</span><span class="mp-diff">Media</span></div>
+            </div>
+        </div>
     </div>
 
-    <div class="action-container"
-        style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:40px;">
-        <a href="A4_Test_Print.html" class="action-button">
-            🖨️ Stampa Marker AR
-        </a>
-        <a href="app/login.html" class="action-button" style="background:rgba(201,146,42,0.2);">
-            🔐 Login / Registrati
-        </a>
+    <!-- CTA BOTTOM -->
+    <div class="cta-bottom">
+        <h2 class="cta-title">Pronto a diventare<br><em>Guardiano di Vercelli?</em></h2>
+        <p class="cta-text">Registrati gratuitamente. La prima missione è in omaggio.</p>
+        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+            <a href="app/login.html?mode=register" class="btn-primary">Crea il tuo Account</a>
+            <a href="app/login.html" class="btn-secondary">Hai già un account? Accedi</a>
+        </div>
     </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-rune">ᚢ · ᚺ · ᚱ</div>
+        Vercelli Hidden Runes · Vercelli, Piemonte · © 2025 VHR ·
+        <a href="app/login.html" style="color:var(--mist);">Accedi</a>
+    </footer>
 
     <script>
-        const tutorialSteps = [
-            {
-                title: "La Guida: Il Nucleo (1/5)",
-                text: "Salve, Guardiano! Sono l'Archivio Didattico, intrappolato in questa gemma di silicio.<br><br>Iniziamo dalla <b>Brand Identity</b>. Qui sono custodite le regole visive e tipografiche che danno forma e coerenza a tutto l'Universo VHR.",
-                targetId: "card-1"
-            },
-            {
-                title: "Il Cuore del Gioco (2/5)",
-                text: "Queste sono le <b>Missioni</b>. Il prototipo del nostro ecosistema AR.<br><br>Scoprirai antiche rune, bestie mitologiche da sconfiggere e tesori frammentati nel tempo. L'avventura comincia da qui.",
-                targetId: "card-2"
-            },
-            {
-                title: "Le Procedure Macchina (3/5)",
-                text: "Questo modulo contiene le <b>SOP (Ideali Operativi Standard)</b> per le IA come me.<br><br>Non ho permessi di amministratore per modificarle, ma ti illustreranno come collaborare al meglio con le macchine del Multiverso.",
-                targetId: "card-3"
-            },
-            {
-                title: "I Mondi Paralleli (4/5)",
-                text: "VHR non è solo Vercelli.<br><br>Negli <b>Universi Narrativi</b> esplorerai le cinque dimensioni che compongono il nostro Multiverso. Dalla magia oscura alla Sci-Fi avanzata.",
-                targetId: "card-4"
-            },
-            {
-                title: "Il Compendio Originale (5/5)",
-                text: "Infine, il <b>Master Document</b>.<br><br>Scarica il manoscritto originale del progetto. L'essenza grezza da cui tutto ha avuto origine.<br><br>Ora sei pronto!",
-                targetId: "card-5"
-            }
-        ];
-
-        let currentStep = -1;
-        let gemsCollected = 0;
-
-        function startTutorial() {
-            if (gemsCollected === 5) {
-                // If completely done just show a message
-                alert("La tua istruzione è completa. Hai raccolto tutte le Gemme della Conoscenza. L'Archivio è a tua disposizione.");
-                return;
-            }
-
-            // Start from 0 if not finished
-            document.body.classList.add('tutorial-active');
-            document.getElementById('tutorial-overlay').style.display = 'block';
-
-            // Reset state
-            gemsCollected = 0;
-            currentStep = -1;
-            updateGemCount();
-
-            nextTutorialStep();
-        }
-
-        function updateGemCount() {
-            document.getElementById('gem-count').textContent = gemsCollected;
-        }
-
-        function nextTutorialStep() {
-            if (currentStep >= 0) {
-                // Collect gem from previous step
-                gemsCollected++;
-                updateGemCount();
-
-                // Remove highlight from old card
-                const oldCard = document.getElementById(tutorialSteps[currentStep].targetId);
-                if (oldCard) oldCard.classList.remove('highlighted');
-            }
-
-            currentStep++;
-
-            if (currentStep >= tutorialSteps.length) {
-                endTutorial();
-                return;
-            }
-
-            const step = tutorialSteps[currentStep];
-            const targetEl = document.getElementById(step.targetId);
-
-            // Highlight new target
-            if (targetEl) {
-                targetEl.classList.add('highlighted');
-                positionDialog(targetEl, step);
-            }
-        }
-
-        function positionDialog(targetEl, step) {
-            const dialog = document.getElementById('tutorial-dialog');
-            const rect = targetEl.getBoundingClientRect();
-
-            document.getElementById('dialog-title').innerHTML = step.title;
-            document.getElementById('dialog-text').innerHTML = step.text;
-
-            // Posizionamento sotto la card
-            dialog.style.display = 'block';
-            dialog.classList.remove('pointer-bottom');
-            dialog.classList.add('pointer-top');
-
-            let topPos = rect.bottom + window.scrollY + 15;
-            let leftPos = rect.left + window.scrollX + (rect.width / 2) - 150;
-
-            // Se esce dallo schermo in basso, mettilo sopra
-            if (topPos + dialog.offsetHeight > window.innerHeight + window.scrollY) {
-                topPos = rect.top + window.scrollY - dialog.offsetHeight - 15;
-                dialog.classList.remove('pointer-top');
-                dialog.classList.add('pointer-bottom');
-            }
-
-            // Se esce ai lati
-            if (leftPos < 10) leftPos = 10;
-            if (leftPos + 300 > window.innerWidth) leftPos = window.innerWidth - 310;
-
-            dialog.style.top = topPos + 'px';
-            dialog.style.left = leftPos + 'px';
-
-            if (currentStep === tutorialSteps.length - 1) {
-                document.getElementById('dialog-btn').textContent = "Termina e Sblocca Archivio";
-            } else {
-                document.getElementById('dialog-btn').textContent = "Raccogli Gemma e Prosegui";
-            }
-        }
-
-        function endTutorial() {
-            document.body.classList.remove('tutorial-active');
-            document.getElementById('tutorial-overlay').style.display = 'none';
-            document.getElementById('tutorial-dialog').style.display = 'none';
-
-            // Clean up any stray highlights
-            document.querySelectorAll('.card.highlighted').forEach(c => c.classList.remove('highlighted'));
-
-            // Final pulse animation to gem counter
-            const counter = document.getElementById('gem-counter');
-            counter.style.transform = 'scale(1.2)';
-            counter.style.background = 'rgba(201,146,42,0.9)';
-            counter.style.color = '#000';
-            setTimeout(() => {
-                counter.style.transform = 'scale(1)';
-                counter.style.background = 'rgba(22, 27, 34, 0.9)';
-                counter.style.color = '#e8b84b';
-            }, 600);
-        }
+        // Scroll fade-up animation
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
     </script>
 </body>
 
