@@ -70,29 +70,43 @@
             flex-direction: column;
         }
 
-        /* Topbar */
+        /* Topbar / Overlay Elements */
         #ar-topbar {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             padding: 14px 20px;
             background: linear-gradient(180deg, rgba(26, 18, 9, 0.85) 0%, transparent 100%);
             pointer-events: auto;
         }
 
-        .ar-back {
-            font-family: 'Cinzel', serif;
-            font-size: 11px;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--gold);
-            background: rgba(26, 18, 9, 0.7);
-            border: 1px solid rgba(201, 146, 42, 0.4);
-            padding: 8px 18px;
-            border-radius: 2px;
-            cursor: pointer;
+        .btn-close-scanner {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(26, 18, 9, 0.85);
+            border: 1px solid rgba(201, 146, 42, 0.5);
+            color: var(--mist);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            cursor: pointer;
+            transition: all .2s;
+            pointer-events: auto;
+        }
+
+        .btn-close-scanner:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+            background: rgba(201, 146, 42, 0.15);
         }
 
         .ar-info {
@@ -618,7 +632,7 @@
             L'esperienza AR richiede la fotocamera del tuo smartphone.<br>
             Apri questa pagina da <strong>Chrome su Android</strong> oppure <strong>Safari su iPhone</strong>.
         </p>
-        <a href="mission.html" class="ce-btn">← Torna alla Missione</a>
+        <a href="javascript:history.back()" class="ce-btn">← Torna alla Missione</a>
     </div>
 
     <!-- ── GPS ERROR ── -->

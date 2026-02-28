@@ -112,23 +112,50 @@
             vertical-align: middle;
         }
 
-        .btn-logout {
-            font-family: 'Cinzel', serif;
-            font-size: 10px;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--mist);
-            border: 1px solid rgba(201, 146, 42, 0.2);
-            padding: 6px 16px;
-            background: none;
-            cursor: pointer;
-            border-radius: 2px;
-            transition: all .2s;
+        /* ── BOTTOM NAVIGATION ── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 7, 3, 0.95);
+            border-top: 1px solid rgba(201, 146, 42, 0.2);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 12px 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
         }
 
-        .btn-logout:hover {
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--mist);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color .2s;
+            cursor: pointer;
+            width: 33%;
+            background: none;
+            border: none;
+        }
+
+        .nav-item.active {
+            color: var(--gold-lt);
+        }
+
+        .nav-item:hover {
             color: var(--gold);
-            border-color: rgba(201, 146, 42, 0.4);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
         }
 
         /* ── LAYOUT ── */
@@ -137,6 +164,8 @@
             min-height: calc(100vh - 53px);
             position: relative;
             z-index: 1;
+            padding-bottom: 60px;
+            /* Space for bottom nav */
         }
 
         /* Sidebar */
@@ -774,6 +803,22 @@
 
         </main>
     </div>
+
+    <!-- ── BOTTOM NAVIGATION ── -->
+    <nav class="bottom-nav">
+        <a href="#missioni" class="nav-item active">
+            <span class="nav-icon">🗺️</span>
+            Missioni
+        </a>
+        <a href="#coupon" class="nav-item">
+            <span class="nav-icon">🎫</span>
+            Coupon
+        </a>
+        <button class="nav-item" onclick="doLogout()">
+            <span class="nav-icon">🚪</span>
+            Esci
+        </button>
+    </nav>
 
     <script type="module">
         import { auth, db } from '../firebase/firebase-config.js';
