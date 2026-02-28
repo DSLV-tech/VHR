@@ -1,11 +1,17 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "legacy_vhr_v1",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
       "Vercelli_Hidden_Runes_Progetto.docx"
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/app/onboarding.html"
+      }
     ]
   },
   "firestore": {
