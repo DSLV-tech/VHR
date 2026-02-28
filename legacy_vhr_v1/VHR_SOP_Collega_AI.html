@@ -44,7 +44,7 @@
       top: 0;
       z-index: 200;
       background: rgba(13, 17, 23, 0.95);
-      
+
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -745,49 +745,51 @@
             <th>Note</th>
           </tr>
           <tr>
+            <td>Next.js (React)</td>
+            <td>14+ (App Router)</td>
+            <td>Frontend Core</td>
+            <td>Rimpiazza il vecchio HTML/JS Vanilla</td>
+          </tr>
+          <tr>
+            <td>Tailwind CSS</td>
+            <td>3.x / 4.x</td>
+            <td>Stilizzazione base</td>
+            <td>Rimpiazza i file CSS globali e inline</td>
+          </tr>
+          <tr>
+            <td>A-Frame</td>
+            <td>1.4+</td>
+            <td>Renderer AR 3D</td>
+            <td>Componenti custom registrati lato client</td>
+          </tr>
+          <tr>
             <td>AR.js</td>
-            <td>3.x</td>
+            <td>3.3.2</td>
             <td>WebAR con marker</td>
             <td>Marker-based, no GPS per AR</td>
           </tr>
           <tr>
-            <td>Three.js</td>
-            <td>r128+</td>
-            <td>Rendering 3D in AR</td>
-            <td>Non usare CapsuleGeometry (r142+)</td>
-          </tr>
-          <tr>
-            <td>GSAP</td>
-            <td>3.x</td>
-            <td>Animazioni UI</td>
-            <td>ScrollTrigger per onboarding</td>
-          </tr>
-          <tr>
-            <td>Firebase</td>
+            <td>Firebase SDK</td>
             <td>10.x</td>
-            <td>Backend completo</td>
-            <td>Auth, Firestore, Storage, Functions, FCM</td>
+            <td>Backend web client</td>
+            <td>Auth e Firestore via Context API</td>
           </tr>
           <tr>
             <td>Stripe</td>
             <td>Latest</td>
             <td>Pagamenti</td>
-            <td>Sempre via Cloud Functions</td>
-          </tr>
-          <tr>
-            <td>HTML5/CSS3/JS</td>
-            <td>ES2022</td>
-            <td>Frontend base</td>
-            <td>No framework JS in MVP</td>
+            <td>Via Route Handlers Next.js / Cloud Functions</td>
           </tr>
         </table>
 
         <div class="callout warn">
-          <span class="callout-icon">⚠️</span>
+          <span class="callout-icon">💡</span>
           <div class="callout-body">
-            <strong>Compatibilità AR.js</strong>
-            AR.js funziona correttamente su Chrome (Android) e Safari (iOS 11.3+). Non supporta Firefox mobile.
-            Implementare sempre una pagina di controllo compatibilità prima di avviare la sessione AR.
+            <strong>Nuovo Paradigma React / Next.js</strong>
+            Il progetto sta migrando dalla vecchia architettura "Vanilla HTML/CSS/JS" a una struttura modulare
+            React/Next.js (App Router).
+            Tutto il codice aggiornato si trova nella directory <code>/vhr-web</code>. Le operazioni di manipolazione
+            DOM (es. <code>document.getElementById</code>) sono deprecate in favore dello State Management di React.
           </div>
         </div>
       </section>
