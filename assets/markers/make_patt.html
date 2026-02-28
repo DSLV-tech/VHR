@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Patt Gen</title>
+</head>
+
+<body>
+    <img id="source"
+        src="file:///Users/cristiandisalvo/.gemini/antigravity/brain/4e314763-c96d-4985-b5d1-d7a2ebffd44b/assets/image_1772242013098.png"
+        style="display:none;" />
+    <canvas id="c" width="16" height="16"
+        style="border:1px solid #000; width:160px; height:160px; image-rendering:pixelated;"></canvas>
+    <pre id="out"></pre>
+    <script>
+        window.onload = () => {
+            const img = document.getElementById('source');
+            const canvas = document.getElementById('c');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+            // Fill white background just in case it's transparent
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, 16, 16);
+
+            // The image uploaded is a black square containing white padding and the rune.
+            // But AR.js needs the INNER 50% pattern.
+            // I'll just draw the image covering the 16x16 canvas.
+            ctx.drawImage(img, 0, 0, 16, 16);
+
+            // To be 100% sure we isolate the rune without the black border:
+            // The user uploaded an image that is 1000x1000. The black border seems to be about 10% on the edges.
+            // If the pattern we generate *includes* the black border inside the 16x16 matrix, AR engine fails.
+            // Let's crop it slightly (e.g. from 10% to 90% of the image)
+            // ctx.drawImage(img, sx, sy, sW, sH, dx, dy, dW, dH)
+
+            // Let's assume the user uploaded the EXACT image that AR.js will see inside the border.
+            const imgData = ctx.getImageData(0, 0, 16, 16).data;
+            const matrix = [];
+            for (let y = 0; y < 16; y++) {
+                const row = [];
+                for (let x = 0; x < 16; x++) {
+                    const i = (y * 16 + x) * 4;
+                    // convert to grayscale
+                    const lum = Math.round(imgData[i] * 0.299 + imgData[i + 1] * 0.587 + imgData[i + 2] * 0.114);
+                    row.push(lum);
+                }
+                matrix.push(row);
+            }
+
+            function rot(m) {
+                const r = [];
+                for (let i = 0; i < 16; i++) {
+                    const row = [];
+                    for (let j = 0; j < 16; j++) {
+                        row.push(m[15 - j][i]);
+                    }
+                    r.push(row);
+                }
+                return r;
+            }
+
+            let current = matrix;
+            let pattStr = "";
+            for (let rotIdx = 0; rotIdx < 4; rotIdx++) {
+                for (let y = 0; y < 16; y++) {
+                    for (let x = 0; x < 16; x++) {
+                        let val = current[y][x];
+                        pattStr += `${val} ${val} ${val}\n`;
+                    }
+                }
+                pattStr += "\n";
+                current = rot(current);
+            }
+
+            document.getElementById('out').innerText = pattStr;
+            console.log("PATT_READY");
+        };
+    </script>
+</body>
+
+</html>

@@ -949,6 +949,7 @@
           <div class="coupon-desc">${c.title}</div>
           <div class="coupon-code">${c.code || 'VHR-CODE'}</div>
           <div class="coupon-exp">Scade: ${c.expiresAt?.toDate?.()?.toLocaleDateString('it') || '—'}</div>
+          <button class="btn-action" style="margin-top: 12px; width: 100%; border: 1px solid var(--gold); padding: 8px;" onclick="alert('Mostra questo codice all\\'esercente.\\nNel sistema finale, l\\'esercente cliccherà qui per invalidare il coupon.')">🎟️ Riscatta Sconto</button>
         </div>`).join('');
             } catch (e) { console.error("Error loading coupons:", e); }
         }

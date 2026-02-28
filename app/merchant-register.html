@@ -15,7 +15,7 @@
             --gold-lt: #e8b84b;
             --parchment: #f2e8d0;
             --mist: #8a7d65;
-            --danger: #cf6679;
+            --danger: #b41e1e;
         }
 
         *,
@@ -43,38 +43,46 @@
             inset: 0;
             z-index: 0;
             pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-            opacity: 0.4;
+            background: radial-gradient(ellipse at center, rgba(201, 146, 42, 0.06) 0%, transparent 70%);
         }
 
-        .auth-card {
-            background: rgba(26, 18, 9, 0.95);
-            border: 1px solid rgba(201, 146, 42, 0.2);
-            padding: 40px;
-            width: 100%;
-            max-width: 480px;
-            border-radius: 4px;
+        .login-wrap {
             position: relative;
             z-index: 1;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
         }
 
-        .logo {
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-title {
             font-family: 'Cinzel Decorative', serif;
-            font-size: 24px;
-            color: var(--gold);
-            text-align: center;
-            margin-bottom: 8px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--parchment);
         }
 
-        .subtitle {
+        .login-title span {
+            color: var(--gold);
+        }
+
+        .login-subtitle {
             font-family: 'Cinzel', serif;
-            font-size: 11px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.28em;
             color: var(--mist);
-            text-align: center;
-            margin-bottom: 32px;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(201, 146, 42, 0.18);
+            border-radius: 4px;
+            padding: 36px 32px;
         }
 
         .form-group {
@@ -85,184 +93,229 @@
             display: block;
             font-family: 'Cinzel', serif;
             font-size: 10px;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             color: var(--mist);
             margin-bottom: 8px;
         }
 
-        input {
+        input,
+        select {
             width: 100%;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(201, 146, 42, 0.2);
             border-radius: 2px;
             color: var(--parchment);
             font-family: 'EB Garamond', serif;
             font-size: 1.1em;
-            transition: all 0.2s;
-        }
-
-        input:focus {
+            transition: border-color .2s;
             outline: none;
-            border-color: rgba(201, 146, 42, 0.6);
-            background: rgba(255, 255, 255, 0.06);
+            appearance: none;
         }
 
-        button {
+        select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a7d65' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        select option {
+            background: var(--ink);
+            color: var(--parchment);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: rgba(201, 146, 42, 0.5);
+        }
+
+        input::placeholder {
+            color: var(--mist);
+            opacity: 0.6;
+        }
+
+        .btn-submit {
             width: 100%;
             padding: 14px;
-            margin-top: 10px;
-            font-family: 'Cinzel', serif;
-            font-size: 14px;
-            letter-spacing: 0.1em;
             background: linear-gradient(135deg, var(--gold-lt), var(--gold));
             color: var(--ink);
             border: none;
             border-radius: 2px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            transition: all .3s;
+            box-shadow: 0 0 20px rgba(201, 146, 42, 0.2);
+            margin-top: 10px;
         }
 
-        button:hover {
-            box-shadow: 0 0 20px rgba(201, 146, 42, 0.4);
+        .btn-submit:hover:not(:disabled) {
+            box-shadow: 0 0 40px rgba(201, 146, 42, 0.4);
             transform: translateY(-1px);
         }
 
-        button:disabled {
+        .btn-submit:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
-        #error-msg {
-            color: var(--danger);
-            font-size: 14px;
-            margin-top: 15px;
-            text-align: center;
-            font-style: italic;
+        .msg {
+            padding: 12px 16px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            margin-bottom: 16px;
+            display: none;
         }
 
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 24px;
-            font-family: 'Cinzel', serif;
-            font-size: 11px;
-            color: var(--mist);
-            text-decoration: none;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            transition: color 0.2s;
+        .msg.error {
+            background: rgba(180, 30, 30, 0.12);
+            border: 1px solid rgba(180, 30, 30, 0.3);
+            color: #ff8a8a;
         }
 
-        .back-link:hover {
-            color: var(--gold);
+        .msg.success {
+            background: rgba(50, 180, 80, 0.12);
+            border: 1px solid rgba(50, 180, 80, 0.3);
+            color: #8affa0;
+        }
+
+        /* Spinner for loading state */
+        .spinner {
+            display: none;
+            border: 2px solid rgba(26, 18, 9, 0.2);
+            border-top: 2px solid var(--ink);
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="auth-card">
-        <div class="logo">V.H.R</div>
-        <div class="subtitle">Registrazione Negoziante</div>
+    <div class="login-wrap">
+        <div class="login-header">
+            <h1 class="login-title">Vercellae <span>Hidden</span> Runes</h1>
+            <div class="login-subtitle">Termina Configurazione</div>
+        </div>
 
-        <p style="font-size: 0.95em; color: var(--mist); margin-bottom: 24px; text-align: center; line-height: 1.5;">
-            Unisciti al progetto Vercellae Hidden Runes.<br>Diventa una tappa del viaggio e attira nuovi clienti
-            offrendo ricompense ai Guardiani.
-        </p>
+        <div class="form-card">
+            <div id="msg" class="msg"></div>
 
-        <form id="merchant-form">
-            <div class="form-group">
-                <label>Nome Attività commerciale</label>
-                <input type="text" id="m-name" required placeholder="Es. Pizzeria Da Genoveffa">
-            </div>
-            <div class="form-group">
-                <label>Tipologia / Categoria</label>
-                <input type="text" id="m-category" required placeholder="Es. Ristorazione / Abbigliamento">
-            </div>
-            <div class="form-group">
-                <label>Indirizzo (facoltativo)</label>
-                <input type="text" id="m-address" placeholder="Es. Via Roma 12, Vercelli">
-            </div>
+            <p style="margin-bottom: 24px; font-size: 1.1em; color: var(--mist); text-align: center;">
+                Per favore, fornisci i dettagli della tua attività per completare la registrazione come partner.
+            </p>
 
-            <button type="submit" id="submit-btn" disabled>Crea Account Merchant</button>
-            <div id="error-msg">Compila i campi richiesti...</div>
-        </form>
-
-        <a href="login.html" class="back-link">← Torna al Login</a>
+            <form id="merchant-form">
+                <div class="form-group">
+                    <label for="shop-name">Nome Attività</label>
+                    <input type="text" id="shop-name" placeholder="Es. Pizzeria Da Franco" required>
+                </div>
+                <div class="form-group">
+                    <label for="shop-category">Categoria</label>
+                    <select id="shop-category" required>
+                        <option value="" disabled selected>Seleziona una categoria</option>
+                        <option value="Ristorazione">Ristorazione (Bar, Ristoranti, Gelaterie)</option>
+                        <option value="Abbigliamento">Abbigliamento</option>
+                        <option value="Cultura">Librerie e Cultura</option>
+                        <option value="Servizi">Servizi</option>
+                        <option value="Altro">Altro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="shop-address">Indirizzo</label>
+                    <input type="text" id="shop-address" placeholder="Es. Via Roma 1, Vercelli" required>
+                </div>
+                <button type="submit" class="btn-submit" id="submit-btn">
+                    <div class="spinner" id="spinner"></div>Invia Richiesta
+                </button>
+            </form>
+        </div>
     </div>
 
+    <!-- Firebase SDK -->
     <script type="module">
         import { auth, db } from '../firebase/firebase-config.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const btn = document.getElementById('submit-btn');
-        const form = document.getElementById('merchant-form');
-        const errMsg = document.getElementById('error-msg');
         let currentUser = null;
 
-        // Check auth status
         onAuthStateChanged(auth, user => {
-            if (user) {
-                currentUser = user;
-                btn.disabled = false;
-                errMsg.textContent = "";
-                errMsg.style.color = "var(--mist)";
-            } else {
+            if (!user) {
+                // If not logged in, they shouldn't be here
                 window.location.href = 'login.html';
+                return;
             }
+            currentUser = user;
         });
+
+        const form = document.getElementById('merchant-form');
+        const btn = document.getElementById('submit-btn');
+        const spinner = document.getElementById('spinner');
+        const msgBox = document.getElementById('msg');
+
+        function showMsg(text, type = 'error') {
+            msgBox.textContent = text;
+            msgBox.className = 'msg ' + type;
+            msgBox.style.display = 'block';
+        }
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUser) return;
 
-            const name = document.getElementById('m-name').value.trim();
-            const category = document.getElementById('m-category').value.trim();
-            const address = document.getElementById('m-address').value.trim();
+            const name = document.getElementById('shop-name').value.trim();
+            const category = document.getElementById('shop-category').value;
+            const address = document.getElementById('shop-address').value.trim();
 
-            if (!name || !category) {
-                errMsg.style.color = "var(--danger)";
-                errMsg.textContent = "Nome e Categoria sono obbligatori.";
+            if (!name || !category || !address) {
+                showMsg('Compila tutti i campi.');
                 return;
             }
 
             btn.disabled = true;
-            btn.textContent = "Invio richiesta...";
+            spinner.style.display = 'inline-block';
+            msgBox.style.display = 'none';
 
             try {
-                // Determine a simple ID based on name or random
-                const merchantId = 'm_' + Math.random().toString(36).substr(2, 9);
-
-                // Write to merchants collection as pending
-                await setDoc(doc(db, 'merchants', merchantId), {
+                // Write the pending merchant record
+                await setDoc(doc(db, 'merchants', currentUser.uid), {
                     uid: currentUser.uid,
                     name: name,
                     category: category,
                     address: address,
-                    email: currentUser.email,
-                    approved: false, // Must be approved by admin
+                    approved: false, // Must be explicitly false for security rules
                     createdAt: serverTimestamp()
                 });
 
-                // Update user role to pending_merchant
-                await setDoc(doc(db, 'users', currentUser.uid), {
-                    role: 'pending_merchant',
-                    updatedAt: serverTimestamp()
-                }, { merge: true });
-
-                window.location.href = 'merchant-dashboard.html';
+                showMsg('Profilo salvato. Reindirizzamento...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'merchant-dashboard.html';
+                }, 1000);
 
             } catch (err) {
-                console.error("Error creating merchant:", err);
-                errMsg.style.color = "var(--danger)";
-                errMsg.textContent = "Errore durante la registrazione. Riprova.";
+                console.error(err);
+                showMsg('Errore di salvataggio. Riprova: ' + err.message);
                 btn.disabled = false;
-                btn.textContent = "Crea Account Merchant";
+                spinner.style.display = 'none';
             }
         });
     </script>
